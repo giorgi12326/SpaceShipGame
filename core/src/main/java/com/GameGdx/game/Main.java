@@ -3,6 +3,8 @@ package com.GameGdx.game;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
+import com.badlogic.gdx.audio.Music;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -37,6 +39,9 @@ public class Main extends ApplicationAdapter {
     Random random;
     float backgroundWidth;
     float backgroundHeight;
+    Sound shoot;
+    Sound pop;
+    Music meow_meow;
 
     float enemyTimer;
 
@@ -73,6 +78,14 @@ public class Main extends ApplicationAdapter {
         backgroundSprite.setY(backgroundHeight*3/8);
         enemies = new ArrayList<>();
         pendingAnimations = new ArrayList<>();
+        shoot = Gdx.audio.newSound(Gdx.files.internal("shoot.mp3"));
+        long soundId = shoot.play();
+        shoot.setVolume(soundId,0.01f);
+        pop = Gdx.audio.newSound(Gdx.files.internal("pop.mp3"));
+        meow_meow = Gdx.audio.newMusic(Gdx.files.internal("meow_meow.mp3"));
+        meow_meow.setLooping(true);
+        meow_meow.setVolume(2f);
+        meow_meow.play();
 
     }
 
@@ -85,9 +98,7 @@ public class Main extends ApplicationAdapter {
     Rectangle r;
 
     private void draw() {
-
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-
         batch.begin();
 
         backgroundSprite.draw(batch);
@@ -143,6 +154,7 @@ public class Main extends ApplicationAdapter {
                     pendingAnimations.add(enemy);
                     enemies.remove(j);
                     bulletList.remove(i);
+                    pop.play();
 
                 }
             }
@@ -191,6 +203,7 @@ public class Main extends ApplicationAdapter {
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
             if(bulletTimer > 0.2f){
                 bulletTimer = 0;
+                shoot.play();
                 createBullet();
             }
         bulletTimer+= delta;

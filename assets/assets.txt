@@ -3,7 +3,10 @@ Playerplaneright.png
 bg.png
 laser.png
 libgdx.png
+meow_meow.mp3
 plane.png
+pop.mp3
 rock.png
 rock_explode.png
 ship.png
+shoot.mp3
