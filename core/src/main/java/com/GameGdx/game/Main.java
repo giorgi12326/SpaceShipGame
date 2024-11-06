@@ -26,6 +26,9 @@ public class Main extends ApplicationAdapter {
     private Texture image;
     private Texture laserImage;
     Sprite shipSprite;
+    Texture lShip;
+    Texture rShip;
+    Texture nShip;
     List<Sprite> bulletList;
     float bulletTimer;
     Texture backgroundTexture;
@@ -39,6 +42,8 @@ public class Main extends ApplicationAdapter {
     List<Rectangle> bulletRectangleList;
     ShapeRenderer shapeRenderer;
     Sprite backgroundSprite;
+    boolean isTiltedLeft = false;
+    boolean isTiltedRight = false;
 
 
     @Override
@@ -48,8 +53,12 @@ public class Main extends ApplicationAdapter {
         backgroundHeight = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
-        Texture shipImage = new Texture("plane.png");
-        shipSprite = new Sprite(shipImage);
+
+        lShip = new Texture("Playerplaneleft.png");
+        rShip = new Texture("Playerplaneright.png");
+        nShip = new Texture("plane.png");
+        shipSprite = new Sprite(nShip);
+
         shipSprite.setScale(2.0f);
         bulletList = new ArrayList<>();
         laserImage = new Texture("laser.png");
@@ -81,7 +90,16 @@ public class Main extends ApplicationAdapter {
         batch.begin();
 
         backgroundSprite.draw(batch);
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
+            shipSprite.setTexture(lShip);
+        else if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+            shipSprite.setTexture(rShip);
+        else
+            shipSprite.setTexture(nShip);
+        //TODO SHOOTING ANIMATION
+
         shipSprite.draw(batch);
+
         for(Sprite sprite : bulletList) {
             sprite.draw(batch);
         }
@@ -121,7 +139,6 @@ public class Main extends ApplicationAdapter {
 
             }
         }
-
         for (int i = enemyList.size() - 1; i >= 0; i--) {
             Sprite enemySprite = enemyList.get(i);
             Rectangle enemyRectangle = enemyRectangleList.get(i);
@@ -150,19 +167,23 @@ public class Main extends ApplicationAdapter {
     private void input() {
         float speed = 300.0f;
         float delta = Gdx.graphics.getDeltaTime();
-        if(Gdx.input.isKeyPressed(Input.Keys.UP))
-            shipSprite.translateY(delta * speed);
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT))
+
+        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
             shipSprite.translateX(delta * speed);
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT))
-            shipSprite.translateX(-delta*speed);
-        if(Gdx.input.isKeyPressed(Input.Keys.DOWN))
-            shipSprite.translateY(-delta*speed);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+            shipSprite.translateX(-delta * speed);
+        }
+        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+            shipSprite.translateY(delta * speed);
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+            shipSprite.translateY(-delta * speed);
+        }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
             if(bulletTimer > 0.2f){
                 bulletTimer = 0;
                 createBullet();
-
         }
         bulletTimer+= delta;
     }

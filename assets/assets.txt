@@ -1,3 +1,5 @@
+Playerplaneleft.png
+Playerplaneright.png
 bg.png
 enemy.png
 laser.png
