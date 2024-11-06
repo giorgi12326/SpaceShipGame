@@ -33,21 +33,22 @@ public class Main extends ApplicationAdapter {
     List<Sprite> bulletList;
     float bulletTimer;
     Texture backgroundTexture;
-    private Texture enemyTexture;
+//    private Texture enemyTexture;
     Random random;
     float backgroundWidth;
     float backgroundHeight;
-    List<Sprite> enemyList;
+//    List<Sprite> enemyList;
     float enemyTimer;
-    List<Rectangle> enemyRectangleList;
+//    List<Rectangle> enemyRectangleList;
     List<Rectangle> bulletRectangleList;
     ShapeRenderer shapeRenderer;
     Sprite backgroundSprite;
     boolean isTiltedLeft = false;
     boolean isTiltedRight = false;
-    List<Float> rockTime;
-    List<Animation<TextureRegion>> rockAnimations;
-    Animation<TextureRegion> rockAnimation;
+//    List<Float> rockTime;
+//    List<Animation<TextureRegion>> rockAnimations;
+//    Animation<TextureRegion> rockAnimation;
+    List<Enemy> enemies;
 
 
 
@@ -58,32 +59,21 @@ public class Main extends ApplicationAdapter {
         backgroundHeight = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
-
         lShip = new Texture("Playerplaneleft.png");
         rShip = new Texture("Playerplaneright.png");
         nShip = new Texture("plane.png");
-
-        Texture rockImageAmine = new Texture("rock_explode.png");
-        TextureRegion[][] rockRegion = TextureRegion.split(rockImageAmine,53,38);
-        rockAnimation = new Animation<>(0.1f,rockRegion[0]);
-
         shipSprite = new Sprite(nShip);
-
         shipSprite.setScale(2.0f);
         bulletList = new ArrayList<>();
         laserImage = new Texture("laser.png");
         backgroundTexture = new Texture ("bg.png");
-        enemyTexture = new Texture("enemy.png");
         random = new Random();
-        enemyList = new ArrayList<>();
-        enemyRectangleList = new ArrayList<>();
         bulletRectangleList = new ArrayList<>();
-        rockAnimations = new ArrayList<>();
         backgroundSprite = new Sprite(backgroundTexture);
         backgroundSprite.setScale(4);
         backgroundSprite.setX(backgroundWidth*3/8);
         backgroundSprite.setY(backgroundHeight*3/8);
-        rockTime = new ArrayList<>();
+        enemies = new ArrayList<>();
 
     }
 
@@ -115,38 +105,31 @@ public class Main extends ApplicationAdapter {
         for(Sprite sprite : bulletList) {
             sprite.draw(batch);
         }
-        for(Sprite sprite : enemyList) {
-            sprite.draw(batch);
-
+        for(Enemy enemy : enemies) {
+            enemy.sprite.draw(batch);
         }
-        for(int i = rockAnimations.size()-1; i >=0 ;i--){
-            float currTime = rockTime.get(i);
-
-            currTime += Gdx.graphics.getDeltaTime();
-            rockTime.set(i,currTime);
-
-            Animation<TextureRegion> current = rockAnimations.get(i);
-
-            batch.draw(current.getKeyFrame(currTime),0,0,59,38);
-            if (current.getKeyFrameIndex(currTime) == 2) {
-                rockAnimations.remove(i);
-                rockTime.remove(i); // Remove corresponding time tracking
-            }
-        }
+//        for(int i = rockAnimations.size()-1; i >=0 ;i--){
+//            float currTime = rockTime.get(i);
+//
+//            currTime += Gdx.graphics.getDeltaTime();
+//            rockTime.set(i,currTime);
+//
+//            Animation<TextureRegion> current = rockAnimations.get(i);
+//
+//            batch.draw(current.getKeyFrame(currTime),0,0,59,38);
+//            if (current.getKeyFrameIndex(currTime) == 2) {
+//                rockAnimations.remove(i);
+//                rockTime.remove(i); // Remove corresponding time tracking
+//            }
+//        }
 
         batch.end();
+
 //
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);  // Use Filled for a solid rectangle or Line for an outline
-//        shapeRenderer.setColor(Color.RED);
-//        for(Rectangle bulletRectangle: bulletRectangleList)
-//            shapeRenderer.rect(bulletRectangle.getX(), bulletRectangle.getY(), bulletRectangle.width, bulletRectangle.height);  // Position and dimensions of the rectangle
-//        for(Rectangle enemyRectangle: enemyRectangleList)
-//            shapeRenderer.rect(enemyRectangle.getX(), enemyRectangle.getY(), enemyRectangle.getWidth(), enemyRectangle.getHeight());  // Position and dimensions of the rectangle
-//
-//        shapeRenderer.end();
     }
     private void logic() {
         float delta = Gdx.graphics.getDeltaTime();
+
 
         for (int i = bulletList.size() - 1; i >= 0; i--) {
             Sprite bulletSprite = bulletList.get(i);
@@ -155,39 +138,36 @@ public class Main extends ApplicationAdapter {
 
             bulletRectangle.set(bulletSprite.getX() + (bulletSprite.getWidth() - bulletSprite.getWidth() * bulletSprite.getScaleX())/2,
                 bulletSprite.getY() + (bulletSprite.getHeight() -bulletSprite.getHeight()*bulletSprite.getScaleY())/2,bulletSprite.getWidth() * bulletSprite.getScaleX(),bulletSprite.getHeight()*bulletSprite.getScaleY());
-            for (int j = enemyList.size() - 1; j >= 0; j--)
-                if(enemyRectangleList.get(j).overlaps(bulletRectangle)){
-                    enemyRectangleList.remove(j);
-                    enemyList.remove(j);
+
+            for (int j = enemies.size() - 1; j >= 0; j--) {
+                Enemy enemy = enemies.get(j);
+                if (enemy.rectangle.overlaps(bulletRectangle)) {
+              
+                    enemies.remove(j);
                     bulletList.remove(i);
-                    rockAnimations.add(rockAnimation);
-                    rockTime.add(0f);
+
                 }
+            }
             if(bulletSprite.getY() > Gdx.graphics.getHeight()) {
                 bulletRectangleList.remove(i);
                 bulletList.remove(i);
 
             }
         }
-        for (int i = enemyList.size() - 1; i >= 0; i--) {
-            Sprite enemySprite = enemyList.get(i);
-            Rectangle enemyRectangle = enemyRectangleList.get(i);
-            enemySprite.translateY(-200f * delta);
-//            if(enemyRectangle.overlaps(bulletRectangle))
-//                enemyList.remove(i);
-            enemyRectangle.set(enemySprite.getX() + (enemySprite.getWidth() - enemySprite.getWidth() * enemySprite.getScaleX())/2,
-                enemySprite.getY() + (enemySprite.getHeight() -enemySprite.getHeight()*enemySprite.getScaleY())/2,enemySprite.getWidth() * enemySprite.getScaleX(),enemySprite.getHeight()*enemySprite.getScaleY());
-
-            if(enemySprite.getY() < -enemySprite.getHeight()) {
-                enemyList.remove(i);
-                enemyRectangleList.remove(i);
-            }
-
+        for (int i = enemies.size() - 1; i >= 0; i--) {
+            Enemy enemy = enemies.get(i);
+            enemy.sprite.translateY(-200f * delta);
+            enemy.rectangle.set(enemy.sprite.getX()+ enemy.sprite.getWidth()*(1-enemy.sprite.getScaleX())/2 ,
+                enemy.sprite.getY() + enemy.sprite.getHeight()*(1-enemy.sprite.getScaleY())/2,enemy.sprite.getWidth()*enemy.scale,enemy.sprite.getHeight()* enemy.scale);
+//            System.out.println(enemy.sprite.getX() + (enemy.width *(1- enemy.scale))/2 + " " + enemy.sprite.getY() + (enemy.height*(1-enemy.sprite.getY()))/2
+//                + " " + enemy.sprite.getWidth() + " " + enemy.sprite.getHeight());
+            if(enemy.sprite.getY()  < 0)
+                enemies.remove(i);
         }
 
-        enemyTimer+= delta;
-        if(enemyTimer > 0.3f){
-            enemyTimer = 0;
+        Rock.timer += delta;
+        if(Rock.timer > Rock.spawnSpeed){
+            Rock.timer = 0;
             createEnemy();
         }
 
@@ -214,7 +194,7 @@ public class Main extends ApplicationAdapter {
             if(bulletTimer > 0.2f){
                 bulletTimer = 0;
                 createBullet();
-        }
+            }
         bulletTimer+= delta;
     }
 
@@ -241,15 +221,8 @@ public class Main extends ApplicationAdapter {
 
     }
     private void createEnemy(){
-        Sprite enemySprite = new Sprite(enemyTexture);
-        enemySprite.setX(random.nextFloat(3f/8f*enemySprite.getWidth(),backgroundWidth-1.5f*enemySprite.getWidth()));
-        enemySprite.setY(backgroundHeight);
-        enemySprite.setScale(4f);
-
-        Rectangle enemyRectangle = new Rectangle();
-        enemyRectangleList.add(enemyRectangle);
-        enemyList.add(enemySprite);
-
+        Enemy enemy = new Rock();
+        enemies.add(enemy);
     }
 
     @Override
