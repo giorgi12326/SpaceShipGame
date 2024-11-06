@@ -89,18 +89,15 @@ public class Main extends ApplicationAdapter {
 
         }
         batch.end();
-
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);  // Use Filled for a solid rectangle or Line for an outline
-        shapeRenderer.setColor(Color.BLUE);
-        for (Sprite enemy: enemyList)
-            shapeRenderer.rect(enemy.getX(),enemy.getY(),enemy.getWidth() * enemy.getScaleX(),enemy.getHeight()* enemy.getScaleY());
-        shapeRenderer.setColor(Color.RED);
-        for(Rectangle bulletRectangle: bulletRectangleList)
-            shapeRenderer.rect(bulletRectangle.getX(), bulletRectangle.getY(), bulletRectangle.width, bulletRectangle.height);  // Position and dimensions of the rectangle
-        for(Rectangle enemyRectangle: enemyRectangleList)
-            shapeRenderer.rect(enemyRectangle.getX(), enemyRectangle.getY(), enemyRectangle.getWidth(), enemyRectangle.getHeight());  // Position and dimensions of the rectangle
-
-        shapeRenderer.end();
+//
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);  // Use Filled for a solid rectangle or Line for an outline
+//        shapeRenderer.setColor(Color.RED);
+//        for(Rectangle bulletRectangle: bulletRectangleList)
+//            shapeRenderer.rect(bulletRectangle.getX(), bulletRectangle.getY(), bulletRectangle.width, bulletRectangle.height);  // Position and dimensions of the rectangle
+//        for(Rectangle enemyRectangle: enemyRectangleList)
+//            shapeRenderer.rect(enemyRectangle.getX(), enemyRectangle.getY(), enemyRectangle.getWidth(), enemyRectangle.getHeight());  // Position and dimensions of the rectangle
+//
+//        shapeRenderer.end();
     }
     private void logic() {
         Rectangle r = new Rectangle();
@@ -109,11 +106,21 @@ public class Main extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
         for (int i = bulletList.size() - 1; i >= 0; i--) {
             Sprite bulletSprite = bulletList.get(i);
+            Rectangle bulletRectangle = bulletRectangleList.get(i);
             bulletSprite.translateY(1000f * delta);
 
-
-            if(bulletSprite.getY() > Gdx.graphics.getHeight()) {
+            bulletRectangle.set(bulletSprite.getX() + (bulletSprite.getWidth() - bulletSprite.getWidth() * bulletSprite.getScaleX())/2,
+                bulletSprite.getY() + (bulletSprite.getHeight() -bulletSprite.getHeight()*bulletSprite.getScaleY())/2,bulletSprite.getWidth() * bulletSprite.getScaleX(),bulletSprite.getHeight()*bulletSprite.getScaleY());
+            for (int j = enemyList.size() - 1; j >= 0; j--)
+                if(enemyRectangleList.get(j).overlaps(bulletRectangle)){
+                    enemyRectangleList.remove(j);
+                    enemyList.remove(j);
+                    bulletList.remove(i);
+                }
+            if(bulletSprite.getY() > Gdx.graphics.getHeight() - 100) {
+                bulletRectangleList.remove(i);
                 bulletList.remove(i);
+
             }
         }
 
@@ -123,8 +130,8 @@ public class Main extends ApplicationAdapter {
             enemySprite.translateY(-200f * delta);
 //            if(enemyRectangle.overlaps(bulletRectangle))
 //                enemyList.remove(i);
-            enemyRectangle.set(enemySprite.getX() + enemySprite.getWidth() - enemySprite.getWidth() * enemySprite.getScaleX(),
-                enemySprite.getY() + enemySprite.getHeight() -enemySprite.getHeight()*enemySprite.getScaleY(),enemySprite.getWidth() * enemySprite.getScaleX(),enemySprite.getHeight()*enemySprite.getScaleY());
+            enemyRectangle.set(enemySprite.getX() + (enemySprite.getWidth() - enemySprite.getWidth() * enemySprite.getScaleX())/2,
+                enemySprite.getY() + (enemySprite.getHeight() -enemySprite.getHeight()*enemySprite.getScaleY())/2,enemySprite.getWidth() * enemySprite.getScaleX(),enemySprite.getHeight()*enemySprite.getScaleY());
 
             if(enemySprite.getY() < -enemySprite.getHeight()) {
                 enemyList.remove(i);
@@ -134,7 +141,7 @@ public class Main extends ApplicationAdapter {
         }
 
         enemyTimer+= delta;
-        if(enemyTimer > 1.0f){
+        if(enemyTimer > 0.3f){
             enemyTimer = 0;
             createEnemy();
         }
@@ -168,6 +175,8 @@ public class Main extends ApplicationAdapter {
         laserSprite.setX(shipSprite.getX() - shipSprite.getWidth()/2 - laserSprite.getHeight());
         laserSprite.setY(shipSprite.getY());
         laserSprite.setScale(0.5f);
+        Rectangle bulletRectangle = new Rectangle();
+        bulletRectangleList.add(bulletRectangle);
         bulletList.add(laserSprite);
     }
     private void createEnemy(){
