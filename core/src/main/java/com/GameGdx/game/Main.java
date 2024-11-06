@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
@@ -44,6 +45,10 @@ public class Main extends ApplicationAdapter {
     Sprite backgroundSprite;
     boolean isTiltedLeft = false;
     boolean isTiltedRight = false;
+    List<Float> rockTime;
+    List<Animation<TextureRegion>> rockAnimations;
+    Animation<TextureRegion> rockAnimation;
+
 
 
     @Override
@@ -57,6 +62,11 @@ public class Main extends ApplicationAdapter {
         lShip = new Texture("Playerplaneleft.png");
         rShip = new Texture("Playerplaneright.png");
         nShip = new Texture("plane.png");
+
+        Texture rockImageAmine = new Texture("rock_explode.png");
+        TextureRegion[][] rockRegion = TextureRegion.split(rockImageAmine,53,38);
+        rockAnimation = new Animation<>(0.1f,rockRegion[0]);
+
         shipSprite = new Sprite(nShip);
 
         shipSprite.setScale(2.0f);
@@ -68,11 +78,12 @@ public class Main extends ApplicationAdapter {
         enemyList = new ArrayList<>();
         enemyRectangleList = new ArrayList<>();
         bulletRectangleList = new ArrayList<>();
-
+        rockAnimations = new ArrayList<>();
         backgroundSprite = new Sprite(backgroundTexture);
         backgroundSprite.setScale(4);
         backgroundSprite.setX(backgroundWidth*3/8);
         backgroundSprite.setY(backgroundHeight*3/8);
+        rockTime = new ArrayList<>();
 
     }
 
@@ -85,6 +96,7 @@ public class Main extends ApplicationAdapter {
     Rectangle r;
 
     private void draw() {
+
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
         batch.begin();
@@ -107,6 +119,21 @@ public class Main extends ApplicationAdapter {
             sprite.draw(batch);
 
         }
+        for(int i = rockAnimations.size()-1; i >=0 ;i--){
+            float currTime = rockTime.get(i);
+
+            currTime += Gdx.graphics.getDeltaTime();
+            rockTime.set(i,currTime);
+
+            Animation<TextureRegion> current = rockAnimations.get(i);
+
+            batch.draw(current.getKeyFrame(currTime),0,0,59,38);
+            if (current.getKeyFrameIndex(currTime) == 2) {
+                rockAnimations.remove(i);
+                rockTime.remove(i); // Remove corresponding time tracking
+            }
+        }
+
         batch.end();
 //
 //        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);  // Use Filled for a solid rectangle or Line for an outline
@@ -120,6 +147,7 @@ public class Main extends ApplicationAdapter {
     }
     private void logic() {
         float delta = Gdx.graphics.getDeltaTime();
+
         for (int i = bulletList.size() - 1; i >= 0; i--) {
             Sprite bulletSprite = bulletList.get(i);
             Rectangle bulletRectangle = bulletRectangleList.get(i);
@@ -132,6 +160,8 @@ public class Main extends ApplicationAdapter {
                     enemyRectangleList.remove(j);
                     enemyList.remove(j);
                     bulletList.remove(i);
+                    rockAnimations.add(rockAnimation);
+                    rockTime.add(0f);
                 }
             if(bulletSprite.getY() > Gdx.graphics.getHeight()) {
                 bulletRectangleList.remove(i);

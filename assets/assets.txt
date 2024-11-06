@@ -5,4 +5,5 @@ enemy.png
 laser.png
 libgdx.png
 plane.png
+rock_explode.png
 ship.png
