@@ -2,4 +2,5 @@ bg.png
 enemy.png
 laser.png
 libgdx.png
+plane.png
 ship.png

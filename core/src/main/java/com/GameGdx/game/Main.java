@@ -38,6 +38,7 @@ public class Main extends ApplicationAdapter {
     List<Rectangle> enemyRectangleList;
     List<Rectangle> bulletRectangleList;
     ShapeRenderer shapeRenderer;
+    Sprite backgroundSprite;
 
 
     @Override
@@ -47,9 +48,9 @@ public class Main extends ApplicationAdapter {
         backgroundHeight = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
         image = new Texture("libgdx.png");
-        Texture shipImage = new Texture("ship.png");
-        TextureRegion[][] regions = TextureRegion.split(shipImage,17,32);
-        shipSprite = new Sprite(regions[0][0]);
+        Texture shipImage = new Texture("plane.png");
+        shipSprite = new Sprite(shipImage);
+        shipSprite.setScale(2.0f);
         bulletList = new ArrayList<>();
         laserImage = new Texture("laser.png");
         backgroundTexture = new Texture ("bg.png");
@@ -58,6 +59,11 @@ public class Main extends ApplicationAdapter {
         enemyList = new ArrayList<>();
         enemyRectangleList = new ArrayList<>();
         bulletRectangleList = new ArrayList<>();
+
+        backgroundSprite = new Sprite(backgroundTexture);
+        backgroundSprite.setScale(4);
+        backgroundSprite.setX(backgroundWidth*3/8);
+        backgroundSprite.setY(backgroundHeight*3/8);
 
     }
 
@@ -72,11 +78,6 @@ public class Main extends ApplicationAdapter {
     private void draw() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
 
-        Sprite backgroundSprite = new Sprite(backgroundTexture);
-        float k = Math.min(backgroundTexture.getWidth()/backgroundWidth,
-            backgroundTexture.getHeight()/backgroundHeight);
-
-        backgroundSprite.setSize(backgroundTexture.getWidth()/k, backgroundTexture.getHeight()/k);
         batch.begin();
 
         backgroundSprite.draw(batch);
@@ -100,9 +101,6 @@ public class Main extends ApplicationAdapter {
 //        shapeRenderer.end();
     }
     private void logic() {
-        Rectangle r = new Rectangle();
-        r.set(-20,-20,100,100);
-
         float delta = Gdx.graphics.getDeltaTime();
         for (int i = bulletList.size() - 1; i >= 0; i--) {
             Sprite bulletSprite = bulletList.get(i);
@@ -117,7 +115,7 @@ public class Main extends ApplicationAdapter {
                     enemyList.remove(j);
                     bulletList.remove(i);
                 }
-            if(bulletSprite.getY() > Gdx.graphics.getHeight() - 100) {
+            if(bulletSprite.getY() > Gdx.graphics.getHeight()) {
                 bulletRectangleList.remove(i);
                 bulletList.remove(i);
 
@@ -170,30 +168,36 @@ public class Main extends ApplicationAdapter {
     }
 
     private void createBullet() {
-        Sprite laserSprite = new Sprite(laserImage);
-        laserSprite.rotate(90);
-        laserSprite.setX(shipSprite.getX() - shipSprite.getWidth()/2 - laserSprite.getHeight());
-        laserSprite.setY(shipSprite.getY());
-        laserSprite.setScale(0.5f);
-        Rectangle bulletRectangle = new Rectangle();
-        bulletRectangleList.add(bulletRectangle);
-        bulletList.add(laserSprite);
+        float distanceFromCenter = 25.0f;
+
+        Sprite laserSprite1 = new Sprite(laserImage);
+        laserSprite1.setX(shipSprite.getX() - shipSprite.getWidth()*0.5f );
+        laserSprite1.setY(shipSprite.getY()-20);
+        laserSprite1.setScale(0.5f);
+
+        Sprite laserSprite2 = new Sprite(laserImage);
+        laserSprite2.setX(shipSprite.getX() + shipSprite.getWidth()*1.5f- laserSprite1.getWidth());
+        laserSprite2.setY(shipSprite.getY()-20);
+        laserSprite2.setScale(0.5f);
+
+        Rectangle bulletRectangle1 = new Rectangle();
+        Rectangle bulletRectangle2 = new Rectangle();
+
+        bulletRectangleList.add(bulletRectangle1);
+        bulletRectangleList.add(bulletRectangle2);
+        bulletList.add(laserSprite1);
+        bulletList.add(laserSprite2);
+
     }
     private void createEnemy(){
         Sprite enemySprite = new Sprite(enemyTexture);
-        enemySprite.setX(random.nextFloat(backgroundWidth-enemySprite.getWidth()));
+        enemySprite.setX(random.nextFloat(3f/8f*enemySprite.getWidth(),backgroundWidth-1.5f*enemySprite.getWidth()));
         enemySprite.setY(backgroundHeight);
-        System.out.println(enemySprite.getX());
-        enemySprite.setScale(0.3f);
-        System.out.println(enemySprite.getX());
-
-
+        enemySprite.setScale(4f);
 
         Rectangle enemyRectangle = new Rectangle();
-
         enemyRectangleList.add(enemyRectangle);
         enemyList.add(enemySprite);
-
 
     }
 
