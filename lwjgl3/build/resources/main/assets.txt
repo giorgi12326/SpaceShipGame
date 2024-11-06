@@ -1,9 +1,9 @@
 Playerplaneleft.png
 Playerplaneright.png
 bg.png
-enemy.png
 laser.png
 libgdx.png
 plane.png
+rock.png
 rock_explode.png
 ship.png

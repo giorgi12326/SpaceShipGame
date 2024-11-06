@@ -28,7 +28,12 @@ public class Rock extends Enemy{
         width = sprite.getWidth() * scale;
         height = sprite.getHeight() * scale;
 
-        spawnSpeed = 1.0f;
+        spawnSpeed = 0.1f;
+
+        Texture expImage = new Texture("rock_explode.png");
+        TextureRegion[][] expRegion = TextureRegion.split(expImage,53,38);
+        animation = new Animation<>(0.1f,expRegion[0]);
+
 
 
 

@@ -19,6 +19,7 @@ import com.badlogic.gdx.graphics.Color;
 import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Random;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
@@ -33,23 +34,20 @@ public class Main extends ApplicationAdapter {
     List<Sprite> bulletList;
     float bulletTimer;
     Texture backgroundTexture;
-//    private Texture enemyTexture;
     Random random;
     float backgroundWidth;
     float backgroundHeight;
-//    List<Sprite> enemyList;
+
     float enemyTimer;
-//    List<Rectangle> enemyRectangleList;
+
     List<Rectangle> bulletRectangleList;
     ShapeRenderer shapeRenderer;
     Sprite backgroundSprite;
     boolean isTiltedLeft = false;
     boolean isTiltedRight = false;
-//    List<Float> rockTime;
-//    List<Animation<TextureRegion>> rockAnimations;
-//    Animation<TextureRegion> rockAnimation;
-    List<Enemy> enemies;
 
+    List<Enemy> enemies;
+    List<Enemy> pendingAnimations;
 
 
     @Override
@@ -74,6 +72,7 @@ public class Main extends ApplicationAdapter {
         backgroundSprite.setX(backgroundWidth*3/8);
         backgroundSprite.setY(backgroundHeight*3/8);
         enemies = new ArrayList<>();
+        pendingAnimations = new ArrayList<>();
 
     }
 
@@ -108,20 +107,19 @@ public class Main extends ApplicationAdapter {
         for(Enemy enemy : enemies) {
             enemy.sprite.draw(batch);
         }
-//        for(int i = rockAnimations.size()-1; i >=0 ;i--){
-//            float currTime = rockTime.get(i);
-//
-//            currTime += Gdx.graphics.getDeltaTime();
-//            rockTime.set(i,currTime);
-//
-//            Animation<TextureRegion> current = rockAnimations.get(i);
-//
-//            batch.draw(current.getKeyFrame(currTime),0,0,59,38);
-//            if (current.getKeyFrameIndex(currTime) == 2) {
-//                rockAnimations.remove(i);
-//                rockTime.remove(i); // Remove corresponding time tracking
-//            }
-//        }
+        for(int i = pendingAnimations.size()-1; i >=0 ;i--){
+            Enemy enemy = pendingAnimations.get(i);
+
+            enemy.animationTimer += Gdx.graphics.getDeltaTime();
+
+            Animation<TextureRegion> current = enemy.animation;
+
+            batch.draw(current.getKeyFrame(enemy.animationTimer),enemy.sprite.getX() - 50+ enemy.sprite.getWidth()*(1-enemy.sprite.getScaleX())/2 ,
+                enemy.sprite.getY()- 19 + enemy.sprite.getHeight()*(1-enemy.sprite.getScaleY())/2,179,114);
+            if (current.getKeyFrameIndex(enemy.animationTimer) == 2) {
+                pendingAnimations.remove(i);
+            }
+        }
 
         batch.end();
 
@@ -142,7 +140,7 @@ public class Main extends ApplicationAdapter {
             for (int j = enemies.size() - 1; j >= 0; j--) {
                 Enemy enemy = enemies.get(j);
                 if (enemy.rectangle.overlaps(bulletRectangle)) {
-              
+                    pendingAnimations.add(enemy);
                     enemies.remove(j);
                     bulletList.remove(i);
 
