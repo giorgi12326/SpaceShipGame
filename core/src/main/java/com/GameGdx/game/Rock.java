@@ -14,6 +14,8 @@ public class Rock extends Enemy{
     public static float spawnSpeed = 0.25f;
     public static float timer = 0;
 
+    public static float moveSpeed = 400f;
+
     Rock(){
         scale = 4.0f;
 

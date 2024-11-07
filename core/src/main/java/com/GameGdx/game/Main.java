@@ -5,13 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
@@ -37,7 +38,7 @@ public class Main extends ApplicationAdapter {
     boolean isTiltedLeft = false;
     boolean isTiltedRight = false;
     List<Enemy> enemies;
-    List<Enemy> pendingAnimations;
+    List<Entity> pendingAnimations;
     List<Entity> garbageCollector;
 
 
@@ -101,18 +102,41 @@ public class Main extends ApplicationAdapter {
             enemy.sprite.draw(batch);
         }
         for(int i = pendingAnimations.size()-1; i >=0 ;i--){
-            Enemy enemy = pendingAnimations.get(i);
 
-            enemy.animationTimer += Gdx.graphics.getDeltaTime();
+            Entity entity = pendingAnimations.get(i);
+            if(entity instanceof Enemy) {
+                entity.animationTimer += Gdx.graphics.getDeltaTime();
+                Animation<TextureRegion> current = entity.animation;
+                batch.draw(current.getKeyFrame(entity.animationTimer), entity.sprite.getX() - 50 + entity.sprite.getWidth() * (1 - entity.sprite.getScaleX()) / 2,
+                    entity.sprite.getY() - 19 + entity.sprite.getHeight() * (1 - entity.sprite.getScaleY()) / 2, 179, 114);
+                if (current.getKeyFrameIndex(entity.animationTimer) == 2) {
+                    pendingAnimations.remove(i);
+                }
+            }
+            else if(entity instanceof Explosion){
+                entity.animationTimer += Gdx.graphics.getDeltaTime();
+                Animation<TextureRegion> current = entity.animation;
+                batch.draw(current.getKeyFrame(entity.animationTimer), entity.sprite.getX()  + entity.sprite.getWidth() * (1 - entity.sprite.getScaleX()) / 2,
+                    entity.sprite.getY()  + entity.sprite.getHeight() * (1 - entity.sprite.getScaleY()) / 2, 256, 256);
 
-            Animation<TextureRegion> current = enemy.animation;
+                entity.rectangle.set(entity.sprite.getX() + (-entity.sprite.getWidth() + entity.sprite.getWidth() * entity.sprite.getScaleX())/2,
+                    entity.sprite.getY() + (entity.sprite.getHeight() -entity.sprite.getHeight()*entity.sprite.getScaleY())/2,entity.sprite.getWidth() * entity.sprite.getScaleX(),entity.sprite.getHeight()*entity.sprite.getScaleY());
 
-            batch.draw(current.getKeyFrame(enemy.animationTimer),enemy.sprite.getX() - 50+ enemy.sprite.getWidth()*(1-enemy.sprite.getScaleX())/2 ,
-                enemy.sprite.getY()- 19 + enemy.sprite.getHeight()*(1-enemy.sprite.getScaleY())/2,179,114);
-            if (current.getKeyFrameIndex(enemy.animationTimer) == 2) {
-                pendingAnimations.remove(i);
+                if (current.getKeyFrameIndex(entity.animationTimer) == 15) {
+                    pendingAnimations.remove(i);
+                }
+
             }
         }
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);  // Use Line type to draw rectangles
+
+        for (Entity entity : pendingAnimations) {
+            Rectangle hitbox = entity.rectangle;
+            shapeRenderer.setColor(Color.RED);  // Set color for the hitboxes
+            shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
+        }
+
+        shapeRenderer.end();
 
         batch.end();
     }
@@ -129,6 +153,11 @@ public class Main extends ApplicationAdapter {
             for (int j = enemies.size() - 1; j >= 0; j--) {
                 Enemy enemy = enemies.get(j);
                 if (enemy.rectangle.overlaps(bullet.rectangle)) {
+                    if(bullet instanceof Rocket) {
+                    pendingAnimations.add(new Explosion(bullet.sprite.getX(), bullet.sprite.getY()));
+                    garbageCollector.add(enemies.get(j));
+                        System.out.println("asd");
+                    }
                     pendingAnimations.add(enemy);
                     garbageCollector.add(enemies.get(j));
                     garbageCollector.add(bullets.get(i));
@@ -141,7 +170,8 @@ public class Main extends ApplicationAdapter {
         }
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Enemy enemy = enemies.get(i);
-            enemy.sprite.translateY(-200f * delta);
+            if(enemy instanceof Rock)
+             enemy.sprite.translateY(-Rock.moveSpeed* delta);
             enemy.rectangle.set(enemy.sprite.getX()+ enemy.sprite.getWidth()*(1-enemy.sprite.getScaleX())/2 ,
                 enemy.sprite.getY() + enemy.sprite.getHeight()*(1-enemy.sprite.getScaleY())/2,enemy.sprite.getWidth()*enemy.scale,enemy.sprite.getHeight()* enemy.scale);
             if(enemy.sprite.getY()  < 0)
@@ -179,25 +209,34 @@ public class Main extends ApplicationAdapter {
             shipSprite.translateY(-delta * speed);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
-            System.out.println(Lasers.timer + " " +Lasers.spawnSpeed );
             if (Lasers.timer > Lasers.spawnSpeed) {
                 shoot.play();
-                createBullet();
+                createLasers();
                 Lasers.timer = 0;
             }
         }
+        if(Gdx.input.isKeyPressed(Input.Keys.SHIFT_LEFT)){
+            if(Rocket.timer > Rocket.spawnSpeed){
+                createRocket();
+                Rocket.timer = 0;
+            }
+
+        }
+        Rocket.timer+= delta;
         Lasers.timer+= delta;
     }
 
-    private void createBullet() {
+    private void createLasers() {
         float distanceFromCenter = 25.0f;
         Bullet bullet1 = new Lasers(shipSprite.getX() - shipSprite.getWidth()*0.5f,shipSprite.getY()-20);
         Bullet bullet2 = new Lasers(shipSprite.getX() + shipSprite.getWidth()*1.5f- bullet1.width,shipSprite.getY()-20);
-
-
-
         bullets.add(bullet1);
         bullets.add(bullet2);
+
+    }
+    private void createRocket() {
+        Bullet rocket = new Rocket(shipSprite.getX() + shipSprite.getWidth()*1.5f- 15,shipSprite.getY()-20);
+        bullets.add(rocket);
 
     }
     private void createEnemy(){

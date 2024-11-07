@@ -9,6 +9,7 @@ import com.badlogic.gdx.math.Rectangle;
 import java.util.Random;
 
 public class Enemy extends Entity{
+    public static float moveSpeed = 20f;
 
 
 

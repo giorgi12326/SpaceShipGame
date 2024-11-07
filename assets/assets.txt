@@ -1,6 +1,7 @@
 Playerplaneleft.png
 Playerplaneright.png
 bg.png
+explode.png
 laser.png
 libgdx.png
 meow_meow.mp3
@@ -8,5 +9,6 @@ plane.png
 pop.mp3
 rock.png
 rock_explode.png
+rocket.png
 ship.png
 shoot.mp3
