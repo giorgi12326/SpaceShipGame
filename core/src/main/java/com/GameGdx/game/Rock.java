@@ -10,10 +10,9 @@ import com.badlogic.gdx.math.Rectangle;
 import java.util.Random;
 
 public class Rock extends Enemy{
-//    public static float timer = 0f;
-//    public static float spawnSpeed = 0.5f;
-//    width = 2;
 
+    public static float spawnSpeed = 0.25f;
+    public static float timer = 0;
 
     Rock(){
         scale = 4.0f;
@@ -27,8 +26,6 @@ public class Rock extends Enemy{
 
         width = sprite.getWidth() * scale;
         height = sprite.getHeight() * scale;
-
-        spawnSpeed = 0.1f;
 
         Texture expImage = new Texture("rock_explode.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,53,38);

@@ -8,29 +8,9 @@ import com.badlogic.gdx.math.Rectangle;
 
 import java.util.Random;
 
-public class Enemy {
-    public Random random = new Random();
+public class Enemy extends Entity{
 
 
-    float scale;
-    public float width;
-    public float height;
-
-
-    public static float timer = 0f;
-    public static float spawnSpeed;
-
-    Texture texture;
-    Sprite sprite ;
-    Rectangle rectangle;
-
-    public float animationTimer = 0f;
-    public Animation<TextureRegion> animation;
-
-    public Enemy(){
-
-
-    }
 
 
 

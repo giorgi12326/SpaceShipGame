@@ -33,10 +33,11 @@ public class Main extends ApplicationAdapter {
     Texture lShip;
     Texture rShip;
     Texture nShip;
-    List<Sprite> bulletList;
-    float bulletTimer;
+    List<Bullet> bullets;
+//    List<Sprite> bulletList;
+//    float bulletTimer;
     Texture backgroundTexture;
-    Random random;
+//    Random random;
     float backgroundWidth;
     float backgroundHeight;
     Sound shoot;
@@ -55,6 +56,7 @@ public class Main extends ApplicationAdapter {
     List<Enemy> pendingAnimations;
 
 
+
     @Override
     public void create() {
         shapeRenderer = new ShapeRenderer();
@@ -67,10 +69,11 @@ public class Main extends ApplicationAdapter {
         nShip = new Texture("plane.png");
         shipSprite = new Sprite(nShip);
         shipSprite.setScale(2.0f);
-        bulletList = new ArrayList<>();
+
+        bullets = new ArrayList<>();
         laserImage = new Texture("laser.png");
         backgroundTexture = new Texture ("bg.png");
-        random = new Random();
+//        random = new Random();
         bulletRectangleList = new ArrayList<>();
         backgroundSprite = new Sprite(backgroundTexture);
         backgroundSprite.setScale(4);
@@ -112,8 +115,8 @@ public class Main extends ApplicationAdapter {
 
         shipSprite.draw(batch);
 
-        for(Sprite sprite : bulletList) {
-            sprite.draw(batch);
+        for(Bullet bullet : bullets) {
+            bullet.sprite.draw(batch);
         }
         for(Enemy enemy : enemies) {
             enemy.sprite.draw(batch);
@@ -140,27 +143,25 @@ public class Main extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
 
 
-        for (int i = bulletList.size() - 1; i >= 0; i--) {
-            Sprite bulletSprite = bulletList.get(i);
-            Rectangle bulletRectangle = bulletRectangleList.get(i);
-            bulletSprite.translateY(1000f * delta);
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+            Bullet bullet = bullets.get(i);
+            bullet.sprite.translateY(1000f * delta);
 
-            bulletRectangle.set(bulletSprite.getX() + (bulletSprite.getWidth() - bulletSprite.getWidth() * bulletSprite.getScaleX())/2,
-                bulletSprite.getY() + (bulletSprite.getHeight() -bulletSprite.getHeight()*bulletSprite.getScaleY())/2,bulletSprite.getWidth() * bulletSprite.getScaleX(),bulletSprite.getHeight()*bulletSprite.getScaleY());
+            bullet.rectangle.set(bullet.sprite.getX() + (bullet.sprite.getWidth() - bullet.sprite.getWidth() * bullet.sprite.getScaleX())/2,
+                bullet.sprite.getY() + (bullet.sprite.getHeight() -bullet.sprite.getHeight()*bullet.sprite.getScaleY())/2,bullet.sprite.getWidth() * bullet.sprite.getScaleX(),bullet.sprite.getHeight()*bullet.sprite.getScaleY());
 
             for (int j = enemies.size() - 1; j >= 0; j--) {
                 Enemy enemy = enemies.get(j);
-                if (enemy.rectangle.overlaps(bulletRectangle)) {
+                if (enemy.rectangle.overlaps(bullet.rectangle)) {
                     pendingAnimations.add(enemy);
                     enemies.remove(j);
-                    bulletList.remove(i);
+                    bullets.remove(i);
                     pop.play();
 
                 }
             }
-            if(bulletSprite.getY() > Gdx.graphics.getHeight()) {
-                bulletRectangleList.remove(i);
-                bulletList.remove(i);
+            if(bullet.sprite.getY() > Gdx.graphics.getHeight()) {
+                bullets.remove(i);
 
             }
         }
@@ -200,40 +201,39 @@ public class Main extends ApplicationAdapter {
         else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
             shipSprite.translateY(-delta * speed);
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.SPACE))
-            if(bulletTimer > 0.2f){
-                bulletTimer = 0;
+        if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
+            System.out.println(Lasers.timer + " " +Lasers.spawnSpeed );
+            if (Lasers.timer > Lasers.spawnSpeed) {
                 shoot.play();
                 createBullet();
+                Lasers.timer = 0;
             }
-        bulletTimer+= delta;
+        }
+        Lasers.timer+= delta;
     }
 
     private void createBullet() {
         float distanceFromCenter = 25.0f;
+        Bullet bullet1 = new Lasers(shipSprite.getX() - shipSprite.getWidth()*0.5f,shipSprite.getY()-20);
+        Bullet bullet2 = new Lasers(shipSprite.getX() + shipSprite.getWidth()*1.5f- bullet1.width,shipSprite.getY()-20);
 
-        Sprite laserSprite1 = new Sprite(laserImage);
-        laserSprite1.setX(shipSprite.getX() - shipSprite.getWidth()*0.5f );
-        laserSprite1.setY(shipSprite.getY()-20);
-        laserSprite1.setScale(0.5f);
 
-        Sprite laserSprite2 = new Sprite(laserImage);
-        laserSprite2.setX(shipSprite.getX() + shipSprite.getWidth()*1.5f- laserSprite1.getWidth());
-        laserSprite2.setY(shipSprite.getY()-20);
-        laserSprite2.setScale(0.5f);
 
-        Rectangle bulletRectangle1 = new Rectangle();
-        Rectangle bulletRectangle2 = new Rectangle();
-
-        bulletRectangleList.add(bulletRectangle1);
-        bulletRectangleList.add(bulletRectangle2);
-        bulletList.add(laserSprite1);
-        bulletList.add(laserSprite2);
+        bullets.add(bullet1);
+        bullets.add(bullet2);
 
     }
     private void createEnemy(){
         Enemy enemy = new Rock();
         enemies.add(enemy);
+    }
+    private float[] scaledEntityParameters(Entity entity){
+        float[] arr = new float[4];
+        arr[0] = entity.sprite.getX() + entity.sprite.getWidth()*Math.abs((1f-entity.scale))/2;
+        arr[1] = entity.sprite.getY() + entity.sprite.getHeight()*Math.abs((1f-entity.scale))/2;
+        arr[2] = entity.width;
+        arr[3] = entity.height;
+        return arr;
     }
 
     @Override
