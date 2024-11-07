@@ -13,48 +13,32 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.utils.viewport.FitViewport;
 import com.badlogic.gdx.math.Rectangle;
-import com.badlogic.gdx.graphics.Color;
-
-
-import java.awt.*;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
-import java.util.Random;
 
 /** {@link com.badlogic.gdx.ApplicationListener} implementation shared by all platforms. */
 public class Main extends ApplicationAdapter {
     private SpriteBatch batch;
-    private Texture image;
-    private Texture laserImage;
     Sprite shipSprite;
     Texture lShip;
     Texture rShip;
     Texture nShip;
     List<Bullet> bullets;
-//    List<Sprite> bulletList;
-//    float bulletTimer;
-    Texture backgroundTexture;
-//    Random random;
     float backgroundWidth;
     float backgroundHeight;
     Sound shoot;
     Sound pop;
     Music meow_meow;
-
     float enemyTimer;
-
-    List<Rectangle> bulletRectangleList;
-    ShapeRenderer shapeRenderer;
+    Texture backgroundTexture;
     Sprite backgroundSprite;
+    ShapeRenderer shapeRenderer;
     boolean isTiltedLeft = false;
     boolean isTiltedRight = false;
-
     List<Enemy> enemies;
     List<Enemy> pendingAnimations;
-
+    List<Entity> garbageCollector;
 
 
     @Override
@@ -63,18 +47,13 @@ public class Main extends ApplicationAdapter {
         backgroundWidth = Gdx.graphics.getWidth();
         backgroundHeight = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
-        image = new Texture("libgdx.png");
         lShip = new Texture("Playerplaneleft.png");
         rShip = new Texture("Playerplaneright.png");
         nShip = new Texture("plane.png");
         shipSprite = new Sprite(nShip);
         shipSprite.setScale(2.0f);
-
         bullets = new ArrayList<>();
-        laserImage = new Texture("laser.png");
         backgroundTexture = new Texture ("bg.png");
-//        random = new Random();
-        bulletRectangleList = new ArrayList<>();
         backgroundSprite = new Sprite(backgroundTexture);
         backgroundSprite.setScale(4);
         backgroundSprite.setX(backgroundWidth*3/8);
@@ -89,7 +68,7 @@ public class Main extends ApplicationAdapter {
         meow_meow.setLooping(true);
         meow_meow.setVolume(2f);
         meow_meow.play();
-
+        garbageCollector = new ArrayList<>();
     }
 
     @Override
@@ -136,12 +115,9 @@ public class Main extends ApplicationAdapter {
         }
 
         batch.end();
-
-//
     }
     private void logic() {
         float delta = Gdx.graphics.getDeltaTime();
-
 
         for (int i = bullets.size() - 1; i >= 0; i--) {
             Bullet bullet = bullets.get(i);
@@ -154,15 +130,13 @@ public class Main extends ApplicationAdapter {
                 Enemy enemy = enemies.get(j);
                 if (enemy.rectangle.overlaps(bullet.rectangle)) {
                     pendingAnimations.add(enemy);
-                    enemies.remove(j);
-                    bullets.remove(i);
+                    garbageCollector.add(enemies.get(j));
+                    garbageCollector.add(bullets.get(i));
                     pop.play();
-
                 }
             }
             if(bullet.sprite.getY() > Gdx.graphics.getHeight()) {
-                bullets.remove(i);
-
+                garbageCollector.add(bullets.get(i));
             }
         }
         for (int i = enemies.size() - 1; i >= 0; i--) {
@@ -170,10 +144,15 @@ public class Main extends ApplicationAdapter {
             enemy.sprite.translateY(-200f * delta);
             enemy.rectangle.set(enemy.sprite.getX()+ enemy.sprite.getWidth()*(1-enemy.sprite.getScaleX())/2 ,
                 enemy.sprite.getY() + enemy.sprite.getHeight()*(1-enemy.sprite.getScaleY())/2,enemy.sprite.getWidth()*enemy.scale,enemy.sprite.getHeight()* enemy.scale);
-//            System.out.println(enemy.sprite.getX() + (enemy.width *(1- enemy.scale))/2 + " " + enemy.sprite.getY() + (enemy.height*(1-enemy.sprite.getY()))/2
-//                + " " + enemy.sprite.getWidth() + " " + enemy.sprite.getHeight());
             if(enemy.sprite.getY()  < 0)
-                enemies.remove(i);
+                garbageCollector.add(enemies.get(i));
+        }
+        for (Entity entity : garbageCollector){
+            if(entity instanceof Bullet)
+                bullets.remove(entity);
+            else if(entity instanceof Enemy)
+                enemies.remove(entity);
+
         }
 
         Rock.timer += delta;
@@ -181,8 +160,6 @@ public class Main extends ApplicationAdapter {
             Rock.timer = 0;
             createEnemy();
         }
-
-
     }
 
     private void input() {
@@ -239,7 +216,6 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
-        image.dispose();
     }
 
 
