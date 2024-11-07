@@ -33,10 +33,6 @@ public class Rock extends Enemy{
         TextureRegion[][] expRegion = TextureRegion.split(expImage,53,38);
         animation = new Animation<>(0.1f,expRegion[0]);
 
-
-
-
-
     }
 //
 ////    x = random.nextFloat(width*(scale - 1)/2);

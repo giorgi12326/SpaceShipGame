@@ -117,14 +117,13 @@ public class Main extends ApplicationAdapter {
             else if(entity instanceof Explosion){
                 entity.animationTimer += Gdx.graphics.getDeltaTime();
                 Animation<TextureRegion> current = entity.animation;
-                batch.draw(current.getKeyFrame(entity.animationTimer), entity.sprite.getX()  + entity.sprite.getWidth() * (1 - entity.sprite.getScaleX()) ,
-                    entity.sprite.getY()  + entity.sprite.getHeight() * (1 - entity.sprite.getScaleY()), entity.sprite.getWidth()*entity.sprite.getScaleX(), entity.sprite.getHeight()*entity.sprite.getScaleY());
+                batch.draw(current.getKeyFrame(entity.animationTimer), entity.sprite.getX()  + entity.width * (1 - entity.sprite.getScaleX()) ,
+                    entity.sprite.getY()  + entity.height * (1 - entity.sprite.getScaleY()), entity.width*entity.sprite.getScaleX(), entity.height*entity.sprite.getScaleX());
+//                System.out.println(entity.width*entity.sprite.getScaleX() + " " + entity.height*entity.sprite.getScaleX());
+                entity.rectangle.set(entity.sprite.getX() - entity.width* entity.sprite.getScaleX()/2 ,
+                    entity.sprite.getY() - entity.height*entity.sprite.getScaleY()/2 ,entity.width*entity.sprite.getScaleY(),entity.height*entity.sprite.getScaleY());
 
-                entity.rectangle.set(entity.sprite.getX() - entity.sprite.getWidth()* entity.sprite.getScaleX()/2 ,
-                    entity.sprite.getY() - entity.sprite.getHeight()*entity.sprite.getScaleY()/2 ,entity.sprite.getWidth()*entity.sprite.getScaleX(),entity.sprite.getHeight()*entity.sprite.getScaleY());
-                if(current.getKeyFrameIndex(entity.animationTimer)  ==4)
-                    explosionList.remove(entity);
-                if (current.getKeyFrameIndex(entity.animationTimer) == 15) {
+                if (current.getKeyFrameIndex(entity.animationTimer) == 4) {
                     explosionList.remove(entity);
                     pendingAnimations.remove(i);
                 }
@@ -140,14 +139,14 @@ public class Main extends ApplicationAdapter {
 //            shapeRenderer.rect(enemyRectangle.getX(), enemyRectangle.getY(), enemyRectangle.getWidth(), enemyRectangle.getHeight());  // Position and dimensions of the rectangle
 //
 //        shapeRenderer.end();
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);  // Use Line type to draw rectangles
-//
-//        for (Entity entity : pendingAnimations) {
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);  // Use Line type to draw rectangles
+
+        for (Entity entity : pendingAnimations) {
 //            shapeRenderer.setColor(Color.RED);
-//            shapeRenderer.rect(entity.rectangle.getX(), entity.rectangle.getY(), entity.rectangle.width, entity.rectangle.height);
-//        }
-//
-//        shapeRenderer.end();
+            shapeRenderer.rect(entity.rectangle.getX(), entity.rectangle.getY(), entity.rectangle.width, entity.rectangle.height);
+        }
+
+        shapeRenderer.end();
 
         batch.end();
     }
@@ -186,7 +185,6 @@ public class Main extends ApplicationAdapter {
                 Enemy enemy =enemies.get(i);
                 if (enemy.rectangle.overlaps(explosion.rectangle)) {
                     pendingAnimations.add(enemy);
-                    System.out.println("here");
 
                     garbageCollector.add(enemies.get(i));
                 }
