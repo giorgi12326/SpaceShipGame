@@ -34,7 +34,7 @@ public class Explosion extends Bullet{
             }
         }
 
-        animation = new Animation<>(0.1f,arrRegion);
+        animation = new Animation<>(0.05f,arrRegion);
 
 
 

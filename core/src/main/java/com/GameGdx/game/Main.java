@@ -5,14 +5,12 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.badlogic.gdx.math.Interpolation;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
@@ -29,8 +27,9 @@ public class Main extends ApplicationAdapter {
     float backgroundWidth;
     float backgroundHeight;
     Sound shoot;
-    Sound pop;
-    Music meow_meow;
+    Sound shootSound;
+    Sound explosionSound;
+    Music gameMusic;
     float enemyTimer;
     Texture backgroundTexture;
     Sprite backgroundSprite;
@@ -40,6 +39,8 @@ public class Main extends ApplicationAdapter {
     List<Enemy> enemies;
     List<Entity> pendingAnimations;
     List<Entity> garbageCollector;
+    List<Explosion> explosionList;
+    Music pop ;
 
 
     @Override
@@ -61,15 +62,15 @@ public class Main extends ApplicationAdapter {
         backgroundSprite.setY(backgroundHeight*3/8);
         enemies = new ArrayList<>();
         pendingAnimations = new ArrayList<>();
-        shoot = Gdx.audio.newSound(Gdx.files.internal("shoot.mp3"));
-        long soundId = shoot.play();
-        shoot.setVolume(soundId,0.01f);
-        pop = Gdx.audio.newSound(Gdx.files.internal("pop.mp3"));
-        meow_meow = Gdx.audio.newMusic(Gdx.files.internal("meow_meow.mp3"));
-        meow_meow.setLooping(true);
-        meow_meow.setVolume(2f);
-        meow_meow.play();
+        shootSound = Gdx.audio.newSound(Gdx.files.internal("shootSound.mp3"));
+        explosionSound = Gdx.audio.newSound(Gdx.files.internal("bomb.mp3"));
+        gameMusic = Gdx.audio.newMusic(Gdx.files.internal("gameMusic.mp3"));
+        pop = Gdx.audio.newMusic(Gdx.files.internal("pop.mp3"));
+        gameMusic.setLooping(true);
+        gameMusic.setVolume(1f);
+        gameMusic.play();
         garbageCollector = new ArrayList<>();
+        explosionList = new ArrayList<>();
     }
 
     @Override
@@ -116,27 +117,37 @@ public class Main extends ApplicationAdapter {
             else if(entity instanceof Explosion){
                 entity.animationTimer += Gdx.graphics.getDeltaTime();
                 Animation<TextureRegion> current = entity.animation;
-                batch.draw(current.getKeyFrame(entity.animationTimer), entity.sprite.getX()  + entity.sprite.getWidth() * (1 - entity.sprite.getScaleX()) / 2,
-                    entity.sprite.getY()  + entity.sprite.getHeight() * (1 - entity.sprite.getScaleY()) / 2, 256, 256);
+                batch.draw(current.getKeyFrame(entity.animationTimer), entity.sprite.getX()  + entity.sprite.getWidth() * (1 - entity.sprite.getScaleX()) ,
+                    entity.sprite.getY()  + entity.sprite.getHeight() * (1 - entity.sprite.getScaleY()), entity.sprite.getWidth()*entity.sprite.getScaleX(), entity.sprite.getHeight()*entity.sprite.getScaleY());
 
-                entity.rectangle.set(entity.sprite.getX() + (-entity.sprite.getWidth() + entity.sprite.getWidth() * entity.sprite.getScaleX())/2,
-                    entity.sprite.getY() + (entity.sprite.getHeight() -entity.sprite.getHeight()*entity.sprite.getScaleY())/2,entity.sprite.getWidth() * entity.sprite.getScaleX(),entity.sprite.getHeight()*entity.sprite.getScaleY());
-
+                entity.rectangle.set(entity.sprite.getX() - entity.sprite.getWidth()* entity.sprite.getScaleX()/2 ,
+                    entity.sprite.getY() - entity.sprite.getHeight()*entity.sprite.getScaleY()/2 ,entity.sprite.getWidth()*entity.sprite.getScaleX(),entity.sprite.getHeight()*entity.sprite.getScaleY());
+                if(current.getKeyFrameIndex(entity.animationTimer)  ==4)
+                    explosionList.remove(entity);
                 if (current.getKeyFrameIndex(entity.animationTimer) == 15) {
+                    explosionList.remove(entity);
                     pendingAnimations.remove(i);
                 }
 
             }
         }
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);  // Use Line type to draw rectangles
-
-        for (Entity entity : pendingAnimations) {
-            Rectangle hitbox = entity.rectangle;
-            shapeRenderer.setColor(Color.RED);  // Set color for the hitboxes
-            shapeRenderer.rect(hitbox.x, hitbox.y, hitbox.width, hitbox.height);
-        }
-
-        shapeRenderer.end();
+        //
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);  // Use Filled for a solid rectangle or Line for an outline
+//        shapeRenderer.setColor(Color.RED);
+//        for(Rectangle bulletRectangle: bulletRectangleList)
+//            shapeRenderer.rect(bulletRectangle.getX(), bulletRectangle.getY(), bulletRectangle.width, bulletRectangle.height);  // Position and dimensions of the rectangle
+//        for(Rectangle enemyRectangle: enemyRectangleList)
+//            shapeRenderer.rect(enemyRectangle.getX(), enemyRectangle.getY(), enemyRectangle.getWidth(), enemyRectangle.getHeight());  // Position and dimensions of the rectangle
+//
+//        shapeRenderer.end();
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);  // Use Line type to draw rectangles
+//
+//        for (Entity entity : pendingAnimations) {
+//            shapeRenderer.setColor(Color.RED);
+//            shapeRenderer.rect(entity.rectangle.getX(), entity.rectangle.getY(), entity.rectangle.width, entity.rectangle.height);
+//        }
+//
+//        shapeRenderer.end();
 
         batch.end();
     }
@@ -154,10 +165,12 @@ public class Main extends ApplicationAdapter {
                 Enemy enemy = enemies.get(j);
                 if (enemy.rectangle.overlaps(bullet.rectangle)) {
                     if(bullet instanceof Rocket) {
-                    pendingAnimations.add(new Explosion(bullet.sprite.getX(), bullet.sprite.getY()));
-                    garbageCollector.add(enemies.get(j));
-                        System.out.println("asd");
+                        Explosion explosion = new Explosion(bullet.sprite.getX(), bullet.sprite.getY());
+                        explosionSound.play();
+                        pendingAnimations.add(explosion);
+                        explosionList.add(explosion);
                     }
+
                     pendingAnimations.add(enemy);
                     garbageCollector.add(enemies.get(j));
                     garbageCollector.add(bullets.get(i));
@@ -168,13 +181,26 @@ public class Main extends ApplicationAdapter {
                 garbageCollector.add(bullets.get(i));
             }
         }
+        for (Explosion explosion : explosionList) {
+            for (int i = enemies.size() - 1; i >= 0; i--) {
+                Enemy enemy =enemies.get(i);
+                if (enemy.rectangle.overlaps(explosion.rectangle)) {
+                    pendingAnimations.add(enemy);
+                    System.out.println("here");
+
+                    garbageCollector.add(enemies.get(i));
+                }
+            }
+        }
+
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Enemy enemy = enemies.get(i);
             if(enemy instanceof Rock)
              enemy.sprite.translateY(-Rock.moveSpeed* delta);
             enemy.rectangle.set(enemy.sprite.getX()+ enemy.sprite.getWidth()*(1-enemy.sprite.getScaleX())/2 ,
                 enemy.sprite.getY() + enemy.sprite.getHeight()*(1-enemy.sprite.getScaleY())/2,enemy.sprite.getWidth()*enemy.scale,enemy.sprite.getHeight()* enemy.scale);
-            if(enemy.sprite.getY()  < 0)
+
+            if(enemy.sprite.getY() < 0)
                 garbageCollector.add(enemies.get(i));
         }
         for (Entity entity : garbageCollector){
@@ -210,7 +236,7 @@ public class Main extends ApplicationAdapter {
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             if (Lasers.timer > Lasers.spawnSpeed) {
-                shoot.play();
+                shootSound.play();
                 createLasers();
                 Lasers.timer = 0;
             }

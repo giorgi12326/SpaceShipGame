@@ -11,7 +11,7 @@ import java.util.Random;
 
 public class Rock extends Enemy{
 
-    public static float spawnSpeed = 0.25f;
+    public static float spawnSpeed = 0.1f;
     public static float timer = 0;
 
     public static float moveSpeed = 400f;
