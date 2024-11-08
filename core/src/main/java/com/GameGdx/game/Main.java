@@ -5,12 +5,14 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.utils.ScreenUtils;
 import com.badlogic.gdx.math.Rectangle;
 import java.util.ArrayList;
@@ -41,10 +43,12 @@ public class Main extends ApplicationAdapter {
     List<Entity> garbageCollector;
     List<Explosion> explosionList;
     Music pop ;
+    Circle rectangle;
 
 
     @Override
     public void create() {
+        rectangle = new Circle();
         shapeRenderer = new ShapeRenderer();
         backgroundWidth = Gdx.graphics.getWidth();
         backgroundHeight = Gdx.graphics.getHeight();
@@ -78,8 +82,34 @@ public class Main extends ApplicationAdapter {
         input();
         logic();
         draw();
+
     }
-    Rectangle r;
+
+    //sprite getWidth and getX return original values
+    //rectangle starts and scales and sprites original position
+    //but circle scales from its center which is its original coordinates
+//    private void test() {
+//        batch.begin();
+//        shipSprite.setScale(3f);
+//        shipSprite.setX(100);
+//        shipSprite.setY(100);
+//        System.out.println(shipSprite.getX() + " " + shipSprite.getWidth() + "asd");
+//
+//        rectangle.set(shipSprite.getX(),shipSprite.getY(),shipSprite.getWidth());
+//
+//        shipSprite.draw(batch);
+//
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shipSprite.setColor(Color.RED);
+//
+//        shapeRenderer.circle(shipSprite.getX() - shipSprite.getWidth()*shipSprite.getScaleX()/2 + shipSprite.getWidth()/2 ,
+//            shipSprite.getY() - shipSprite.getWidth()*(shipSprite.getScaleY()-1)/2 ,
+//            shipSprite.getWidth()*shipSprite.getScaleX());
+//
+//        shapeRenderer.end();
+//
+//        batch.end();
+//    }
 
     private void draw() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
@@ -117,36 +147,28 @@ public class Main extends ApplicationAdapter {
             else if(entity instanceof Explosion){
                 entity.animationTimer += Gdx.graphics.getDeltaTime();
                 Animation<TextureRegion> current = entity.animation;
-                batch.draw(current.getKeyFrame(entity.animationTimer), entity.sprite.getX()  + entity.width * (1 - entity.sprite.getScaleX()) ,
-                    entity.sprite.getY()  + entity.height * (1 - entity.sprite.getScaleY()), entity.width*entity.sprite.getScaleX(), entity.height*entity.sprite.getScaleX());
-//                System.out.println(entity.width*entity.sprite.getScaleX() + " " + entity.height*entity.sprite.getScaleX());
-                entity.rectangle.set(entity.sprite.getX() - entity.width* entity.sprite.getScaleX()/2 ,
-                    entity.sprite.getY() - entity.height*entity.sprite.getScaleY()/2 ,entity.width*entity.sprite.getScaleY(),entity.height*entity.sprite.getScaleY());
+                batch.draw(current.getKeyFrame(entity.animationTimer), entity.sprite.getX()  + entity.sprite.getWidth() * (1 - entity.sprite.getScaleX()) ,
+                    entity.sprite.getY()  + entity.sprite.getHeight() * (1 - entity.sprite.getScaleY()), entity.sprite.getWidth()*entity.sprite.getScaleX(), entity.sprite.getHeight()*entity.sprite.getScaleY());
 
-                if (current.getKeyFrameIndex(entity.animationTimer) == 4) {
+                entity.rectangle.set(entity.sprite.getX() - entity.sprite.getWidth()* entity.sprite.getScaleX()/2 ,
+                    entity.sprite.getY() - entity.sprite.getHeight()*entity.sprite.getScaleY()/2 ,entity.sprite.getWidth()*entity.sprite.getScaleX(),entity.sprite.getHeight()*entity.sprite.getScaleY());
+                if(current.getKeyFrameIndex(entity.animationTimer)  ==4)
+                    explosionList.remove(entity);
+                if (current.getKeyFrameIndex(entity.animationTimer) == 15) {
                     explosionList.remove(entity);
                     pendingAnimations.remove(i);
                 }
 
             }
         }
-        //
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);  // Use Filled for a solid rectangle or Line for an outline
-//        shapeRenderer.setColor(Color.RED);
-//        for(Rectangle bulletRectangle: bulletRectangleList)
-//            shapeRenderer.rect(bulletRectangle.getX(), bulletRectangle.getY(), bulletRectangle.width, bulletRectangle.height);  // Position and dimensions of the rectangle
-//        for(Rectangle enemyRectangle: enemyRectangleList)
-//            shapeRenderer.rect(enemyRectangle.getX(), enemyRectangle.getY(), enemyRectangle.getWidth(), enemyRectangle.getHeight());  // Position and dimensions of the rectangle
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);  // Use Line type to draw rectangles
+//
+//        for (Entity entity : pendingAnimations) {
+//            shapeRenderer.setColor(Color.RED);
+//            shapeRenderer.rect(entity.rectangle.getX(), entity.rectangle.getY(), entity.rectangle.width, entity.rectangle.height);
+//        }
 //
 //        shapeRenderer.end();
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);  // Use Line type to draw rectangles
-
-        for (Entity entity : pendingAnimations) {
-//            shapeRenderer.setColor(Color.RED);
-            shapeRenderer.rect(entity.rectangle.getX(), entity.rectangle.getY(), entity.rectangle.width, entity.rectangle.height);
-        }
-
-        shapeRenderer.end();
 
         batch.end();
     }
@@ -185,6 +207,7 @@ public class Main extends ApplicationAdapter {
                 Enemy enemy =enemies.get(i);
                 if (enemy.rectangle.overlaps(explosion.rectangle)) {
                     pendingAnimations.add(enemy);
+                    System.out.println("here");
 
                     garbageCollector.add(enemies.get(i));
                 }
