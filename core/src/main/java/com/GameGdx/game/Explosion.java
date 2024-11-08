@@ -21,9 +21,6 @@ public class Explosion extends Bullet{
         sprite.setY(y);
         rectangle = new Rectangle();
 
-        width = sprite.getWidth()*scale;
-        height = sprite.getHeight()*scale;
-
         Texture expImage = new Texture("explode.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,64,64);
         TextureRegion[] arrRegion = new TextureRegion[expRegion.length*expRegion[0].length];
