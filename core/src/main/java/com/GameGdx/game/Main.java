@@ -147,21 +147,20 @@ public class Main extends ApplicationAdapter {
             else if(entity instanceof Explosion){
                 entity.animationTimer += Gdx.graphics.getDeltaTime();
                 Animation<TextureRegion> current = entity.animation;
-                batch.draw(current.getKeyFrame(entity.animationTimer), entity.sprite.getX()  + entity.sprite.getWidth() * (1 - entity.sprite.getScaleX()) ,
-                    entity.sprite.getY()  + entity.sprite.getHeight() * (1 - entity.sprite.getScaleY()), entity.sprite.getWidth()*entity.sprite.getScaleX(), entity.sprite.getHeight()*entity.sprite.getScaleY());
+                batch.draw(current.getKeyFrame(entity.animationTimer),entity.sprite.getX() - Explosion.widthOfRegion*entity.sprite.getScaleX()/2f ,
+                    entity.sprite.getY() - Explosion.heightOfRegion*entity.sprite.getScaleY()/2f, Explosion.widthOfRegion*entity.sprite.getScaleX(), Explosion.heightOfRegion*entity.sprite.getScaleY());
 
-                entity.rectangle.set(entity.sprite.getX() - entity.sprite.getWidth()* entity.sprite.getScaleX()/2 ,
-                    entity.sprite.getY() - entity.sprite.getHeight()*entity.sprite.getScaleY()/2 ,entity.sprite.getWidth()*entity.sprite.getScaleX(),entity.sprite.getHeight()*entity.sprite.getScaleY());
-                if(current.getKeyFrameIndex(entity.animationTimer)  ==4)
-                    explosionList.remove(entity);
-                if (current.getKeyFrameIndex(entity.animationTimer) == 15) {
+                entity.rectangle.set(entity.sprite.getX() - Explosion.heightOfRegion*entity.sprite.getScaleX()/2 ,
+                    entity.sprite.getY() - Explosion.heightOfRegion*entity.sprite.getScaleY()/2 +20,entity.sprite.getHeight()*entity.sprite.getScaleX(),entity.sprite.getHeight()*entity.sprite.getScaleY());
+                if (current.getKeyFrameIndex(entity.animationTimer) == 3) {
                     explosionList.remove(entity);
                     pendingAnimations.remove(i);
                 }
 
             }
         }
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);  // Use Line type to draw rectangles
+//
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);  // Use Line type to draw rectangles
 //
 //        for (Entity entity : pendingAnimations) {
 //            shapeRenderer.setColor(Color.RED);
@@ -169,8 +168,8 @@ public class Main extends ApplicationAdapter {
 //        }
 //
 //        shapeRenderer.end();
-
         batch.end();
+
     }
     private void logic() {
         float delta = Gdx.graphics.getDeltaTime();

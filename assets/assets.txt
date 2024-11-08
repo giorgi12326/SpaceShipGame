@@ -6,7 +6,6 @@ explode.png
 gameMusic.mp3
 laser.png
 libgdx.png
-meow_meow.mp3
 plane.png
 pop.mp3
 rock.png
