@@ -1,3 +1,4 @@
+LightningBolt.png
 Playerplaneleft.png
 Playerplaneright.png
 bg.png

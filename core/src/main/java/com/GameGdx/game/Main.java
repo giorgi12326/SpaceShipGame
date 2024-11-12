@@ -44,6 +44,8 @@ public class Main extends ApplicationAdapter {
     List<Explosion> explosionList;
     Music pop ;
     Circle rectangle;
+    float shipTimer = 0f;
+    float dashTimer = 2f;
 
 
     @Override
@@ -75,6 +77,7 @@ public class Main extends ApplicationAdapter {
         gameMusic.play();
         garbageCollector = new ArrayList<>();
         explosionList = new ArrayList<>();
+
     }
 
     @Override
@@ -113,6 +116,7 @@ public class Main extends ApplicationAdapter {
 
     private void draw() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
+        float delta = Gdx.graphics.getDeltaTime();
         batch.begin();
 
         backgroundSprite.draw(batch);
@@ -127,22 +131,17 @@ public class Main extends ApplicationAdapter {
         shipSprite.draw(batch);
 
         for(Bullet bullet : bullets) {
-            bullet.sprite.draw(batch);
+            bullet.update(batch);
         }
         for(Enemy enemy : enemies) {
-            enemy.sprite.draw(batch);
+            enemy.update(batch);
+
         }
         for(int i = pendingAnimations.size()-1; i >=0 ;i--){
 
             Entity entity = pendingAnimations.get(i);
             if(entity instanceof Enemy) {
-                entity.animationTimer += Gdx.graphics.getDeltaTime();
-                Animation<TextureRegion> current = entity.animation;
-                batch.draw(current.getKeyFrame(entity.animationTimer), entity.sprite.getX() - 50 + entity.sprite.getWidth() * (1 - entity.sprite.getScaleX()) / 2,
-                    entity.sprite.getY() - 19 + entity.sprite.getHeight() * (1 - entity.sprite.getScaleY()) / 2, 179, 114);
-                if (current.getKeyFrameIndex(entity.animationTimer) == 2) {
-                    pendingAnimations.remove(i);
-                }
+//               entity.update(batch);
             }
             else if(entity instanceof Explosion){
                 entity.animationTimer += Gdx.graphics.getDeltaTime();
@@ -152,22 +151,12 @@ public class Main extends ApplicationAdapter {
 
                 entity.rectangle.set(entity.sprite.getX() - Explosion.heightOfRegion*entity.sprite.getScaleX()/2 ,
                     entity.sprite.getY() - Explosion.heightOfRegion*entity.sprite.getScaleY()/2 +20,entity.sprite.getHeight()*entity.sprite.getScaleX(),entity.sprite.getHeight()*entity.sprite.getScaleY());
-                if (current.getKeyFrameIndex(entity.animationTimer) == 3) {
+                if (current.getKeyFrameIndex(entity.animationTimer) == 2) {
                     explosionList.remove(entity);
                     pendingAnimations.remove(i);
                 }
-
             }
         }
-//
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);  // Use Line type to draw rectangles
-//
-//        for (Entity entity : pendingAnimations) {
-//            shapeRenderer.setColor(Color.RED);
-//            shapeRenderer.rect(entity.rectangle.getX(), entity.rectangle.getY(), entity.rectangle.width, entity.rectangle.height);
-//        }
-//
-//        shapeRenderer.end();
         batch.end();
 
     }
@@ -178,8 +167,8 @@ public class Main extends ApplicationAdapter {
             Bullet bullet = bullets.get(i);
             bullet.sprite.translateY(1000f * delta);
 
-            bullet.rectangle.set(bullet.sprite.getX() + (bullet.sprite.getWidth() - bullet.sprite.getWidth() * bullet.sprite.getScaleX())/2,
-                bullet.sprite.getY() + (bullet.sprite.getHeight() -bullet.sprite.getHeight()*bullet.sprite.getScaleY())/2,bullet.sprite.getWidth() * bullet.sprite.getScaleX(),bullet.sprite.getHeight()*bullet.sprite.getScaleY());
+//            bullet.rectangle.set(bullet.sprite.getX() + (bullet.sprite.getWidth() - bullet.sprite.getWidth() * bullet.sprite.getScaleX())/2,
+//                bullet.sprite.getY() + (bullet.sprite.getHeight() -bullet.sprite.getHeight()*bullet.sprite.getScaleY())/2,bullet.sprite.getWidth() * bullet.sprite.getScaleX(),bullet.sprite.getHeight()*bullet.sprite.getScaleY());
 
             for (int j = enemies.size() - 1; j >= 0; j--) {
                 Enemy enemy = enemies.get(j);
@@ -187,9 +176,10 @@ public class Main extends ApplicationAdapter {
                     if(bullet instanceof Rocket) {
                         Explosion explosion = new Explosion(bullet.sprite.getX(), bullet.sprite.getY());
                         explosionSound.play();
-                        pendingAnimations.add(explosion);
+
                         explosionList.add(explosion);
                     }
+                    enemy.shouldDisplayAnimation = true;
 
                     pendingAnimations.add(enemy);
                     garbageCollector.add(enemies.get(j));
@@ -217,17 +207,21 @@ public class Main extends ApplicationAdapter {
             Enemy enemy = enemies.get(i);
             if(enemy instanceof Rock)
              enemy.sprite.translateY(-Rock.moveSpeed* delta);
-            enemy.rectangle.set(enemy.sprite.getX()+ enemy.sprite.getWidth()*(1-enemy.sprite.getScaleX())/2 ,
-                enemy.sprite.getY() + enemy.sprite.getHeight()*(1-enemy.sprite.getScaleY())/2,enemy.sprite.getWidth()*enemy.scale,enemy.sprite.getHeight()* enemy.scale);
 
             if(enemy.sprite.getY() < 0)
                 garbageCollector.add(enemies.get(i));
         }
-        for (Entity entity : garbageCollector){
+
+        for (int i = garbageCollector.size() - 1; i >= 0; i--) {
+            Entity entity = garbageCollector.get( i);
             if(entity instanceof Bullet)
                 bullets.remove(entity);
-            else if(entity instanceof Enemy)
-                enemies.remove(entity);
+            else if(entity instanceof Enemy) {
+                if (entity.shouldDisplayAnimation == false) {
+                    enemies.remove(entity);
+                    garbageCollector.remove(entity);
+                }
+            }
 
         }
 
@@ -242,17 +236,24 @@ public class Main extends ApplicationAdapter {
         float speed = 300.0f;
         float delta = Gdx.graphics.getDeltaTime();
 
-        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.D)) {
             shipSprite.translateX(delta * speed);
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.A)) {
             shipSprite.translateX(-delta * speed);
         }
-        if(Gdx.input.isKeyPressed(Input.Keys.UP)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.W)) {
             shipSprite.translateY(delta * speed);
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.DOWN)) {
+        else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
             shipSprite.translateY(-delta * speed);
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
+            if(shipTimer > dashTimer) {
+                shipSprite.translateX(-delta * speed * 30);
+                shipTimer = 0f;
+            }
+
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             if (Lasers.timer > Lasers.spawnSpeed) {
@@ -270,6 +271,7 @@ public class Main extends ApplicationAdapter {
         }
         Rocket.timer+= delta;
         Lasers.timer+= delta;
+        shipTimer+=delta;
     }
 
     private void createLasers() {

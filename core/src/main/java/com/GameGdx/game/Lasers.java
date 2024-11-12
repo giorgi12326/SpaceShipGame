@@ -20,9 +20,8 @@ public class Lasers extends Bullet{
 
         width = sprite.getWidth()*scale;
         height = sprite.getHeight()*scale;
-
-
-
+    }
+    public void update(){
 
     }
 }

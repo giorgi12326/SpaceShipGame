@@ -15,7 +15,7 @@ public class Explosion extends Bullet{
 
 
     public Explosion(float x,float y){
-        scale= 8f;
+        scale= 4f;
 
         texture = new Texture("explode.png");
         sprite = new Sprite(texture);
@@ -35,10 +35,6 @@ public class Explosion extends Bullet{
         heightOfRegion = tileHeight;
 
         animation = new Animation<>(0.08f,expRegion[0]);
-
-
-
-
-
     }
+
 }

@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
@@ -11,14 +12,13 @@ import java.util.Random;
 
 public class Rock extends Enemy{
 
-    public static float spawnSpeed = 0.1f;
+    public static float spawnSpeed = 1.2f;
     public static float timer = 0;
-
     public static float moveSpeed = 400f;
 
-    Rock(){
-        scale = 4.0f;
 
+    Rock(){
+        scale = 3.0f;
         texture = new Texture("rock.png");
         sprite = new Sprite(texture);
         sprite.setScale(scale);
@@ -32,15 +32,27 @@ public class Rock extends Enemy{
         Texture expImage = new Texture("rock_explode.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,53,38);
         animation = new Animation<>(0.1f,expRegion[0]);
+//        System.out.println(shouldDisplayAnimation);
+
+        shouldDisplayAnimation= false;
+
 
     }
+
+    //    entity.animationTimer += Gdx.graphics.getDeltaTime();
+//    Animation<TextureRegion> current = entity.animation;
+//                batch.draw(current.getKeyFrame(entity.animationTimer),entity.sprite.getX() - Explosion.widthOfRegion*entity.sprite.getScaleX()/2f ,
+//        entity.sprite.getY() - Explosion.heightOfRegion*entity.sprite.getScaleY()/2f, Explosion.widthOfRegion*entity.sprite.getScaleX(), Explosion.heightOfRegion*entity.sprite.getScaleY());
 //
-////    x = random.nextFloat(width*(scale - 1)/2);
-//    public static Texture texture = new Texture("rock.png");
-//    public static TextureRegion[][] textureRegions = TextureRegion.split(texture,53,38);
-////    Animation<TextureRegion> animation = new Animation<>(0.1f,textureRegions[0]);
-//    public Sprite sprite = new Sprite(texture);
-//    Rock(int x,int y,int scale){
+//                entity.rectangle.set(entity.sprite.getX() - Explosion.heightOfRegion*entity.sprite.getScaleX()/2 ,
+//        entity.sprite.getY() - Explosion.heightOfRegion*entity.sprite.getScaleY()/2 +20,entity.sprite.getHeight()*entity.sprite.getScaleX(),entity.sprite.getHeight()*entity.sprite.getScaleY());
+//                if (current.getKeyFrameIndex(entity.animationTimer) == 3) {
+//        explosionList.remove(entity);
+//        pendingAnimations.remove(i);
+
+
+
+
 
 
 }

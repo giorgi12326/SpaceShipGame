@@ -11,8 +11,8 @@ import java.util.Random;
 public class Enemy extends Entity{
     public static float moveSpeed = 20f;
 
-
-
-
-
+    @Override
+    public void triggerAnimation() {
+        System.out.println("this");
+    }
 }
