@@ -86,33 +86,13 @@ public class Main extends ApplicationAdapter {
         logic();
         draw();
 
+
     }
 
     //sprite getWidth and getX return original values
     //rectangle starts and scales and sprites original position
     //but circle scales from its center which is its original coordinates
-//    private void test() {
-//        batch.begin();
-//        shipSprite.setScale(3f);
-//        shipSprite.setX(100);
-//        shipSprite.setY(100);
-//        System.out.println(shipSprite.getX() + " " + shipSprite.getWidth() + "asd");
-//
-//        rectangle.set(shipSprite.getX(),shipSprite.getY(),shipSprite.getWidth());
-//
-//        shipSprite.draw(batch);
-//
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        shipSprite.setColor(Color.RED);
-//
-//        shapeRenderer.circle(shipSprite.getX() - shipSprite.getWidth()*shipSprite.getScaleX()/2 + shipSprite.getWidth()/2 ,
-//            shipSprite.getY() - shipSprite.getWidth()*(shipSprite.getScaleY()-1)/2 ,
-//            shipSprite.getWidth()*shipSprite.getScaleX());
-//
-//        shapeRenderer.end();
-//
-//        batch.end();
-//    }
+
 
     private void draw() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
@@ -131,32 +111,44 @@ public class Main extends ApplicationAdapter {
         shipSprite.draw(batch);
 
         for(Bullet bullet : bullets) {
+            if(bullet instanceof Explosion)
+                System.out.println("exp");
             bullet.update(batch);
         }
         for(Enemy enemy : enemies) {
             enemy.update(batch);
 
         }
-        for(int i = pendingAnimations.size()-1; i >=0 ;i--){
+//        for(int i = pendingAnimations.size()-1; i >=0 ;i--){
+//
+//            Entity entity = pendingAnimations.get(i);
+//            if(entity instanceof Enemy) {
+////               entity.update(batch);
+//            }
+//            else if(entity instanceof Explosion){
+//                System.out.println("bomb");
+//                entity.animationTimer += Gdx.graphics.getDeltaTime();
+//                Animation<TextureRegion> current = entity.animation;
+//                batch.draw(current.getKeyFrame(entity.animationTimer),0,
+//                    0, Explosion.widthOfRegion*entity.sprite.getScaleX(), Explosion.heightOfRegion*entity.sprite.getScaleY());
+//
+//                entity.rectangle.set(entity.sprite.getX() - Explosion.heightOfRegion*entity.sprite.getScaleX()/2 ,
+//                    entity.sprite.getY() - Explosion.heightOfRegion*entity.sprite.getScaleY()/2 +20,entity.sprite.getHeight()*entity.sprite.getScaleX(),entity.sprite.getHeight()*entity.sprite.getScaleY());
+//                if (current.getKeyFrameIndex(entity.animationTimer) == 2) {
+//                    explosionList.remove(entity);
+//                    pendingAnimations.remove(i);
+//                }
+//            }
+//        }
 
-            Entity entity = pendingAnimations.get(i);
-            if(entity instanceof Enemy) {
-//               entity.update(batch);
-            }
-            else if(entity instanceof Explosion){
-                entity.animationTimer += Gdx.graphics.getDeltaTime();
-                Animation<TextureRegion> current = entity.animation;
-                batch.draw(current.getKeyFrame(entity.animationTimer),entity.sprite.getX() - Explosion.widthOfRegion*entity.sprite.getScaleX()/2f ,
-                    entity.sprite.getY() - Explosion.heightOfRegion*entity.sprite.getScaleY()/2f, Explosion.widthOfRegion*entity.sprite.getScaleX(), Explosion.heightOfRegion*entity.sprite.getScaleY());
-
-                entity.rectangle.set(entity.sprite.getX() - Explosion.heightOfRegion*entity.sprite.getScaleX()/2 ,
-                    entity.sprite.getY() - Explosion.heightOfRegion*entity.sprite.getScaleY()/2 +20,entity.sprite.getHeight()*entity.sprite.getScaleX(),entity.sprite.getHeight()*entity.sprite.getScaleY());
-                if (current.getKeyFrameIndex(entity.animationTimer) == 2) {
-                    explosionList.remove(entity);
-                    pendingAnimations.remove(i);
-                }
-            }
-        }
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);  // Use Line type to draw rectangles
+//
+//        for (Entity entity : bullets) {
+//            shapeRenderer.setColor(Color.RED);
+//            shapeRenderer.rect(entity.rectangle.getX(), entity.rectangle.getY(), entity.rectangle.width, entity.rectangle.height);
+//        }
+//
+//        shapeRenderer.end();
         batch.end();
 
     }
@@ -165,7 +157,7 @@ public class Main extends ApplicationAdapter {
 
         for (int i = bullets.size() - 1; i >= 0; i--) {
             Bullet bullet = bullets.get(i);
-            bullet.sprite.translateY(1000f * delta);
+//            bullet.sprite.translateY(1000f * delta);
 
 //            bullet.rectangle.set(bullet.sprite.getX() + (bullet.sprite.getWidth() - bullet.sprite.getWidth() * bullet.sprite.getScaleX())/2,
 //                bullet.sprite.getY() + (bullet.sprite.getHeight() -bullet.sprite.getHeight()*bullet.sprite.getScaleY())/2,bullet.sprite.getWidth() * bullet.sprite.getScaleX(),bullet.sprite.getHeight()*bullet.sprite.getScaleY());
@@ -173,15 +165,14 @@ public class Main extends ApplicationAdapter {
             for (int j = enemies.size() - 1; j >= 0; j--) {
                 Enemy enemy = enemies.get(j);
                 if (enemy.rectangle.overlaps(bullet.rectangle)) {
+
                     if(bullet instanceof Rocket) {
                         Explosion explosion = new Explosion(bullet.sprite.getX(), bullet.sprite.getY());
                         explosionSound.play();
-
-                        explosionList.add(explosion);
+                        bullets.add(explosion);
                     }
-                    enemy.shouldDisplayAnimation = true;
 
-                    pendingAnimations.add(enemy);
+                    enemy.shouldDisplayAnimation = true;
                     garbageCollector.add(enemies.get(j));
                     garbageCollector.add(bullets.get(i));
                     pop.play();
@@ -191,22 +182,24 @@ public class Main extends ApplicationAdapter {
                 garbageCollector.add(bullets.get(i));
             }
         }
-        for (Explosion explosion : explosionList) {
-            for (int i = enemies.size() - 1; i >= 0; i--) {
-                Enemy enemy =enemies.get(i);
-                if (enemy.rectangle.overlaps(explosion.rectangle)) {
-                    pendingAnimations.add(enemy);
-                    System.out.println("here");
-
-                    garbageCollector.add(enemies.get(i));
-                }
-            }
-        }
+//        for (Explosion explosion : explosionList) {
+//            for (int i = enemies.size() - 1; i >= 0; i--) {
+//                Enemy enemy =enemies.get(i);
+//                if (enemy.rectangle.overlaps(explosion.rectangle)) {
+//
+//                    pendingAnimations.add(enemy);
+//                    pendingAnimations.add(explosion);
+//                    System.out.println("here");
+//dw
+//                    garbageCollector.add(enemies.get(i));
+//                }
+//            }
+//        }
 
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Enemy enemy = enemies.get(i);
             if(enemy instanceof Rock)
-             enemy.sprite.translateY(-Rock.moveSpeed* delta);
+//             enemy.sprite.translateY(-Rock.moveSpeed* delta);
 
             if(enemy.sprite.getY() < 0)
                 garbageCollector.add(enemies.get(i));
@@ -214,10 +207,14 @@ public class Main extends ApplicationAdapter {
 
         for (int i = garbageCollector.size() - 1; i >= 0; i--) {
             Entity entity = garbageCollector.get( i);
-            if(entity instanceof Bullet)
-                bullets.remove(entity);
+            if(entity instanceof Bullet){
+                if (!entity.shouldDisplayAnimation) {
+                    bullets.remove(entity);
+                    garbageCollector.remove(entity);
+                }
+            }
             else if(entity instanceof Enemy) {
-                if (entity.shouldDisplayAnimation == false) {
+                if (!entity.shouldDisplayAnimation) {
                     enemies.remove(entity);
                     garbageCollector.remove(entity);
                 }

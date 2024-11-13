@@ -10,9 +10,6 @@ public class Explosion extends Bullet{
     public static float spawnSpeed = 1f;
     public static float timer = 0;
     public boolean expired = false;
-    public static float widthOfRegion;
-    public static float heightOfRegion;
-
 
     public Explosion(float x,float y){
         scale= 4f;
@@ -26,15 +23,14 @@ public class Explosion extends Bullet{
 
         Texture expImage = new Texture("explode.png");
 
-        int tileWidth = 150;
-        int tileHeight  = 60;
+        width = 150;
+        height  = 60;
 
-        TextureRegion[][] expRegion = TextureRegion.split(expImage,tileWidth,tileHeight);
+        TextureRegion[][] expRegion = TextureRegion.split(expImage,(int)width,(int)height);
+        animation = new Animation<>(0.1f,expRegion[0]);
+        shouldDisplayAnimation = true;
+        framesOfAnimation = 5;
 
-        widthOfRegion = tileWidth;
-        heightOfRegion = tileHeight;
-
-        animation = new Animation<>(0.08f,expRegion[0]);
     }
 
 }

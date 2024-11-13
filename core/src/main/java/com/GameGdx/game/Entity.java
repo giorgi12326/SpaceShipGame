@@ -28,28 +28,40 @@ public class Entity {
 
     public float animationTimer = 0f;
     public Animation<TextureRegion> animation;
-    public volatile boolean shouldDisplayAnimation;
+    public boolean shouldDisplayAnimation;
+    public int framesOfAnimation;
+
+
+
 
     public void update(SpriteBatch batch){
-        if(shouldDisplayAnimation) {
-            if (animation.getKeyFrameIndex(animationTimer) == 2) {
+        if(shouldDisplayAnimation){
+            animationTimer += Gdx.graphics.getDeltaTime();
+            batch.draw(animation.getKeyFrame(animationTimer), sprite.getX() - width*scale + width/2,
+                sprite.getY() - width*scale + width/2,width*scale*2, height*scale*2);
+            if((this instanceof Explosion)) {
+                rectangle.set(sprite.getX() - width * sprite.getScaleX() / 2 + width,
+                    sprite.getY() - height * sprite.getScaleY() / 2 + height,
+                    height * scale, height * scale);
+            }
+            if (animation.getKeyFrameIndex(animationTimer) == framesOfAnimation-1) {
+                animationTimer = 0;
                 shouldDisplayAnimation = false;
             }
-            animationTimer += Gdx.graphics.getDeltaTime();
-            animate(batch);
         }
         else{
-            rectangle.set(sprite.getX()+ sprite.getWidth()*(1-sprite.getScaleX())/2 ,
-                sprite.getY() + sprite.getHeight()*(1-sprite.getScaleY())/2,sprite.getWidth()*scale,sprite.getHeight()* scale);
             sprite.draw(batch);
+            rectangle.set(sprite.getX() - width * sprite.getScaleX() / 2 + width,
+                sprite.getY() - height * sprite.getScaleY() / 2 + height,
+                height * scale, height * scale);
+            move();
+
         }
     }
-    public void animate(SpriteBatch batch){
-
-        batch.draw(animation.getKeyFrame(animationTimer), sprite.getX() - 50 + sprite.getWidth() * (1 - sprite.getScaleX()) / 2,
-            sprite.getY() - 19 + sprite.getHeight() * (1 - sprite.getScaleY()) / 2, 179, 114);
+    public void move(){
 
     }
+
 
     public void triggerAnimation(){
         shouldDisplayAnimation = true;

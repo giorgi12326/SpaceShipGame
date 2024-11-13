@@ -18,7 +18,7 @@ public class Rock extends Enemy{
 
 
     Rock(){
-        scale = 3.0f;
+        scale = 6.0f;
         texture = new Texture("rock.png");
         sprite = new Sprite(texture);
         sprite.setScale(scale);
@@ -26,16 +26,20 @@ public class Rock extends Enemy{
         sprite.setY(Gdx.graphics.getHeight());
         rectangle = new Rectangle();
 
-        width = sprite.getWidth() * scale;
-        height = sprite.getHeight() * scale;
+        width = sprite.getWidth();
+        height = sprite.getHeight();
 
         Texture expImage = new Texture("rock_explode.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,53,38);
         animation = new Animation<>(0.1f,expRegion[0]);
-//        System.out.println(shouldDisplayAnimation);
-
+        framesOfAnimation = 3;
         shouldDisplayAnimation= false;
 
+
+    }
+    @Override
+    public void move(){
+        sprite.translateY(-moveSpeed*Gdx.graphics.getDeltaTime());
 
     }
 
