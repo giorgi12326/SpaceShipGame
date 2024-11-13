@@ -12,15 +12,19 @@ public class UFO extends Enemy {
     public static float timer = 0;
     public static float moveSpeed = 200f;
 
-    UFO(){
+    Ship ship;
+
+    UFO(Ship ship){
+        this.ship = ship;
+
         scale = 5.0f;
-        animationScale = 4f;
+        animationScale = 6f;
 
         texture = new Texture("ufo.png");
         sprite = new Sprite(texture);
         sprite.setScale(scale);
         sprite.setX(Gdx.graphics.getWidth());
-        sprite.setY(random.nextFloat((scale - 1f)/2, Gdx.graphics.getHeight()));
+        sprite.setY(random.nextFloat(ship.sprite.getY()) + 400);
         rectangle = new Rectangle();
 
         width = sprite.getWidth();
@@ -41,7 +45,13 @@ public class UFO extends Enemy {
     }
     @Override
     public void move(){
-        sprite.translateX(-moveSpeed*Gdx.graphics.getDeltaTime());
+        System.out.println(ship.sprite.getX());
+        if(ship.sprite.getX()  > sprite.getX()+ 3f)
+            sprite.translateX(moveSpeed*Gdx.graphics.getDeltaTime());
+        else if (ship.sprite.getX()  < sprite.getX() - 3f)
+            sprite.translateX(-moveSpeed*Gdx.graphics.getDeltaTime());
+
+
 
     }
 }

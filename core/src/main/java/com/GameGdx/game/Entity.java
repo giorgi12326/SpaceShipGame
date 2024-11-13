@@ -40,6 +40,7 @@ public class Entity {
     public void update(SpriteBatch batch){
 
         if(shouldDisplayAnimation){
+
             batch.draw(animation.getKeyFrame(animationTimer), sprite.getX() - width*scale*animationScale/2,
                 sprite.getY() - height*scale*animationScale/2,width*scale*animationScale, height*scale*animationScale);
             animationTimer += Gdx.graphics.getDeltaTime();
