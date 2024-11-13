@@ -1,4 +1,5 @@
 LightningBolt.png
+OmegaBolt.png
 Playerplaneleft.png
 Playerplaneright.png
 bg.png
@@ -15,3 +16,4 @@ rocket.png
 ship.png
 shoot.mp3
 shootSound.mp3
+ufo.png

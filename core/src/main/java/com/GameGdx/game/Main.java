@@ -222,6 +222,12 @@ public class Main extends ApplicationAdapter {
             Rock.timer = 0;
             createEnemy();
         }
+        UFO.timer += delta;
+        if(UFO.timer > UFO.spawnSpeed){
+            System.out.println("asd");
+            UFO.timer = 0;
+            createUFO();
+        }
     }
 
     private void input() {
@@ -245,7 +251,6 @@ public class Main extends ApplicationAdapter {
                 shipSprite.translateX(-delta * speed * 30);
                 shipTimer = 0f;
             }
-
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             if (Lasers.timer > Lasers.spawnSpeed) {
@@ -279,6 +284,10 @@ public class Main extends ApplicationAdapter {
         bullets.add(rocket);
 
     }
+    private void createUFO(){
+        Enemy ufo = new UFO();
+        enemies.add(ufo);
+    }
     private void createEnemy(){
         Enemy enemy = new Rock();
         enemies.add(enemy);
@@ -292,10 +301,12 @@ public class Main extends ApplicationAdapter {
         return arr;
     }
 
+
     @Override
     public void dispose() {
         batch.dispose();
     }
+
 
 
 }

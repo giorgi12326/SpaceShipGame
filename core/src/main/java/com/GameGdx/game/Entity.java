@@ -35,11 +35,13 @@ public class Entity {
     public Animation<TextureRegion> animation;
     public boolean shouldDisplayAnimation;
     public int framesOfAnimation;
+    public float animationScale = 1;
 
     public void update(SpriteBatch batch){
+
         if(shouldDisplayAnimation){
-            batch.draw(animation.getKeyFrame(animationTimer), sprite.getX() - width*scale/2,
-                sprite.getY() - height*scale/2,width*scale, height*scale);
+            batch.draw(animation.getKeyFrame(animationTimer), sprite.getX() - width*scale*animationScale/2,
+                sprite.getY() - height*scale*animationScale/2,width*scale*animationScale, height*scale*animationScale);
             animationTimer += Gdx.graphics.getDeltaTime();
             if((this instanceof Explosion)) {
                 setRectangle();
