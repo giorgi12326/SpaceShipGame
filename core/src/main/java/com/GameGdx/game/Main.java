@@ -85,8 +85,6 @@ public class Main extends ApplicationAdapter {
         input();
         logic();
         draw();
-
-
     }
 
     //sprite getWidth and getX return original values
@@ -111,8 +109,7 @@ public class Main extends ApplicationAdapter {
         shipSprite.draw(batch);
 
         for(Bullet bullet : bullets) {
-            if(bullet instanceof Explosion)
-                System.out.println("exp");
+
             bullet.update(batch);
         }
         for(Enemy enemy : enemies) {
@@ -167,9 +164,10 @@ public class Main extends ApplicationAdapter {
                 if (enemy.rectangle.overlaps(bullet.rectangle)) {
 
                     if(bullet instanceof Rocket) {
-                        Explosion explosion = new Explosion(bullet.sprite.getX(), bullet.sprite.getY());
+                        Explosion explosion = new Explosion(bullet.sprite.getX() + bullet.width/2, bullet.sprite.getY()+ bullet.height/2);
                         explosionSound.play();
                         bullets.add(explosion);
+                        garbageCollector.add(explosion);
                     }
 
                     enemy.shouldDisplayAnimation = true;
@@ -198,15 +196,13 @@ public class Main extends ApplicationAdapter {
 
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Enemy enemy = enemies.get(i);
-            if(enemy instanceof Rock)
-//             enemy.sprite.translateY(-Rock.moveSpeed* delta);
-
             if(enemy.sprite.getY() < 0)
                 garbageCollector.add(enemies.get(i));
         }
 
         for (int i = garbageCollector.size() - 1; i >= 0; i--) {
             Entity entity = garbageCollector.get( i);
+
             if(entity instanceof Bullet){
                 if (!entity.shouldDisplayAnimation) {
                     bullets.remove(entity);
@@ -221,7 +217,6 @@ public class Main extends ApplicationAdapter {
             }
 
         }
-
         Rock.timer += delta;
         if(Rock.timer > Rock.spawnSpeed){
             Rock.timer = 0;

@@ -12,19 +12,26 @@ public class Explosion extends Bullet{
     public boolean expired = false;
 
     public Explosion(float x,float y){
-        scale= 4f;
+        scale= 8f;
 
         texture = new Texture("explode.png");
         sprite = new Sprite(texture);
         sprite.setScale(scale);
         sprite.setX(x);
         sprite.setY(y);
+
+        height = sprite.getHeight();
+        width = sprite.getWidth();
+
+        hitboxWidth = height;
+        hitboxHeight = height;
+
         rectangle = new Rectangle();
 
         Texture expImage = new Texture("explode.png");
 
-        width = 150;
-        height  = 60;
+        width = 150f;
+        height  = 60f;
 
         TextureRegion[][] expRegion = TextureRegion.split(expImage,(int)width,(int)height);
         animation = new Animation<>(0.1f,expRegion[0]);
@@ -32,5 +39,6 @@ public class Explosion extends Bullet{
         framesOfAnimation = 5;
 
     }
+
 
 }
