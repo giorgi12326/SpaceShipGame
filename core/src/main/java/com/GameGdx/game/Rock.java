@@ -12,13 +12,13 @@ import java.util.Random;
 
 public class Rock extends Enemy{
 
-    public static float spawnSpeed = 1.2f;
+    public static float spawnSpeed = 0.1f;
     public static float timer = 0;
     public static float moveSpeed = 400f;
 
 
     Rock(){
-        scale = 6.0f;
+        scale = 4.0f;
         texture = new Texture("rock.png");
         sprite = new Sprite(texture);
         sprite.setScale(scale);
@@ -28,6 +28,12 @@ public class Rock extends Enemy{
 
         width = sprite.getWidth();
         height = sprite.getHeight();
+
+        hitboxWidth = 16f;
+        hitboxHeight = 13f;
+
+        x = sprite.getX();
+        y = sprite.getY();
 
         Texture expImage = new Texture("rock_explode.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,53,38);
