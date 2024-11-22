@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 
 public class Explosion extends Bullet{
     public static float spawnSpeed = 1f;
@@ -26,7 +25,6 @@ public class Explosion extends Bullet{
         hitboxOfEntity.hitboxWidth = sprite.height;
         hitboxOfEntity.hitboxHeight = sprite.height;
 
-        rectangle = new Rectangle();
 
         Texture expImage = new Texture("explode.png");
 
@@ -34,11 +32,14 @@ public class Explosion extends Bullet{
         sprite.height = 60f;
 
         TextureRegion[][] expRegion = TextureRegion.split(expImage,(int) sprite.width,(int) sprite.height);
-        animationOfEntity.animation = new Animation<>(0.1f, expRegion[0]);
-        animationOfEntity.shouldDisplayAnimation = true;
+        animationOfEntity.animations.add(new Animation<>(0.1f, expRegion[0]));
+        animationOfEntity.shouldDisplayAnimation = 0;
         animationOfEntity.framesOfAnimation = 5;
 
     }
 
-
+    @Override
+    public void hitBoxDuringAnimation() {
+        hitboxOfEntity.setRectangle();
+    }
 }

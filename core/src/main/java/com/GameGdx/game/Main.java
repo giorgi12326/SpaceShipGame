@@ -122,8 +122,8 @@ public class Main extends ApplicationAdapter {
 
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Entity enemy = enemies.get(i);
-            if(enemy.rectangle.overlaps(ship.rectangle))
-                System.exit(1);
+//            if(enemy.rectangle.overlaps(ship.rectangle))
+//                System.exit(1);
         }
 
 
@@ -136,7 +136,7 @@ public class Main extends ApplicationAdapter {
 
             for (int j = enemies.size() - 1; j >= 0; j--) {
                 Enemy enemy = enemies.get(j);
-                if (enemy.rectangle.overlaps(bullet.rectangle)) {
+                if (enemy.hitboxOfEntity.rectangle.overlaps(bullet.hitboxOfEntity.rectangle)) {
 
                     if(bullet instanceof Rocket) {
                         Explosion explosion = new Explosion(bullet.sprite.sprite.getX() + bullet.sprite.width /2, bullet.sprite.sprite.getY()+ bullet.sprite.height /2);
@@ -145,7 +145,7 @@ public class Main extends ApplicationAdapter {
                         garbageCollector.add(explosion);
                     }
 
-                    enemy.animationOfEntity.shouldDisplayAnimation = true;
+                    enemy.animationOfEntity.shouldDisplayAnimation = 0;
                     garbageCollector.add(enemies.get(j));
                     garbageCollector.add(bullets.get(i));
                     pop.play();
@@ -173,7 +173,7 @@ public class Main extends ApplicationAdapter {
             Enemy enemy = enemies.get(i);
             if(enemy.sprite.sprite.getY() < 0){
                 garbageCollector.add(enemies.get(i));
-                System.exit(1);//dedda
+//                System.exit(1);//dedda
             }
         }
 
@@ -181,13 +181,13 @@ public class Main extends ApplicationAdapter {
             Entity entity = garbageCollector.get( i);
 
             if(entity instanceof Bullet){
-                if (!entity.animationOfEntity.shouldDisplayAnimation) {
+                if (entity.animationOfEntity.shouldDisplayAnimation == -1) {
                     bullets.remove(entity);
                     garbageCollector.remove(entity);
                 }
             }
             else if(entity instanceof Enemy) {
-                if (!entity.animationOfEntity.shouldDisplayAnimation) {
+                if (entity.animationOfEntity.shouldDisplayAnimation == -1) {
                     enemies.remove(entity);
                     garbageCollector.remove(entity);
                 }
@@ -231,7 +231,7 @@ public class Main extends ApplicationAdapter {
                 if(ship.sprite.sprite.getX() > -ship.sprite.width /2*(1f- ship.sprite.scale))//
                     ship.sprite.sprite.translateX(-delta * speed * 40);
                 shipTimer = 0f;
-                ship.triggerAnimation();
+                ship.animationOfEntity.triggerAnimation();
             }
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.E)) {
@@ -239,7 +239,7 @@ public class Main extends ApplicationAdapter {
                 if(ship.sprite.sprite.getX() < Gdx.graphics.getWidth() + ship.sprite.width /2*(-1f- ship.sprite.scale))
                     ship.sprite.sprite.translateX(+delta * speed * 40);
                 shipTimer = 0f;
-                ship.triggerAnimation();
+                ship.animationOfEntity.triggerAnimation();
             }
 
         }

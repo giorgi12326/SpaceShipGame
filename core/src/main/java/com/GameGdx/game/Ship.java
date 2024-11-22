@@ -4,9 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.math.Rectangle;
 
 public class Ship extends Entity{
 
@@ -19,7 +17,6 @@ public class Ship extends Entity{
         sprite.sprite.setScale(sprite.scale);
         sprite.sprite.setX(Gdx.graphics.getWidth()/2f);
         sprite.sprite.setY(200);
-        rectangle = new Rectangle();
 
         sprite.width = sprite.sprite.getWidth();
         sprite.height = sprite.sprite.getHeight();
@@ -29,9 +26,8 @@ public class Ship extends Entity{
 
         Texture expImage = new Texture("PhaseLeft.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,16,16);
-        animationOfEntity.animation = new Animation<>(0.05f, expRegion[0]);
+        animationOfEntity.animations.add(new Animation<>(0.05f, expRegion[0]));
         animationOfEntity.framesOfAnimation = 5;
-        animationOfEntity.shouldDisplayAnimation = false;
         animationOfEntity.animationScale = 2.0f;
 
     }

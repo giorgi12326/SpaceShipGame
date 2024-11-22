@@ -16,7 +16,6 @@ public class Rocket extends Bullet {
         sprite.sprite.setScale(sprite.scale);
         sprite.sprite.setX(x);
         sprite.sprite.setY(y);
-        rectangle = new Rectangle();
 
         sprite.width = sprite.sprite.getWidth() * sprite.scale;
         sprite.height = sprite.sprite.getHeight() * sprite.scale;
