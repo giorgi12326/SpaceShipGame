@@ -1,5 +1,7 @@
 LightningBolt.png
 OmegaBolt.png
+PhaseLeft.png
+PhaseRight.png
 Playerplaneleft.png
 Playerplaneright.png
 bg.png

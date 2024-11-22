@@ -1,74 +1,64 @@
 package com.GameGdx.game;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 import java.util.Random;
 
 public class Entity {
+    public final AnimationOfEntity animationOfEntity = new AnimationOfEntity(this);
+    public final SpriteOfEntity sprite = new SpriteOfEntity(this);
+    public final HitboxOfEntity hitboxOfEntity = new HitboxOfEntity(this);
+
     public Random random = new Random();
+    float delta = Gdx.graphics.getDeltaTime();
 
-
-    float scale;
-    public float width;
-    public float height;
-
-    public float hitboxWidth;
-    public float hitboxHeight;
-
-    float x;
-    float y;
 
     public static float timer = 0f;
     public static float spawnSpeed;
 
-    Texture texture;
-    Sprite sprite ;
+
     Rectangle rectangle;
 
-    public float animationTimer = 0f;
-    public Animation<TextureRegion> animation;
-    public boolean shouldDisplayAnimation;
-    public int framesOfAnimation;
-    public float animationScale = 1;
-
     public void update(SpriteBatch batch){
-
-        if(shouldDisplayAnimation){
-
-            batch.draw(animation.getKeyFrame(animationTimer), sprite.getX() - width*scale*animationScale/2,
-                sprite.getY() - height*scale*animationScale/2,width*scale*animationScale, height*scale*animationScale);
-            animationTimer += Gdx.graphics.getDeltaTime();
-            if((this instanceof Explosion)) {
-                setRectangle();
-            }
+        if(animationOfEntity.shouldDisplayAnimation){
+            animationOfEntity.drawAnimation(batch);
+            animationOfEntity.animationTimer = animationOfEntity.animationTimer + Gdx.graphics.getDeltaTime();
+            if((this instanceof Explosion))
+                setBatchRectangle();
             else
-                rectangle.set(-1, -1, 0, 0);
-            if (animation.getKeyFrameIndex(animationTimer) == framesOfAnimation-1) {
-                animationTimer = 0;
-                shouldDisplayAnimation = false;
+                setAnimationRectangle();
+            if (animationOfEntity.animation.getKeyFrameIndex(animationOfEntity.animationTimer) == animationOfEntity.framesOfAnimation -1) {
+                animationOfEntity.animationTimer = 0;
+                animationOfEntity.shouldDisplayAnimation = false;
             }
         }
         else{
-            sprite.draw(batch);
-            setRectangle();
+            sprite.sprite.draw(batch);
+            setBatchRectangle();
             move();
 
         }
     }
+    public void setBatchRectangle() {
+        rectangle.set(sprite.sprite.getX() + sprite.width / 2 - hitboxOfEntity.hitboxHeight * sprite.scale / 2, sprite.sprite.getY() + sprite.height / 2 - hitboxOfEntity.hitboxHeight * sprite.scale / 2,
+                hitboxOfEntity.hitboxWidth* sprite.scale, hitboxOfEntity.hitboxHeight * sprite.scale);
+    }
 
-    private void setRectangle() {
-        rectangle.set(sprite.getX() + width / 2 -hitboxWidth*scale/2,
-            sprite.getY() + height/ 2 -hitboxHeight*scale/2,
-            hitboxWidth*scale, hitboxHeight*scale);
+    void setAnimationRectangle() {
+        rectangle.set(-1, -1, 0, 0);
+
+    }
+
+    public void triggerAnimation(){
+        animationOfEntity.shouldDisplayAnimation = true;
     }
 
     public void move(){
+
+    }
+    public void loop(){
 
     }
 

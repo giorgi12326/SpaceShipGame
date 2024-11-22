@@ -4,11 +4,8 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
-
-import java.util.Random;
 
 public class Rock extends Enemy{
 
@@ -18,34 +15,35 @@ public class Rock extends Enemy{
 
 
     Rock(){
-        scale = 4.0f;
-        texture = new Texture("rock.png");
-        sprite = new Sprite(texture);
-        sprite.setScale(scale);
-        sprite.setX(random.nextFloat((scale - 1f)/2, Gdx.graphics.getWidth() - width - width*scale/2));
-        sprite.setY(Gdx.graphics.getHeight());
+        sprite.scale = 4.0f;
+
+        sprite.texture = new Texture("rock.png");
+        sprite.sprite = new Sprite(sprite.texture);
+        sprite.sprite.setScale(sprite.scale);
+
+        sprite.width = sprite.sprite.getWidth();
+        sprite.height = sprite.sprite.getHeight();
+
+        sprite.sprite.setX(random.nextFloat(0, Gdx.graphics.getWidth() - sprite.width * sprite.scale));
+        sprite.sprite.setY(Gdx.graphics.getHeight());
         rectangle = new Rectangle();
 
-        width = sprite.getWidth();
-        height = sprite.getHeight();
+        hitboxOfEntity.hitboxWidth = 16f;
+        hitboxOfEntity.hitboxHeight = 13f;
 
-        hitboxWidth = 16f;
-        hitboxHeight = 13f;
 
-        x = sprite.getX();
-        y = sprite.getY();
 
         Texture expImage = new Texture("rock_explode.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,53,38);
-        animation = new Animation<>(0.1f,expRegion[0]);
-        framesOfAnimation = 3;
-        shouldDisplayAnimation= false;
+        animationOfEntity.animation = new Animation<>(0.1f, expRegion[0]);
+        animationOfEntity.framesOfAnimation = 3;
+        animationOfEntity.shouldDisplayAnimation = false;
 
 
     }
     @Override
     public void move(){
-        sprite.translateY(-moveSpeed*Gdx.graphics.getDeltaTime());
+        sprite.sprite.translateY(-moveSpeed*Gdx.graphics.getDeltaTime());
 
     }
 

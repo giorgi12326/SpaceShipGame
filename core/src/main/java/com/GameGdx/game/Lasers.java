@@ -1,6 +1,5 @@
 package com.GameGdx.game;
 
-import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.math.Rectangle;
@@ -10,17 +9,17 @@ public class Lasers extends Bullet{
     public static float timer = 0;
 
     public Lasers(float x,float y){
-        scale= 0.5f;
+        sprite.scale = 0.5f;
 
-        texture = new Texture("laser.png");
-        sprite = new Sprite(texture);
-        sprite.setScale(scale);
-        sprite.setX(x);
-        sprite.setY(y);
+        sprite.texture = new Texture("laser.png");
+        sprite.sprite = new Sprite(sprite.texture);
+        sprite.sprite.setScale(sprite.scale);
+        sprite.sprite.setX(x);
+        sprite.sprite.setY(y);
         rectangle = new Rectangle();
 
-        width = sprite.getWidth()*scale;
-        height = sprite.getHeight()*scale;
+        sprite.width = sprite.sprite.getWidth() * sprite.scale;
+        sprite.height = sprite.sprite.getHeight() * sprite.scale;
     }
     public void update(){
 

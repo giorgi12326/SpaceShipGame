@@ -9,17 +9,17 @@ public class Rocket extends Bullet {
     public static float timer = 0;
 
     public Rocket(float x,float y){
-        scale= 3f;
+        sprite.scale = 3f;
 
-        texture = new Texture("rocket.png");
-        sprite = new Sprite(texture);
-        sprite.setScale(scale);
-        sprite.setX(x);
-        sprite.setY(y);
+        sprite.texture = new Texture("rocket.png");
+        sprite.sprite = new Sprite(sprite.texture);
+        sprite.sprite.setScale(sprite.scale);
+        sprite.sprite.setX(x);
+        sprite.sprite.setY(y);
         rectangle = new Rectangle();
 
-        width = sprite.getWidth()*scale;
-        height = sprite.getHeight()*scale;
+        sprite.width = sprite.sprite.getWidth() * sprite.scale;
+        sprite.height = sprite.sprite.getHeight() * sprite.scale;
 
 
 

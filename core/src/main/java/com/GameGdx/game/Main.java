@@ -5,16 +5,13 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.utils.ScreenUtils;
-import com.badlogic.gdx.math.Rectangle;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -45,7 +42,7 @@ public class Main extends ApplicationAdapter {
     Music pop ;
     Circle rectangle;
     float shipTimer = 0f;
-    float dashTimer = 2f;
+    float dashTimer = 1f;
     Ship ship;
 
 
@@ -108,15 +105,13 @@ public class Main extends ApplicationAdapter {
 //            ship.sprite.setTexture(nShip);
         //TODO SHOOTING ANIMATION
 
-        ship.sprite.draw(batch);
+        ship.update(batch);
 
         for(Bullet bullet : bullets) {
-
             bullet.update(batch);
         }
         for(Enemy enemy : enemies) {
             enemy.update(batch);
-
         }
 
         batch.end();
@@ -124,6 +119,13 @@ public class Main extends ApplicationAdapter {
     }
     private void logic() {
         float delta = Gdx.graphics.getDeltaTime();
+
+        for (int i = enemies.size() - 1; i >= 0; i--) {
+            Entity enemy = enemies.get(i);
+            if(enemy.rectangle.overlaps(ship.rectangle))
+                System.exit(1);
+        }
+
 
         for (int i = bullets.size() - 1; i >= 0; i--) {
             Bullet bullet = bullets.get(i);
@@ -137,19 +139,19 @@ public class Main extends ApplicationAdapter {
                 if (enemy.rectangle.overlaps(bullet.rectangle)) {
 
                     if(bullet instanceof Rocket) {
-                        Explosion explosion = new Explosion(bullet.sprite.getX() + bullet.width/2, bullet.sprite.getY()+ bullet.height/2);
+                        Explosion explosion = new Explosion(bullet.sprite.sprite.getX() + bullet.sprite.width /2, bullet.sprite.sprite.getY()+ bullet.sprite.height /2);
                         explosionSound.play();
                         bullets.add(explosion);
                         garbageCollector.add(explosion);
                     }
 
-                    enemy.shouldDisplayAnimation = true;
+                    enemy.animationOfEntity.shouldDisplayAnimation = true;
                     garbageCollector.add(enemies.get(j));
                     garbageCollector.add(bullets.get(i));
                     pop.play();
                 }
             }
-            if(bullet.sprite.getY() > Gdx.graphics.getHeight()) {
+            if(bullet.sprite.sprite.getY() > Gdx.graphics.getHeight()) {
                 garbageCollector.add(bullets.get(i));
             }
         }
@@ -169,21 +171,23 @@ public class Main extends ApplicationAdapter {
 
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Enemy enemy = enemies.get(i);
-            if(enemy.sprite.getY() < 0)
+            if(enemy.sprite.sprite.getY() < 0){
                 garbageCollector.add(enemies.get(i));
+                System.exit(1);//dedda
+            }
         }
 
         for (int i = garbageCollector.size() - 1; i >= 0; i--) {
             Entity entity = garbageCollector.get( i);
 
             if(entity instanceof Bullet){
-                if (!entity.shouldDisplayAnimation) {
+                if (!entity.animationOfEntity.shouldDisplayAnimation) {
                     bullets.remove(entity);
                     garbageCollector.remove(entity);
                 }
             }
             else if(entity instanceof Enemy) {
-                if (!entity.shouldDisplayAnimation) {
+                if (!entity.animationOfEntity.shouldDisplayAnimation) {
                     enemies.remove(entity);
                     garbageCollector.remove(entity);
                 }
@@ -197,7 +201,6 @@ public class Main extends ApplicationAdapter {
         }
         UFO.timer += delta;
         if(UFO.timer > UFO.spawnSpeed){
-            System.out.println("asd");
             UFO.timer = 0;
             createUFO();
         }
@@ -208,23 +211,37 @@ public class Main extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
 
         if(Gdx.input.isKeyPressed(Input.Keys.D)) {
-            ship.sprite.translateX(delta * speed);
+            if(ship.sprite.sprite.getX() < Gdx.graphics.getWidth() + ship.sprite.width /2*(-1f- ship.sprite.scale))
+                ship.sprite.sprite.translateX(delta * speed);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-            ship.sprite.translateX(-delta * speed);
+            if(ship.sprite.sprite.getX() > -ship.sprite.width /2*(1f- ship.sprite.scale))//
+                ship.sprite.sprite.translateX(-delta * speed);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.W)) {
-            ship.sprite.translateY(delta * speed);
-            System.out.println(ship.sprite.getX());
+            ship.sprite.sprite.translateY(delta * speed);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-            ship.sprite.translateY(-delta * speed);
+            ship.sprite.sprite.translateY(-delta * speed);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
+            System.out.println(shipTimer + " " + dashTimer);
+
             if(shipTimer > dashTimer) {
-                ship.sprite.translateX(-delta * speed * 30);
+                if(ship.sprite.sprite.getX() > -ship.sprite.width /2*(1f- ship.sprite.scale))//
+                    ship.sprite.sprite.translateX(-delta * speed * 40);
                 shipTimer = 0f;
+                ship.triggerAnimation();
             }
+        }
+        else if(Gdx.input.isKeyPressed(Input.Keys.E)) {
+            if(shipTimer > dashTimer) {
+                if(ship.sprite.sprite.getX() < Gdx.graphics.getWidth() + ship.sprite.width /2*(-1f- ship.sprite.scale))
+                    ship.sprite.sprite.translateX(+delta * speed * 40);
+                shipTimer = 0f;
+                ship.triggerAnimation();
+            }
+
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             if (Lasers.timer > Lasers.spawnSpeed) {
@@ -247,14 +264,14 @@ public class Main extends ApplicationAdapter {
 
     private void createLasers() {
         float distanceFromCenter = 25.0f;
-        Bullet bullet1 = new Lasers(ship.sprite.getX() - ship.sprite.getWidth()*0.5f,ship.sprite.getY()-20);
-        Bullet bullet2 = new Lasers(ship.sprite.getX() + ship.sprite.getWidth()*1.5f- bullet1.width,ship.sprite.getY()-20);
+        Bullet bullet1 = new Lasers(ship.sprite.sprite.getX() - ship.sprite.sprite.getWidth()*0.5f, ship.sprite.sprite.getY()-20);
+        Bullet bullet2 = new Lasers(ship.sprite.sprite.getX() + ship.sprite.sprite.getWidth()*1.5f- bullet1.sprite.width, ship.sprite.sprite.getY()-20);
         bullets.add(bullet1);
         bullets.add(bullet2);
 
     }
     private void createRocket() {
-        Bullet rocket = new Rocket(ship.sprite.getX() + ship.sprite.getWidth()*1.5f- 15,ship.sprite.getY()-20);
+        Bullet rocket = new Rocket(ship.sprite.sprite.getX() + ship.sprite.sprite.getWidth()*1.5f- 15, ship.sprite.sprite.getY()-20);
         bullets.add(rocket);
 
     }

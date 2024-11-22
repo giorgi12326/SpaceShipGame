@@ -12,31 +12,31 @@ public class Explosion extends Bullet{
     public boolean expired = false;
 
     public Explosion(float x,float y){
-        scale= 8f;
+        sprite.scale = 8f;
 
-        texture = new Texture("explode.png");
-        sprite = new Sprite(texture);
-        sprite.setScale(scale);
-        sprite.setX(x);
-        sprite.setY(y);
+        sprite.texture = new Texture("explode.png");
+        sprite.sprite = new Sprite(sprite.texture);
+        sprite.sprite.setScale(sprite.scale);
+        sprite.sprite.setX(x);
+        sprite.sprite.setY(y);
 
-        height = sprite.getHeight();
-        width = sprite.getWidth();
+        sprite.height = sprite.sprite.getHeight();
+        sprite.width = sprite.sprite.getWidth();
 
-        hitboxWidth = height;
-        hitboxHeight = height;
+        hitboxOfEntity.hitboxWidth = sprite.height;
+        hitboxOfEntity.hitboxHeight = sprite.height;
 
         rectangle = new Rectangle();
 
         Texture expImage = new Texture("explode.png");
 
-        width = 150f;
-        height  = 60f;
+        sprite.width = 150f;
+        sprite.height = 60f;
 
-        TextureRegion[][] expRegion = TextureRegion.split(expImage,(int)width,(int)height);
-        animation = new Animation<>(0.1f,expRegion[0]);
-        shouldDisplayAnimation = true;
-        framesOfAnimation = 5;
+        TextureRegion[][] expRegion = TextureRegion.split(expImage,(int) sprite.width,(int) sprite.height);
+        animationOfEntity.animation = new Animation<>(0.1f, expRegion[0]);
+        animationOfEntity.shouldDisplayAnimation = true;
+        animationOfEntity.framesOfAnimation = 5;
 
     }
 

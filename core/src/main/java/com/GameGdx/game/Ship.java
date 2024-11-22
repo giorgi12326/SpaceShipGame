@@ -4,38 +4,39 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Ship extends Entity{
 
     public static float moveSpeed = 200f;
+
     Ship(){
-        scale = 3.0f;
-        texture = new Texture("plane.png");
-        sprite = new Sprite(texture);
-        sprite.setScale(scale);
-        sprite.setX(Gdx.graphics.getWidth()/2f);
-        sprite.setY(200);
+        sprite.scale = 3.0f;
+        sprite.texture = new Texture("plane.png");
+        sprite.sprite = new Sprite(sprite.texture);
+        sprite.sprite.setScale(sprite.scale);
+        sprite.sprite.setX(Gdx.graphics.getWidth()/2f);
+        sprite.sprite.setY(200);
         rectangle = new Rectangle();
 
-        width = sprite.getWidth();
-        height = sprite.getHeight();
+        sprite.width = sprite.sprite.getWidth();
+        sprite.height = sprite.sprite.getHeight();
 
-        hitboxWidth = 17f;
-        hitboxHeight = 16f;
+        hitboxOfEntity.hitboxWidth = 17f;
+        hitboxOfEntity.hitboxHeight = 16f;
 
-        x = sprite.getX();
-        y = sprite.getY();
-
-//        Texture expImage = new Texture("rock_explode.png");
-//        TextureRegion[][] expRegion = TextureRegion.split(expImage,53,38);
-//        animation = new Animation<>(0.1f,expRegion[0]);
-//        framesOfAnimation = 3;
-//        shouldDisplayAnimation= false;
-
+        Texture expImage = new Texture("PhaseLeft.png");
+        TextureRegion[][] expRegion = TextureRegion.split(expImage,16,16);
+        animationOfEntity.animation = new Animation<>(0.05f, expRegion[0]);
+        animationOfEntity.framesOfAnimation = 5;
+        animationOfEntity.shouldDisplayAnimation = false;
+        animationOfEntity.animationScale = 2.0f;
 
     }
+
+
 
 
 }
