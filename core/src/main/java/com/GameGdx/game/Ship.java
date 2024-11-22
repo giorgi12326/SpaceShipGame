@@ -11,15 +11,15 @@ public class Ship extends Entity{
     public static float moveSpeed = 200f;
 
     Ship(){
-        sprite.scale = 3.0f;
-        sprite.texture = new Texture("plane.png");
-        sprite.sprite = new Sprite(sprite.texture);
-        sprite.sprite.setScale(sprite.scale);
-        sprite.sprite.setX(Gdx.graphics.getWidth()/2f);
-        sprite.sprite.setY(200);
+        spriteOfEntity.scale = 3.0f;
+        spriteOfEntity.texture = new Texture("plane.png");
+        spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
+        spriteOfEntity.sprite.setScale(spriteOfEntity.scale);
+        spriteOfEntity.sprite.setX(Gdx.graphics.getWidth()/2f);
+        spriteOfEntity.sprite.setY(200);
 
-        sprite.width = sprite.sprite.getWidth();
-        sprite.height = sprite.sprite.getHeight();
+        spriteOfEntity.width = spriteOfEntity.sprite.getWidth();
+        spriteOfEntity.height = spriteOfEntity.sprite.getHeight();
 
         hitboxOfEntity.hitboxWidth = 17f;
         hitboxOfEntity.hitboxHeight = 16f;

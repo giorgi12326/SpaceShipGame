@@ -1,5 +1,6 @@
 package com.GameGdx.game;
 
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Rectangle;
 
 public class HitboxOfEntity {
@@ -7,6 +8,7 @@ public class HitboxOfEntity {
     public float hitboxWidth;
     public float hitboxHeight;
     Rectangle rectangle = new Rectangle();
+    Pixmap pixmap;
 
 
     public HitboxOfEntity(Entity entity) {
@@ -14,8 +16,12 @@ public class HitboxOfEntity {
     }
 
     public void setRectangle() {
-        rectangle.set(entity.sprite.sprite.getX() + entity.sprite.width / 2 - hitboxHeight * entity.sprite.scale / 2, entity.sprite.sprite.getY() + entity.sprite.height / 2 - hitboxHeight * entity.sprite.scale / 2,
-                hitboxWidth* entity.sprite.scale, hitboxHeight * entity.sprite.scale);
+        rectangle.set(entity.spriteOfEntity.sprite.getX() + entity.spriteOfEntity.width / 2 - hitboxHeight * entity.spriteOfEntity.scale / 2, entity.spriteOfEntity.sprite.getY() + entity.spriteOfEntity.height / 2 - hitboxHeight * entity.spriteOfEntity.scale / 2,
+                hitboxWidth* entity.spriteOfEntity.scale, hitboxHeight * entity.spriteOfEntity.scale);
+    }
+    public void setRectangle(float x,float y,float width,float height,float scale) {
+        rectangle.set(entity.spriteOfEntity.sprite.getX()  - height * scale / 2, y - width * scale / 2,
+                width * scale, height * scale);
     }
 
     void removeRectangle() {

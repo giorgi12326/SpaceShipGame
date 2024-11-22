@@ -16,17 +16,17 @@ public class UFO extends Enemy {
     UFO(Ship ship){
         this.ship = ship;
 
-        sprite.scale = 5.0f;
+        spriteOfEntity.scale = 5.0f;
         animationOfEntity.animationScale = 6f;
 
-        sprite.texture = new Texture("ufo.png");
-        sprite.sprite = new Sprite(sprite.texture);
-        sprite.sprite.setScale(sprite.scale);
-        sprite.sprite.setX(Gdx.graphics.getWidth());
-        sprite.sprite.setY(random.nextFloat(Math.max(200,ship.sprite.sprite.getY())) + 400);
+        spriteOfEntity.texture = new Texture("ufo.png");
+        spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
+        spriteOfEntity.sprite.setScale(spriteOfEntity.scale);
+        spriteOfEntity.sprite.setX(Gdx.graphics.getWidth());
+        spriteOfEntity.sprite.setY(random.nextFloat(Math.max(200,ship.spriteOfEntity.sprite.getY())) + 400);
 
-        sprite.width = sprite.sprite.getWidth();
-        sprite.height = sprite.sprite.getHeight();
+        spriteOfEntity.width = spriteOfEntity.sprite.getWidth();
+        spriteOfEntity.height = spriteOfEntity.sprite.getHeight();
 
         hitboxOfEntity.hitboxWidth = 18f;
         hitboxOfEntity.hitboxHeight = 16f;
@@ -39,12 +39,18 @@ public class UFO extends Enemy {
     }
     @Override
     public void moveSprite(){
-        if(ship.sprite.sprite.getX()  > sprite.sprite.getX()+10)
-            sprite.sprite.translateX(moveSpeed*Gdx.graphics.getDeltaTime()*2);
-        else if(ship.sprite.sprite.getX()  < sprite.sprite.getX()-10)
-            sprite.sprite.translateX(-moveSpeed*Gdx.graphics.getDeltaTime()*2);
+        if(ship.spriteOfEntity.sprite.getX()  > spriteOfEntity.sprite.getX()+10)
+            spriteOfEntity.sprite.translateX(moveSpeed*Gdx.graphics.getDeltaTime()*2);
+        else if(ship.spriteOfEntity.sprite.getX()  < spriteOfEntity.sprite.getX()-10)
+            spriteOfEntity.sprite.translateX(-moveSpeed*Gdx.graphics.getDeltaTime()*2);
 
+    }
 
+    @Override
+    public void hitBoxDuringAnimation() {
+        hitboxOfEntity.setRectangle(spriteOfEntity.sprite.getX()+ spriteOfEntity.sprite.getWidth()* spriteOfEntity.scale,
+            spriteOfEntity.sprite.getY() + spriteOfEntity.sprite.getHeight()*spriteOfEntity.scale,100,100, spriteOfEntity.scale);
+        System.out.println(hitboxOfEntity.rectangle.getWidth() + " " + hitboxOfEntity.rectangle.getHeight());
 
     }
 

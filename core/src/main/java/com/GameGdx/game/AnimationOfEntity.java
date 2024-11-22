@@ -17,13 +17,14 @@ public class AnimationOfEntity {
     public float animationScale = 1;
 
 
+
     public AnimationOfEntity(Entity entity) {
         this.entity = entity;
     }
 
     public void drawAnimation(SpriteBatch batch,int index){
-        batch.draw(animations.get(shouldDisplayAnimation).getKeyFrame(animationTimer), entity.sprite.sprite.getX() - entity.sprite.width * entity.sprite.scale * animationScale /2,
-            entity.sprite.sprite.getY() - entity.sprite.height * entity.sprite.scale * animationScale /2, entity.sprite.width * entity.sprite.scale * animationScale, entity.sprite.height * entity.sprite.scale * animationScale);
+        batch.draw(animations.get(shouldDisplayAnimation).getKeyFrame(animationTimer), entity.spriteOfEntity.sprite.getX() - entity.spriteOfEntity.width * entity.spriteOfEntity.scale * animationScale /2,
+            entity.spriteOfEntity.sprite.getY() - entity.spriteOfEntity.height * entity.spriteOfEntity.scale * animationScale /2, entity.spriteOfEntity.width * entity.spriteOfEntity.scale * animationScale, entity.spriteOfEntity.height * entity.spriteOfEntity.scale * animationScale);
         updateAnimationTimer();
         checkIfAnimationShouldEnd();
     }

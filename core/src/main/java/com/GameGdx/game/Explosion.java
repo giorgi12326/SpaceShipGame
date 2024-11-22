@@ -11,27 +11,27 @@ public class Explosion extends Bullet{
     public boolean expired = false;
 
     public Explosion(float x,float y){
-        sprite.scale = 8f;
+        spriteOfEntity.scale = 8f;
 
-        sprite.texture = new Texture("explode.png");
-        sprite.sprite = new Sprite(sprite.texture);
-        sprite.sprite.setScale(sprite.scale);
-        sprite.sprite.setX(x);
-        sprite.sprite.setY(y);
+        spriteOfEntity.texture = new Texture("explode.png");
+        spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
+        spriteOfEntity.sprite.setScale(spriteOfEntity.scale);
+        spriteOfEntity.sprite.setX(x);
+        spriteOfEntity.sprite.setY(y);
 
-        sprite.height = sprite.sprite.getHeight();
-        sprite.width = sprite.sprite.getWidth();
+        spriteOfEntity.height = spriteOfEntity.sprite.getHeight();
+        spriteOfEntity.width = spriteOfEntity.sprite.getWidth();
 
-        hitboxOfEntity.hitboxWidth = sprite.height;
-        hitboxOfEntity.hitboxHeight = sprite.height;
+        hitboxOfEntity.hitboxWidth = spriteOfEntity.height;
+        hitboxOfEntity.hitboxHeight = spriteOfEntity.height;
 
 
         Texture expImage = new Texture("explode.png");
 
-        sprite.width = 150f;
-        sprite.height = 60f;
+        spriteOfEntity.width = 150f;
+        spriteOfEntity.height = 60f;
 
-        TextureRegion[][] expRegion = TextureRegion.split(expImage,(int) sprite.width,(int) sprite.height);
+        TextureRegion[][] expRegion = TextureRegion.split(expImage,(int) spriteOfEntity.width,(int) spriteOfEntity.height);
         animationOfEntity.animations.add(new Animation<>(0.1f, expRegion[0]));
         animationOfEntity.shouldDisplayAnimation = 0;
         animationOfEntity.framesOfAnimation = 5;
@@ -41,5 +41,32 @@ public class Explosion extends Bullet{
     @Override
     public void hitBoxDuringAnimation() {
         hitboxOfEntity.setRectangle();
+        System.out.println(hitboxOfEntity.rectangle.getWidth() + " " + hitboxOfEntity.rectangle.getHeight());
     }
+//    public boolean pixelPerfectCollision(Pixmap pixmap1, int x1, int y1,
+//                                     Pixmap pixmap2, int x2, int y2) {
+//    for (int i = 0; i < pixmap1.getWidth(); i++) {
+//        for (int j = 0; j < pixmap1.getHeight(); j++) {
+//            int globalX = x1 + i;
+//            int globalY = y1 + j;
+//
+//            int pixmap2X = globalX - x2;
+//            int pixmap2Y = globalY - y2;
+//
+//            if (pixmap2X >= 0 && pixmap2Y >= 0 &&
+//                pixmap2X < pixmap2.getWidth() &&
+//                pixmap2Y < pixmap2.getHeight()) {
+//
+//                int pixel1 = pixmap1.getPixel(i, j);
+//                int pixel2 = pixmap2.getPixel(pixmap2X, pixmap2Y);
+//
+//                if (((pixel1 & 0x000000FF) > 0) && // Alpha > 0
+//                    ((pixel2 & 0x000000FF) > 0)) {
+//                    return true;
+//                }
+//            }
+//        }
+//    }
+//    return false;
+//}
 }

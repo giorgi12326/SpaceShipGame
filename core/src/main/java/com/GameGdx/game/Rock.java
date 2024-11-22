@@ -1,6 +1,7 @@
 package com.GameGdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -14,21 +15,23 @@ public class Rock extends Enemy{
 
 
     Rock(){
-        sprite.scale = 4.0f;
+        spriteOfEntity.scale = 4.0f;
 
-        sprite.texture = new Texture("rock.png");
-        sprite.sprite = new Sprite(sprite.texture);
-        sprite.sprite.setScale(sprite.scale);
+        spriteOfEntity.texture = new Texture("rock.png");
+        spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
+        spriteOfEntity.sprite.setScale(spriteOfEntity.scale);
 
-        sprite.width = sprite.sprite.getWidth();
-        sprite.height = sprite.sprite.getHeight();
+        spriteOfEntity.width = spriteOfEntity.sprite.getWidth();
+        spriteOfEntity.height = spriteOfEntity.sprite.getHeight();
 
-        sprite.sprite.setX(random.nextFloat(0, Gdx.graphics.getWidth() - sprite.width * sprite.scale));
-        sprite.sprite.setY(Gdx.graphics.getHeight());
+        spriteOfEntity.sprite.setX(random.nextFloat(0, Gdx.graphics.getWidth() - spriteOfEntity.width * spriteOfEntity.scale));
+        spriteOfEntity.sprite.setY(Gdx.graphics.getHeight());
 
 
         hitboxOfEntity.hitboxWidth = 16f;
         hitboxOfEntity.hitboxHeight = 13f;
+
+        hitboxOfEntity.pixmap = new Pixmap(Gdx.files.internal("rock.png"));
 
 
 
@@ -45,7 +48,7 @@ public class Rock extends Enemy{
 
     @Override
     public void moveSprite(){
-        sprite.sprite.translateY(-moveSpeed*Gdx.graphics.getDeltaTime());
+        spriteOfEntity.sprite.translateY(-moveSpeed*Gdx.graphics.getDeltaTime());
 
     }
 

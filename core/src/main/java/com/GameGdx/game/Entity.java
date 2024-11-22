@@ -7,12 +7,11 @@ import java.util.Random;
 
 public class Entity {
     public final AnimationOfEntity animationOfEntity = new AnimationOfEntity(this);
-    public final SpriteOfEntity sprite = new SpriteOfEntity(this);
+    public final SpriteOfEntity spriteOfEntity = new SpriteOfEntity(this);
     public final HitboxOfEntity hitboxOfEntity = new HitboxOfEntity(this);
 
     public Random random = new Random();
     float delta = Gdx.graphics.getDeltaTime();
-
 
     public static float timer = 0f;
     public static float spawnSpeed;
@@ -38,11 +37,11 @@ public class Entity {
     }
 
     public void drawNormally(SpriteBatch batch){
-        sprite.draw(batch);
+        spriteOfEntity.draw(batch);
     }
+
     public void hitBoxNormally(){
         hitboxOfEntity.setRectangle();
-
     }
 
     public void moveSprite(){

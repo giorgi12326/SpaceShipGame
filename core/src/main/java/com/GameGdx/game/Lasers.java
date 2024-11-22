@@ -2,23 +2,22 @@ package com.GameGdx.game;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.math.Rectangle;
 
 public class Lasers extends Bullet{
     public static float spawnSpeed = 0.2f;
     public static float timer = 0;
 
     public Lasers(float x,float y){
-        sprite.scale = 0.5f;
+        spriteOfEntity.scale = 0.5f;
 
-        sprite.texture = new Texture("laser.png");
-        sprite.sprite = new Sprite(sprite.texture);
-        sprite.sprite.setScale(sprite.scale);
-        sprite.sprite.setX(x);
-        sprite.sprite.setY(y);
+        spriteOfEntity.texture = new Texture("laser.png");
+        spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
+        spriteOfEntity.sprite.setScale(spriteOfEntity.scale);
+        spriteOfEntity.sprite.setX(x);
+        spriteOfEntity.sprite.setY(y);
 
-        sprite.width = sprite.sprite.getWidth() * sprite.scale;
-        sprite.height = sprite.sprite.getHeight() * sprite.scale;
+        spriteOfEntity.width = spriteOfEntity.sprite.getWidth() * spriteOfEntity.scale;
+        spriteOfEntity.height = spriteOfEntity.sprite.getHeight() * spriteOfEntity.scale;
     }
     public void update(){
 
