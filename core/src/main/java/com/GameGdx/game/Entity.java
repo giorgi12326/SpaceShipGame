@@ -20,6 +20,8 @@ public class Entity {
         if(animationOfEntity.shouldDisplayAnimation >= 0){
             drawDuringAnimation(batch, animationOfEntity.shouldDisplayAnimation);
             hitBoxDuringAnimation();
+            if(this instanceof Rocket)
+                System.out.println();
         }
         else{
             drawNormally(batch);
@@ -41,7 +43,7 @@ public class Entity {
     }
 
     public void hitBoxNormally(){
-        hitboxOfEntity.setRectangle();
+        hitboxOfEntity.setRectangleSprite();
     }
 
     public void moveSprite(){

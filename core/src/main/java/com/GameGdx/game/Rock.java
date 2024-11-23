@@ -11,11 +11,12 @@ public class Rock extends Enemy{
 
     public static float spawnSpeed = 0.3f;
     public static float timer = 0;
-    public static float moveSpeed = 400f;
+    public static float moveSpeed = 50f ;
 
 
     Rock(){
         spriteOfEntity.scale = 4.0f;
+        animationOfEntity.animationScale = 4.0f;
 
         spriteOfEntity.texture = new Texture("rock.png");
         spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
@@ -38,7 +39,10 @@ public class Rock extends Enemy{
         Texture expImage = new Texture("rock_explode.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,53,38);
         animationOfEntity.animations.add(new Animation<>(0.1f, expRegion[0]));
+        animationOfEntity.size.add(new Pair(53,38));
         animationOfEntity.framesOfAnimation = 3;
+        animationOfEntity.animationWidth = 53 * animationOfEntity.animationScale;
+        animationOfEntity.animationHeight = 38 * animationOfEntity.animationScale;
 
 
     }

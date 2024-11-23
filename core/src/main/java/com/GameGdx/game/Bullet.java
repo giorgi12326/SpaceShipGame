@@ -4,7 +4,8 @@ import com.badlogic.gdx.Gdx;
 
 public class Bullet extends Entity{
     public void moveSprite(){
-        spriteOfEntity.sprite.translateY(1000f * Gdx.graphics.getDeltaTime());
+        if(animationOfEntity.shouldDisplayAnimation == -1)
+            spriteOfEntity.sprite.translateY(1000f * Gdx.graphics.getDeltaTime());
 
     }
 }

@@ -25,8 +25,8 @@ public class UFO extends Enemy {
         spriteOfEntity.sprite.setX(Gdx.graphics.getWidth());
         spriteOfEntity.sprite.setY(random.nextFloat(Math.max(200,ship.spriteOfEntity.sprite.getY())) + 400);
 
-        spriteOfEntity.width = spriteOfEntity.sprite.getWidth();
-        spriteOfEntity.height = spriteOfEntity.sprite.getHeight();
+        spriteOfEntity.width = spriteOfEntity.sprite.getWidth() * spriteOfEntity.scale;
+        spriteOfEntity.height = spriteOfEntity.sprite.getHeight() * spriteOfEntity.scale;
 
         hitboxOfEntity.hitboxWidth = 18f;
         hitboxOfEntity.hitboxHeight = 16f;
@@ -34,7 +34,10 @@ public class UFO extends Enemy {
         Texture expImage = new Texture("OmegaBolt.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,100,100);
         animationOfEntity.animations.add(new Animation<>(0.1f, expRegion[0]));
+        animationOfEntity.size.add(new Pair(100,100));
         animationOfEntity.framesOfAnimation = 8;
+        animationOfEntity.animationWidth = 100* animationOfEntity.animationScale;
+        animationOfEntity.animationHeight = 100* animationOfEntity.animationScale;
 
     }
     @Override
@@ -43,14 +46,11 @@ public class UFO extends Enemy {
             spriteOfEntity.sprite.translateX(moveSpeed*Gdx.graphics.getDeltaTime()*2);
         else if(ship.spriteOfEntity.sprite.getX()  < spriteOfEntity.sprite.getX()-10)
             spriteOfEntity.sprite.translateX(-moveSpeed*Gdx.graphics.getDeltaTime()*2);
-
     }
 
     @Override
     public void hitBoxDuringAnimation() {
-        hitboxOfEntity.setRectangle(spriteOfEntity.sprite.getX()+ spriteOfEntity.sprite.getWidth()* spriteOfEntity.scale,
-            spriteOfEntity.sprite.getY() + spriteOfEntity.sprite.getHeight()*spriteOfEntity.scale,100,100, spriteOfEntity.scale);
-        System.out.println(hitboxOfEntity.rectangle.getWidth() + " " + hitboxOfEntity.rectangle.getHeight());
+        hitboxOfEntity.setRectangleAnimation();
 
     }
 

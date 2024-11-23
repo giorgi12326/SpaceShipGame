@@ -27,6 +27,7 @@ public class Ship extends Entity{
         Texture expImage = new Texture("PhaseLeft.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,16,16);
         animationOfEntity.animations.add(new Animation<>(0.05f, expRegion[0]));
+        animationOfEntity.size.add(new Pair(16,16));
         animationOfEntity.framesOfAnimation = 5;
         animationOfEntity.animationScale = 2.0f;
 

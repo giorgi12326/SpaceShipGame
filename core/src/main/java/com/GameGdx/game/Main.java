@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -38,7 +39,7 @@ public class Main extends ApplicationAdapter {
     List<Enemy> enemies;
     List<Entity> pendingAnimations;
     List<Entity> garbageCollector;
-    List<Explosion> explosionList;
+//    List<Explosion> explosionList;
     Music pop ;
     Circle rectangle;
     float shipTimer = 0f;
@@ -74,7 +75,7 @@ public class Main extends ApplicationAdapter {
         gameMusic.setVolume(1f);
         gameMusic.play();
         garbageCollector = new ArrayList<>();
-        explosionList = new ArrayList<>();
+//        explosionList = new ArrayList<>();
         ship = new Ship();
 
     }
@@ -113,8 +114,19 @@ public class Main extends ApplicationAdapter {
         for(Enemy enemy : enemies) {
             enemy.update(batch);
         }
-
         batch.end();
+        for(Enemy enemy : enemies) {
+
+            shapeRenderer.begin(ShapeRenderer.ShapeType.Line); // Use ShapeType.Line for outline rectangles
+
+            // Draw a rectangle (x, y, width, height)
+            shapeRenderer.setColor(Color.RED); // Set color to red
+            shapeRenderer.rect(enemy.spriteOfEntity.sprite.getX(), enemy.spriteOfEntity.sprite.getY(), enemy.hitboxOfEntity.hitboxWidth* enemy.spriteOfEntity.scale, enemy.hitboxOfEntity.hitboxHeight*enemy.spriteOfEntity.scale); // Rectangle at (50,50) with width 100 and height 200
+
+
+            // End rendering shapes
+            shapeRenderer.end();
+        }
 
     }
     private void logic() {
@@ -139,10 +151,11 @@ public class Main extends ApplicationAdapter {
                 if (enemy.hitboxOfEntity.rectangle.overlaps(bullet.hitboxOfEntity.rectangle)) {
 
                     if(bullet instanceof Rocket) {
-                        Explosion explosion = new Explosion(bullet.spriteOfEntity.sprite.getX() + bullet.spriteOfEntity.width /2, bullet.spriteOfEntity.sprite.getY()+ bullet.spriteOfEntity.height /2);
-                        explosionSound.play();
-                        bullets.add(explosion);
-                        garbageCollector.add(explosion);
+                        bullet.animationOfEntity.triggerAnimation();
+//                        Explosion explosion = new Explosion(bullet.spriteOfEntity.sprite.getX() + bullet.spriteOfEntity.width /2, bullet.spriteOfEntity.sprite.getY()+ bullet.spriteOfEntity.height /2);
+//                        explosionSound.play();
+//                        bullets.add(explosion);
+//                        garbageCollector.add(explosion);
                     }
 
                     enemy.animationOfEntity.shouldDisplayAnimation = 0;
@@ -215,7 +228,7 @@ public class Main extends ApplicationAdapter {
                 ship.spriteOfEntity.sprite.translateX(delta * speed);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if(ship.spriteOfEntity.sprite.getX() > -ship.spriteOfEntity.width /2*(1f- ship.spriteOfEntity.scale))//
+            if(ship.spriteOfEntity.sprite.getX() > -ship.spriteOfEntity.width /2*(1f/ ship.spriteOfEntity.scale - 1f))//
                 ship.spriteOfEntity.sprite.translateX(-delta * speed);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.W)) {
@@ -228,7 +241,7 @@ public class Main extends ApplicationAdapter {
             System.out.println(shipTimer + " " + dashTimer);
 
             if(shipTimer > dashTimer) {
-                if(ship.spriteOfEntity.sprite.getX() > -ship.spriteOfEntity.width /2*(1f- ship.spriteOfEntity.scale))//
+                if(ship.spriteOfEntity.sprite.getX() > -ship.spriteOfEntity.width /2*(1f/ship.spriteOfEntity.scale - 1))//
                     ship.spriteOfEntity.sprite.translateX(-delta * speed * 40);
                 shipTimer = 0f;
                 ship.animationOfEntity.triggerAnimation();
@@ -236,7 +249,7 @@ public class Main extends ApplicationAdapter {
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.E)) {
             if(shipTimer > dashTimer) {
-                if(ship.spriteOfEntity.sprite.getX() < Gdx.graphics.getWidth() + ship.spriteOfEntity.width /2*(-1f- ship.spriteOfEntity.scale))
+                if(ship.spriteOfEntity.sprite.getX() < Gdx.graphics.getWidth() + ship.spriteOfEntity.width /2*(1f/ ship.spriteOfEntity.scale - 1f))
                     ship.spriteOfEntity.sprite.translateX(+delta * speed * 40);
                 shipTimer = 0f;
                 ship.animationOfEntity.triggerAnimation();
@@ -265,7 +278,7 @@ public class Main extends ApplicationAdapter {
     private void createLasers() {
         float distanceFromCenter = 25.0f;
         Bullet bullet1 = new Lasers(ship.spriteOfEntity.sprite.getX() - ship.spriteOfEntity.sprite.getWidth()*0.5f, ship.spriteOfEntity.sprite.getY()-20);
-        Bullet bullet2 = new Lasers(ship.spriteOfEntity.sprite.getX() + ship.spriteOfEntity.sprite.getWidth()*1.5f- bullet1.spriteOfEntity.width, ship.spriteOfEntity.sprite.getY()-20);
+        Bullet bullet2 = new Lasers(ship.spriteOfEntity.sprite.getX() + ship.spriteOfEntity.sprite.getWidth()*1.5f- bullet1.spriteOfEntity.width/bullet1.spriteOfEntity.scale, ship.spriteOfEntity.sprite.getY()-20);
         bullets.add(bullet1);
         bullets.add(bullet2);
 
@@ -296,6 +309,8 @@ public class Main extends ApplicationAdapter {
     @Override
     public void dispose() {
         batch.dispose();
+        shapeRenderer.dispose();
+
     }
 
 
