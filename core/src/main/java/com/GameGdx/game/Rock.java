@@ -11,7 +11,7 @@ public class Rock extends Enemy{
 
     public static float spawnSpeed = 0.3f;
     public static float timer = 0;
-    public static float moveSpeed = 400f;
+    public static float moveSpeed = 400f;//dddddddddddda
 
 
     Rock(){
@@ -19,18 +19,18 @@ public class Rock extends Enemy{
 
         spriteOfEntity.texture = new Texture("rock.png");
         spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
+
         spriteOfEntity.sprite.setScale(spriteOfEntity.scale);
+        spriteOfEntity.width = spriteOfEntity.sprite.getWidth() * spriteOfEntity.scale;
+        spriteOfEntity.height = spriteOfEntity.sprite.getHeight()* spriteOfEntity.scale;
 
-        spriteOfEntity.width = spriteOfEntity.sprite.getWidth();
-        spriteOfEntity.height = spriteOfEntity.sprite.getHeight();
 
-        spriteOfEntity.sprite.setX(random.nextFloat(0, Gdx.graphics.getWidth() - spriteOfEntity.width * spriteOfEntity.scale));
+        spriteOfEntity.sprite.setX(random.nextFloat(0, Gdx.graphics.getWidth() - spriteOfEntity.width));
         spriteOfEntity.sprite.setY(Gdx.graphics.getHeight());
 
 
-        hitboxOfEntity.hitboxWidth = 16f;
-        hitboxOfEntity.hitboxHeight = 13f;
-
+        hitboxOfEntity.hitboxWidth = 16f * spriteOfEntity.scale;
+        hitboxOfEntity.hitboxHeight = 13f * spriteOfEntity.scale;
         hitboxOfEntity.pixmap = new Pixmap(Gdx.files.internal("rock.png"));
 
 

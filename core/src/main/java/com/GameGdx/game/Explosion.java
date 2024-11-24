@@ -20,7 +20,7 @@ public class Explosion extends Bullet{
         spriteOfEntity.sprite.setY(y);
 
         spriteOfEntity.height = spriteOfEntity.sprite.getHeight();
-        spriteOfEntity.width = spriteOfEntity.sprite.getWidth();
+        spriteOfEntity.width = spriteOfEntity.sprite.getWidth();//TODO
 
         hitboxOfEntity.hitboxWidth = spriteOfEntity.height;
         hitboxOfEntity.hitboxHeight = spriteOfEntity.height;

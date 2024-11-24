@@ -16,8 +16,9 @@ public class HitboxOfEntity {
     }
 
     public void setRectangle() {
-        rectangle.set(entity.spriteOfEntity.sprite.getX() + entity.spriteOfEntity.width / 2 - hitboxHeight * entity.spriteOfEntity.scale / 2, entity.spriteOfEntity.sprite.getY() + entity.spriteOfEntity.height / 2 - hitboxHeight * entity.spriteOfEntity.scale / 2,
-                hitboxWidth* entity.spriteOfEntity.scale, hitboxHeight * entity.spriteOfEntity.scale);
+        rectangle.set(entity.spriteOfEntity.sprite.getX() - entity.hitboxOfEntity.hitboxWidth/2f + entity.spriteOfEntity.sprite.getWidth()/2f,
+            entity.spriteOfEntity.sprite.getY() - entity.hitboxOfEntity.hitboxHeight/2f  + entity.spriteOfEntity.sprite.getHeight()/2f ,
+                hitboxWidth, hitboxHeight);
     }
     public void setRectangle(float x,float y,float width,float height,float scale) {
         rectangle.set(entity.spriteOfEntity.sprite.getX()  - height * scale / 2, y - width * scale / 2,

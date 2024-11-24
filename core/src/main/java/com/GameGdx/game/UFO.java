@@ -21,15 +21,16 @@ public class UFO extends Enemy {
 
         spriteOfEntity.texture = new Texture("ufo.png");
         spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
+
         spriteOfEntity.sprite.setScale(spriteOfEntity.scale);
         spriteOfEntity.sprite.setX(Gdx.graphics.getWidth());
         spriteOfEntity.sprite.setY(random.nextFloat(Math.max(200,ship.spriteOfEntity.sprite.getY())) + 400);
 
-        spriteOfEntity.width = spriteOfEntity.sprite.getWidth();
-        spriteOfEntity.height = spriteOfEntity.sprite.getHeight();
+        spriteOfEntity.width = spriteOfEntity.sprite.getWidth() * spriteOfEntity.scale;
+        spriteOfEntity.height = spriteOfEntity.sprite.getHeight()* spriteOfEntity.scale;
 
-        hitboxOfEntity.hitboxWidth = 18f;
-        hitboxOfEntity.hitboxHeight = 16f;
+        hitboxOfEntity.hitboxWidth = 18f * spriteOfEntity.scale;
+        hitboxOfEntity.hitboxHeight = 16f * spriteOfEntity.scale;
 
         Texture expImage = new Texture("OmegaBolt.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,100,100);

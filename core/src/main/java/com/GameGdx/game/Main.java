@@ -5,6 +5,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -76,6 +77,8 @@ public class Main extends ApplicationAdapter {
         garbageCollector = new ArrayList<>();
         explosionList = new ArrayList<>();
         ship = new Ship();
+//        createEnemy();
+
 
     }
 
@@ -84,9 +87,34 @@ public class Main extends ApplicationAdapter {
         input();
         logic();
         draw();
+//        test();
     }
+//
+//    private void test() {
+//
+//        Entity enemy = enemies.get(0);
+//        enemy.spriteOfEntity.sprite.setY(0);
+//        enemy.spriteOfEntity.sprite.setX(0);
+//        System.out.println(enemy.spriteOfEntity.sprite.getWidth());
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//
+//            shapeRenderer.setColor(Color.BLUE);
+//            shapeRenderer.rect(
+//                enemy.spriteOfEntity.sprite.getX() - enemy.spriteOfEntity.width/2 + enemy.spriteOfEntity.sprite.getWidth()/2,
+//                enemy.spriteOfEntity.sprite.getY(),
+//                enemy.hitboxOfEntity.hitboxWidth,
+//                enemy.hitboxOfEntity.hitboxHeight
+//            );
+//
+//
+//        shapeRenderer.end();
+//    }
 
-    //sprite getWidth and getX return original values
+    //sprite getWidth and getX return original values(--WITHOUT-- REMOVAL OF TRANSPARENCY) and scales without its coordinates changing**\
+        //however it scales from the center and x and y no longer represent starting point of sprite
+        //my width is now scaled width (with transparency),
+        // if you want without one, you look for hit-boxWidth
+        //getY and getY doesnt change after scaling
     //rectangle starts and scales and sprites original position
     //but circle scales from its center which is its original coordinates
 
@@ -113,8 +141,34 @@ public class Main extends ApplicationAdapter {
         for(Enemy enemy : enemies) {
             enemy.update(batch);
         }
+//        System.out.println(ship.spriteOfEntity.sprite.getX());
 
         batch.end();
+
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        for(Enemy enemy : enemies) {
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.rect(
+                enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth/2f + enemy.spriteOfEntity.sprite.getWidth()/2f,
+                enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight/2f  + enemy.spriteOfEntity.sprite.getHeight()/2f,
+                enemy.hitboxOfEntity.hitboxWidth,
+                enemy.hitboxOfEntity.hitboxHeight
+            );
+
+        }
+        for(Bullet enemy : bullets) {
+            shapeRenderer.setColor(Color.RED);
+            shapeRenderer.rect(
+                enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth/2f + enemy.spriteOfEntity.sprite.getWidth()/2f,
+                enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight/2f  + enemy.spriteOfEntity.sprite.getHeight()/2f,
+
+                enemy.hitboxOfEntity.hitboxWidth,
+                enemy.hitboxOfEntity.hitboxHeight
+            );
+        }
+        shapeRenderer.end();
+
+
 
     }
     private void logic() {
@@ -225,7 +279,7 @@ public class Main extends ApplicationAdapter {
             ship.spriteOfEntity.sprite.translateY(-delta * speed);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
-            System.out.println(shipTimer + " " + dashTimer);
+//            System.out.println(shipTimer + " " + dashTimer);
 
             if(shipTimer > dashTimer) {
                 if(ship.spriteOfEntity.sprite.getX() > -ship.spriteOfEntity.width /2*(1f- ship.spriteOfEntity.scale))//

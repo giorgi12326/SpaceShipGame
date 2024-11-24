@@ -23,8 +23,8 @@ public class AnimationOfEntity {
     }
 
     public void drawAnimation(SpriteBatch batch,int index){
-        batch.draw(animations.get(shouldDisplayAnimation).getKeyFrame(animationTimer), entity.spriteOfEntity.sprite.getX() - entity.spriteOfEntity.width * entity.spriteOfEntity.scale * animationScale /2,
-            entity.spriteOfEntity.sprite.getY() - entity.spriteOfEntity.height * entity.spriteOfEntity.scale * animationScale /2, entity.spriteOfEntity.width * entity.spriteOfEntity.scale * animationScale, entity.spriteOfEntity.height * entity.spriteOfEntity.scale * animationScale);
+        batch.draw(animations.get(shouldDisplayAnimation).getKeyFrame(animationTimer), entity.spriteOfEntity.sprite.getX() - entity.spriteOfEntity.width * animationScale /2,
+            entity.spriteOfEntity.sprite.getY() - entity.spriteOfEntity.height  * animationScale /2, entity.spriteOfEntity.width  * animationScale, entity.spriteOfEntity.height * animationScale);
         updateAnimationTimer();
         checkIfAnimationShouldEnd();
     }
