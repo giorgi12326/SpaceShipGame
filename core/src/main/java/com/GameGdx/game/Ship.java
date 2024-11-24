@@ -22,7 +22,7 @@ public class Ship extends Entity{
         spriteOfEntity.sprite.setY(200);
 
         spriteOfEntity.width = spriteOfEntity.sprite.getWidth() * spriteOfEntity.scale;
-        spriteOfEntity.height = spriteOfEntity.sprite.getHeight();
+        spriteOfEntity.height = spriteOfEntity.sprite.getHeight()  * spriteOfEntity.scale;
 
         hitboxOfEntity.hitboxWidth = 29f * spriteOfEntity.scale;
         hitboxOfEntity.hitboxHeight = 29f * spriteOfEntity.scale;
@@ -30,6 +30,10 @@ public class Ship extends Entity{
         Texture expImage = new Texture("PhaseLeft.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,16,16);
         animationOfEntity.animations.add(new Animation<>(0.05f, expRegion[0]));
+        animationOfEntity.sizeFull.add(new Pair(16f*animationOfEntity.animationScale,16f*animationOfEntity.animationScale));
+        animationOfEntity.offset.add(new Pair(0,0));
+
+
         animationOfEntity.framesOfAnimation = 5;
 
     }

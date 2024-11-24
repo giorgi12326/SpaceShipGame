@@ -39,7 +39,7 @@ public class Main extends ApplicationAdapter {
     List<Enemy> enemies;
     List<Entity> pendingAnimations;
     List<Entity> garbageCollector;
-    List<Explosion> explosionList;
+//    List<Explosion> explosionList;
     Music pop ;
     Circle rectangle;
     float shipTimer = 0f;
@@ -75,7 +75,7 @@ public class Main extends ApplicationAdapter {
         gameMusic.setVolume(1f);
         gameMusic.play();
         garbageCollector = new ArrayList<>();
-        explosionList = new ArrayList<>();
+//        explosionList = new ArrayList<>();
         ship = new Ship();
 //        createEnemy();
 
@@ -147,24 +147,36 @@ public class Main extends ApplicationAdapter {
 
         shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
         for(Enemy enemy : enemies) {
-            shapeRenderer.setColor(Color.RED);
-            shapeRenderer.rect(
-                enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth/2f + enemy.spriteOfEntity.sprite.getWidth()/2f,
-                enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight/2f  + enemy.spriteOfEntity.sprite.getHeight()/2f,
-                enemy.hitboxOfEntity.hitboxWidth,
-                enemy.hitboxOfEntity.hitboxHeight
-            );
+            if(enemy instanceof UFO&& enemy.animationOfEntity.shouldDisplayAnimation != -1){
+                shapeRenderer.setColor(Color.BLUE);
+                Pair getHitbox = enemy.animationOfEntity.hitbox.getFirst();
+                Pair getOffset = enemy.animationOfEntity.offset.getFirst();
+                shapeRenderer.rect(enemy.spriteOfEntity.sprite.getX() + enemy.spriteOfEntity.sprite.getWidth()/2f - getHitbox.x()/2f + getOffset.x(),
+                    enemy.spriteOfEntity.sprite.getY() + enemy.spriteOfEntity.sprite.getHeight()/2f - getHitbox.y()/2f + getOffset.y(),
+                    getHitbox.x(),getHitbox.y());
+            }
+            else {
+                shapeRenderer.setColor(Color.RED);
+                shapeRenderer.rect(
+                    enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth / 2f + enemy.spriteOfEntity.sprite.getWidth() / 2f,
+                    enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight / 2f + enemy.spriteOfEntity.sprite.getHeight() / 2f,
+                    enemy.hitboxOfEntity.hitboxWidth,
+                    enemy.hitboxOfEntity.hitboxHeight
+                );
+            }
 
         }
         for(Bullet enemy : bullets) {
             shapeRenderer.setColor(Color.RED);
+
             shapeRenderer.rect(
-                enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth/2f + enemy.spriteOfEntity.sprite.getWidth()/2f,
-                enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight/2f  + enemy.spriteOfEntity.sprite.getHeight()/2f,
+                enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth / 2f + enemy.spriteOfEntity.sprite.getWidth() / 2f,
+                enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight / 2f + enemy.spriteOfEntity.sprite.getHeight() / 2f,
 
                 enemy.hitboxOfEntity.hitboxWidth,
                 enemy.hitboxOfEntity.hitboxHeight
             );
+
         }
         shapeRenderer.end();
 
@@ -176,8 +188,8 @@ public class Main extends ApplicationAdapter {
 
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Entity enemy = enemies.get(i);
-            if(enemy.hitboxOfEntity.rectangle.overlaps(ship.hitboxOfEntity.rectangle))
-                System.exit(1);
+//            if(enemy.hitboxOfEntity.rectangle.overlaps(ship.hitboxOfEntity.rectangle))
+//                System.exit(1);
         }
 
 
@@ -193,10 +205,11 @@ public class Main extends ApplicationAdapter {
                 if (enemy.hitboxOfEntity.rectangle.overlaps(bullet.hitboxOfEntity.rectangle)) {
 
                     if(bullet instanceof Rocket) {
-                        Explosion explosion = new Explosion(bullet.spriteOfEntity.sprite.getX() + bullet.spriteOfEntity.width /2, bullet.spriteOfEntity.sprite.getY()+ bullet.spriteOfEntity.height /2);
+                        bullet.animationOfEntity.triggerAnimation();
+//                        Explosion explosion = new Explosion(bullet.spriteOfEntity.sprite.getX() + bullet.spriteOfEntity.width /2, bullet.spriteOfEntity.sprite.getY()+ bullet.spriteOfEntity.height /2);
                         explosionSound.play();
-                        bullets.add(explosion);
-                        garbageCollector.add(explosion);
+//                        bullets.add(explosion);
+//                        garbageCollector.add(explosion);
                     }
 
                     enemy.animationOfEntity.shouldDisplayAnimation = 0;

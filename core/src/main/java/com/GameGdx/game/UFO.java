@@ -17,7 +17,7 @@ public class UFO extends Enemy {
         this.ship = ship;
 
         spriteOfEntity.scale = 5.0f;
-        animationOfEntity.animationScale = 6f;
+        animationOfEntity.animationScale = 5f;
 
         spriteOfEntity.texture = new Texture("ufo.png");
         spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
@@ -33,8 +33,14 @@ public class UFO extends Enemy {
         hitboxOfEntity.hitboxHeight = 16f * spriteOfEntity.scale;
 
         Texture expImage = new Texture("OmegaBolt.png");
-        TextureRegion[][] expRegion = TextureRegion.split(expImage,100,100);
+        TextureRegion[][] expRegion = TextureRegion.split(expImage,100,82);
         animationOfEntity.animations.add(new Animation<>(0.1f, expRegion[0]));
+        animationOfEntity.sizeFull.add(new Pair(100f*animationOfEntity.animationScale,82f*animationOfEntity.animationScale));
+        animationOfEntity.offset.add(new Pair(0,-100f*animationOfEntity.animationScale/2));
+        animationOfEntity.hitbox.add(new Pair(100*animationOfEntity.animationScale,82*animationOfEntity.animationScale));
+
+
+
         animationOfEntity.framesOfAnimation = 8;
 
     }
@@ -49,10 +55,7 @@ public class UFO extends Enemy {
 
     @Override
     public void hitBoxDuringAnimation() {
-        hitboxOfEntity.setRectangle(spriteOfEntity.sprite.getX()+ spriteOfEntity.sprite.getWidth()* spriteOfEntity.scale,
-            spriteOfEntity.sprite.getY() + spriteOfEntity.sprite.getHeight()*spriteOfEntity.scale,100,100, spriteOfEntity.scale);
-        System.out.println(hitboxOfEntity.rectangle.getWidth() + " " + hitboxOfEntity.rectangle.getHeight());
-
+        hitboxOfEntity.setAnimationRectangle(0);
     }
 
     @Override

@@ -41,7 +41,7 @@ public class Entity {
     }
 
     public void hitBoxNormally(){
-        hitboxOfEntity.setRectangle();
+        hitboxOfEntity.setSpriteRectangle();
     }
 
     public void moveSprite(){
