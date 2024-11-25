@@ -145,41 +145,54 @@ public class Main extends ApplicationAdapter {
 
         batch.end();
 
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-        for(Enemy enemy : enemies) {
-            if(enemy instanceof UFO&& enemy.animationOfEntity.shouldDisplayAnimation != -1){
-                shapeRenderer.setColor(Color.BLUE);
-                Pair getHitbox = enemy.animationOfEntity.hitbox.getFirst();
-                Pair getOffset = enemy.animationOfEntity.offset.getFirst();
-                shapeRenderer.rect(enemy.spriteOfEntity.sprite.getX() + enemy.spriteOfEntity.sprite.getWidth()/2f - getHitbox.x()/2f + getOffset.x(),
-                    enemy.spriteOfEntity.sprite.getY() + enemy.spriteOfEntity.sprite.getHeight()/2f - getHitbox.y()/2f + getOffset.y(),
-                    getHitbox.x(),getHitbox.y());
-            }
-            else {
-                shapeRenderer.setColor(Color.RED);
-                shapeRenderer.rect(
-                    enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth / 2f + enemy.spriteOfEntity.sprite.getWidth() / 2f,
-                    enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight / 2f + enemy.spriteOfEntity.sprite.getHeight() / 2f,
-                    enemy.hitboxOfEntity.hitboxWidth,
-                    enemy.hitboxOfEntity.hitboxHeight
-                );
-            }
-
-        }
-        for(Bullet enemy : bullets) {
-            shapeRenderer.setColor(Color.RED);
-
-            shapeRenderer.rect(
-                enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth / 2f + enemy.spriteOfEntity.sprite.getWidth() / 2f,
-                enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight / 2f + enemy.spriteOfEntity.sprite.getHeight() / 2f,
-
-                enemy.hitboxOfEntity.hitboxWidth,
-                enemy.hitboxOfEntity.hitboxHeight
-            );
-
-        }
-        shapeRenderer.end();
-
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        for(Enemy enemy : enemies) {
+//            if(enemy instanceof UFO&& enemy.animationOfEntity.shouldDisplayAnimation != -1){
+//                shapeRenderer.setColor(Color.BLUE);
+//                Pair getHitbox = enemy.animationOfEntity.hitbox.getFirst();
+//                Pair getOffset = enemy.animationOfEntity.offset.getFirst();
+//                shapeRenderer.rect(enemy.spriteOfEntity.sprite.getX() + enemy.spriteOfEntity.sprite.getWidth()/2f - getHitbox.x()/2f + getOffset.x(),
+//                    enemy.spriteOfEntity.sprite.getY() + enemy.spriteOfEntity.sprite.getHeight()/2f - getHitbox.y()/2f + getOffset.y(),
+//                    getHitbox.x(),getHitbox.y());
+//            }
+//            else {
+//                shapeRenderer.setColor(Color.RED);
+//                shapeRenderer.rect(
+//                    enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth / 2f + enemy.spriteOfEntity.sprite.getWidth() / 2f,
+//                    enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight / 2f + enemy.spriteOfEntity.sprite.getHeight() / 2f,
+//                    enemy.hitboxOfEntity.hitboxWidth,
+//                    enemy.hitboxOfEntity.hitboxHeight
+//                );
+//                shapeRenderer.setColor(Color.YELLOW);
+//
+//                shapeRenderer.rect(enemy.spriteOfEntity.sprite.getX() - enemy.spriteOfEntity.width/2f + enemy.spriteOfEntity.sprite.getWidth()/2f,
+//                    enemy.spriteOfEntity.sprite.getY() - enemy.spriteOfEntity.height/2f  + enemy.spriteOfEntity.sprite.getHeight()/2f,
+//                    enemy.spriteOfEntity.width,enemy.spriteOfEntity.height
+//                    );
+////                    secondEntity.spriteOfEntity.sprite.getX() - entity.hitboxOfEntity.hitboxWidth/2f + entity.spriteOfEntity.sprite.getWidth()/2f,
+////                    entity.spriteOfEntity.sprite.getY() - entity.hitboxOfEntity.hitboxHeight/2f  + entity.spriteOfEntity.sprite.getHeight()/2f);
+//
+//            }
+//
+//        }
+//        shapeRenderer.rect(ship.spriteOfEntity.sprite.getX() - ship.spriteOfEntity.width/2f + ship.spriteOfEntity.sprite.getWidth()/2f,
+//            ship.spriteOfEntity.sprite.getY() - ship.spriteOfEntity.height/2f  + ship.spriteOfEntity.sprite.getHeight()/2f,
+//            ship.spriteOfEntity.width,ship.spriteOfEntity.height
+//        );
+////        System.out.println(ship.spriteOfEntity.width + "  " + ship.spriteOfEntity.height);
+//        for(Bullet enemy : bullets) {
+//            shapeRenderer.setColor(Color.RED);
+//
+//            shapeRenderer.rect(
+//                enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth / 2f + enemy.spriteOfEntity.sprite.getWidth() / 2f,
+//                enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight / 2f + enemy.spriteOfEntity.sprite.getHeight() / 2f,
+//                enemy.hitboxOfEntity.hitboxWidth,
+//                enemy.hitboxOfEntity.hitboxHeight
+//            );
+//
+//        }
+//        shapeRenderer.end();
+//
 
 
     }
@@ -188,34 +201,30 @@ public class Main extends ApplicationAdapter {
 
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Entity enemy = enemies.get(i);
-//            if(enemy.hitboxOfEntity.rectangle.overlaps(ship.hitboxOfEntity.rectangle))
+            if(enemy.hitboxOfEntity.rectangle.overlaps(ship.hitboxOfEntity.rectangle))
+                if(ship.hitboxOfEntity.overlapsHitbox(enemy))
+                 System.out.println("yes");
+//                System.out.println(ship.hitboxOfEntity.overlapsHitbox(enemy));
 //                System.exit(1);
         }
 
 
         for (int i = bullets.size() - 1; i >= 0; i--) {
             Bullet bullet = bullets.get(i);
-//            bullet.sprite.translateY(1000f * delta);
-
-//            bullet.rectangle.set(bullet.sprite.getX() + (bullet.sprite.getWidth() - bullet.sprite.getWidth() * bullet.sprite.getScaleX())/2,
-//                bullet.sprite.getY() + (bullet.sprite.getHeight() -bullet.sprite.getHeight()*bullet.sprite.getScaleY())/2,bullet.sprite.getWidth() * bullet.sprite.getScaleX(),bullet.sprite.getHeight()*bullet.sprite.getScaleY());
-
             for (int j = enemies.size() - 1; j >= 0; j--) {
                 Enemy enemy = enemies.get(j);
                 if (enemy.hitboxOfEntity.rectangle.overlaps(bullet.hitboxOfEntity.rectangle)) {
+                    if (bullet.hitboxOfEntity.overlapsHitbox(enemy)) {
+                        if (bullet instanceof Rocket) {
+                            bullet.animationOfEntity.triggerAnimation();
+                            explosionSound.play();
+                        }
 
-                    if(bullet instanceof Rocket) {
-                        bullet.animationOfEntity.triggerAnimation();
-//                        Explosion explosion = new Explosion(bullet.spriteOfEntity.sprite.getX() + bullet.spriteOfEntity.width /2, bullet.spriteOfEntity.sprite.getY()+ bullet.spriteOfEntity.height /2);
-                        explosionSound.play();
-//                        bullets.add(explosion);
-//                        garbageCollector.add(explosion);
+                        enemy.animationOfEntity.shouldDisplayAnimation = 0;
+                        garbageCollector.add(enemies.get(j));
+                        garbageCollector.add(bullets.get(i));
+                        pop.play();
                     }
-
-                    enemy.animationOfEntity.shouldDisplayAnimation = 0;
-                    garbageCollector.add(enemies.get(j));
-                    garbageCollector.add(bullets.get(i));
-                    pop.play();
                 }
             }
             if(bullet.spriteOfEntity.sprite.getY() > Gdx.graphics.getHeight()) {
@@ -266,7 +275,7 @@ public class Main extends ApplicationAdapter {
             Rock.timer = 0;
             createEnemy();
         }
-        UFO.timer += delta;
+//        UFO.timer += delta;
         if(UFO.timer > UFO.spawnSpeed){
             UFO.timer = 0;
             createUFO();
@@ -278,18 +287,20 @@ public class Main extends ApplicationAdapter {
         float delta = Gdx.graphics.getDeltaTime();
 
         if(Gdx.input.isKeyPressed(Input.Keys.D)) {
-            if(ship.spriteOfEntity.sprite.getX() < Gdx.graphics.getWidth() + ship.spriteOfEntity.width /2*(-1f- ship.spriteOfEntity.scale))
+            if(ship.spriteOfEntity.sprite.getX() + ship.spriteOfEntity.sprite.getWidth()/2f +ship.spriteOfEntity.width/2f  < Gdx.graphics.getWidth())
                 ship.spriteOfEntity.sprite.translateX(delta * speed);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.A)) {
-            if(ship.spriteOfEntity.sprite.getX() > -ship.spriteOfEntity.width /2*(1f- ship.spriteOfEntity.scale))//
+            if(ship.spriteOfEntity.sprite.getX() + ship.spriteOfEntity.sprite.getWidth()/2f -ship.spriteOfEntity.width/2f > 0)//
                 ship.spriteOfEntity.sprite.translateX(-delta * speed);
         }
         if(Gdx.input.isKeyPressed(Input.Keys.W)) {
-            ship.spriteOfEntity.sprite.translateY(delta * speed);
+            if(ship.spriteOfEntity.sprite.getY() + ship.spriteOfEntity.sprite.getHeight()/2f +ship.spriteOfEntity.height/2f  < Gdx.graphics.getHeight())
+                ship.spriteOfEntity.sprite.translateY(delta * speed);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
-            ship.spriteOfEntity.sprite.translateY(-delta * speed);
+            if(ship.spriteOfEntity.sprite.getY() + ship.spriteOfEntity.sprite.getHeight()/2f -ship.spriteOfEntity.height/2f > 0)//
+                ship.spriteOfEntity.sprite.translateY(-delta * speed);
         }
         else if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
 //            System.out.println(shipTimer + " " + dashTimer);

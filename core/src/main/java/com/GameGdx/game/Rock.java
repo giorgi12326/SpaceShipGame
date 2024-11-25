@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Rock extends Enemy{
 
-    public static float spawnSpeed = 0.3f;
+    public static float spawnSpeed = 0.4f;
     public static float timer = 0;
-    public static float moveSpeed = 400f;//dddddddddddda
+    public static float moveSpeed = 300f;//
 
 
     Rock(){
@@ -26,16 +26,13 @@ public class Rock extends Enemy{
         spriteOfEntity.height = spriteOfEntity.sprite.getHeight()* spriteOfEntity.scale;
 
 
-        spriteOfEntity.sprite.setX(random.nextFloat(0, Gdx.graphics.getWidth() - spriteOfEntity.width));
+        spriteOfEntity.sprite.setX(random.nextFloat(spriteOfEntity.width/2f - spriteOfEntity.sprite.getWidth()/2f,Gdx.graphics.getWidth() + spriteOfEntity.sprite.getWidth()/2f - spriteOfEntity.width/2f));//
         spriteOfEntity.sprite.setY(Gdx.graphics.getHeight());
 
 
         hitboxOfEntity.hitboxWidth = 16f * spriteOfEntity.scale;
         hitboxOfEntity.hitboxHeight = 13f * spriteOfEntity.scale;
-        hitboxOfEntity.pixmap = new Pixmap(Gdx.files.internal("rock.png"));
-
-
-
+        hitboxOfEntity.pixmap = hitboxOfEntity.scalePixmap( new Pixmap(Gdx.files.internal("rock.png")),spriteOfEntity.scale,spriteOfEntity.scale);
         Texture expImage = new Texture("rock_explode.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,53,38);
         animationOfEntity.animations.add(new Animation<>(0.1f, expRegion[0]));

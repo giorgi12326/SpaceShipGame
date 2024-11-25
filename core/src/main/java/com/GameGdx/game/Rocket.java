@@ -1,5 +1,7 @@
 package com.GameGdx.game;
 
+import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -22,6 +24,10 @@ public class Rocket extends Bullet {
         spriteOfEntity.width = spriteOfEntity.sprite.getWidth() * spriteOfEntity.scale;
         spriteOfEntity.height = spriteOfEntity.sprite.getHeight() * spriteOfEntity.scale;
 
+        hitboxOfEntity.pixmap = hitboxOfEntity.scalePixmap( new Pixmap(Gdx.files.internal("rocket.png")),spriteOfEntity.scale,spriteOfEntity.scale);
+        hitboxOfEntity.hitboxWidth = 7f * spriteOfEntity.scale;
+        hitboxOfEntity.hitboxHeight = 19f * spriteOfEntity.scale;
+
         Texture expImage = new Texture("explode.png");
 
 //        spriteOfEntity.width = 150f;
@@ -33,6 +39,7 @@ public class Rocket extends Bullet {
         animationOfEntity.sizeFull.add(new Pair(150f*animationOfEntity.animationScale,60f*animationOfEntity.animationScale));
         animationOfEntity.offset.add(new Pair(0,0));
         animationOfEntity.hitbox.add(new Pair(60f*animationOfEntity.animationScale,60f*animationOfEntity.animationScale));
+
 
     }
 }

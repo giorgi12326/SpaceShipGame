@@ -1,6 +1,7 @@
 package com.GameGdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -8,11 +9,11 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Ship extends Entity{
 
-    public static float moveSpeed = 200f;
+    public static float moveSpeed = 100f;
 
     Ship(){
         spriteOfEntity.scale = 3.0f;
-        animationOfEntity.animationScale = 2.0f;
+        animationOfEntity.animationScale = 3.0f;
 
         spriteOfEntity.texture = new Texture("plane.png");
         spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
@@ -26,6 +27,9 @@ public class Ship extends Entity{
 
         hitboxOfEntity.hitboxWidth = 29f * spriteOfEntity.scale;
         hitboxOfEntity.hitboxHeight = 29f * spriteOfEntity.scale;
+        hitboxOfEntity.pixmap = hitboxOfEntity.scalePixmap( new Pixmap(Gdx.files.internal("plane.png")),spriteOfEntity.scale,spriteOfEntity.scale);
+
+
 
         Texture expImage = new Texture("PhaseLeft.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,16,16);
@@ -35,6 +39,20 @@ public class Ship extends Entity{
 
 
         animationOfEntity.framesOfAnimation = 5;
+        System.out.println(hitboxOfEntity.pixmap.getPixel(24,26));
+//
+//        for (int i = 0; i < hitboxOfEntity.pixmap.getHeight(); i++) {
+//            for (int j = 0; j <  hitboxOfEntity.pixmap.getWidth(); j++) {
+//                if(hitboxOfEntity.pixmap.getPixel(j,i) != 0)
+//                    System.out.print( 1);
+//                else
+//                    System.out.print( 0);
+//
+//
+//            }
+//            System.out.println();
+//
+//        }
 
     }
 

@@ -1,6 +1,7 @@
 package com.GameGdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -31,6 +32,8 @@ public class UFO extends Enemy {
 
         hitboxOfEntity.hitboxWidth = 18f * spriteOfEntity.scale;
         hitboxOfEntity.hitboxHeight = 16f * spriteOfEntity.scale;
+        hitboxOfEntity.pixmap = new Pixmap(Gdx.files.internal("ufo.png"));
+
 
         Texture expImage = new Texture("OmegaBolt.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,100,82);
