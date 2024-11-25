@@ -39,7 +39,7 @@ public class Ship extends Entity{
 
 
         animationOfEntity.framesOfAnimation = 5;
-        System.out.println(hitboxOfEntity.pixmap.getPixel(24,26));
+//        System.out.println(hitboxOfEntity.pixmap.getPixel(24,26));
 //
 //        for (int i = 0; i < hitboxOfEntity.pixmap.getHeight(); i++) {
 //            for (int j = 0; j <  hitboxOfEntity.pixmap.getWidth(); j++) {

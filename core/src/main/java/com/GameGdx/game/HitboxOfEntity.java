@@ -40,8 +40,6 @@ public class HitboxOfEntity {
 
     }
     public boolean overlapsHitbox(Entity secondEntity){
-//        System.out.println("asdasdasd " +             secondEntity.spriteOfEntity.sprite.getY() + " " +  secondEntity.spriteOfEntity.height/2f+ " "  + secondEntity.spriteOfEntity.sprite.getHeight()/2f);
-
         return doPixmapsOverlap(pixmap,
             entity.spriteOfEntity.sprite.getX() - entity.spriteOfEntity.width/2f + entity.spriteOfEntity.sprite.getWidth()/2f,
             entity.spriteOfEntity.sprite.getY() - entity.spriteOfEntity.height/2f  + entity.spriteOfEntity.sprite.getHeight()/2f,

@@ -21,9 +21,6 @@ public class AnimationOfEntity {
 
 
 
-
-
-
     public AnimationOfEntity(Entity entity) {
         this.entity = entity;
     }

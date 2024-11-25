@@ -145,54 +145,54 @@ public class Main extends ApplicationAdapter {
 
         batch.end();
 
-//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
-//        for(Enemy enemy : enemies) {
-//            if(enemy instanceof UFO&& enemy.animationOfEntity.shouldDisplayAnimation != -1){
-//                shapeRenderer.setColor(Color.BLUE);
-//                Pair getHitbox = enemy.animationOfEntity.hitbox.getFirst();
-//                Pair getOffset = enemy.animationOfEntity.offset.getFirst();
-//                shapeRenderer.rect(enemy.spriteOfEntity.sprite.getX() + enemy.spriteOfEntity.sprite.getWidth()/2f - getHitbox.x()/2f + getOffset.x(),
-//                    enemy.spriteOfEntity.sprite.getY() + enemy.spriteOfEntity.sprite.getHeight()/2f - getHitbox.y()/2f + getOffset.y(),
-//                    getHitbox.x(),getHitbox.y());
-//            }
-//            else {
-//                shapeRenderer.setColor(Color.RED);
-//                shapeRenderer.rect(
-//                    enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth / 2f + enemy.spriteOfEntity.sprite.getWidth() / 2f,
-//                    enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight / 2f + enemy.spriteOfEntity.sprite.getHeight() / 2f,
-//                    enemy.hitboxOfEntity.hitboxWidth,
-//                    enemy.hitboxOfEntity.hitboxHeight
-//                );
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+        for(Enemy enemy : enemies) {
+            if(enemy instanceof UFO&& enemy.animationOfEntity.shouldDisplayAnimation != -1){
+                shapeRenderer.setColor(Color.BLUE);
+                Pair getHitbox = enemy.animationOfEntity.hitbox.getFirst();
+                Pair getOffset = enemy.animationOfEntity.offset.getFirst();
+                shapeRenderer.rect(enemy.spriteOfEntity.sprite.getX() + enemy.spriteOfEntity.sprite.getWidth()/2f - getHitbox.x()/2f + getOffset.x(),
+                    enemy.spriteOfEntity.sprite.getY() + enemy.spriteOfEntity.sprite.getHeight()/2f - getHitbox.y()/2f + getOffset.y(),
+                    getHitbox.x(),getHitbox.y());
+            }
+            else {
+                shapeRenderer.setColor(Color.RED);
+                shapeRenderer.rect(
+                    enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth / 2f + enemy.spriteOfEntity.sprite.getWidth() / 2f,
+                    enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight / 2f + enemy.spriteOfEntity.sprite.getHeight() / 2f,
+                    enemy.hitboxOfEntity.hitboxWidth,
+                    enemy.hitboxOfEntity.hitboxHeight
+                );
 //                shapeRenderer.setColor(Color.YELLOW);
 //
 //                shapeRenderer.rect(enemy.spriteOfEntity.sprite.getX() - enemy.spriteOfEntity.width/2f + enemy.spriteOfEntity.sprite.getWidth()/2f,
 //                    enemy.spriteOfEntity.sprite.getY() - enemy.spriteOfEntity.height/2f  + enemy.spriteOfEntity.sprite.getHeight()/2f,
 //                    enemy.spriteOfEntity.width,enemy.spriteOfEntity.height
 //                    );
-////                    secondEntity.spriteOfEntity.sprite.getX() - entity.hitboxOfEntity.hitboxWidth/2f + entity.spriteOfEntity.sprite.getWidth()/2f,
-////                    entity.spriteOfEntity.sprite.getY() - entity.hitboxOfEntity.hitboxHeight/2f  + entity.spriteOfEntity.sprite.getHeight()/2f);
-//
-//            }
-//
-//        }
-//        shapeRenderer.rect(ship.spriteOfEntity.sprite.getX() - ship.spriteOfEntity.width/2f + ship.spriteOfEntity.sprite.getWidth()/2f,
-//            ship.spriteOfEntity.sprite.getY() - ship.spriteOfEntity.height/2f  + ship.spriteOfEntity.sprite.getHeight()/2f,
-//            ship.spriteOfEntity.width,ship.spriteOfEntity.height
-//        );
-////        System.out.println(ship.spriteOfEntity.width + "  " + ship.spriteOfEntity.height);
-//        for(Bullet enemy : bullets) {
-//            shapeRenderer.setColor(Color.RED);
-//
-//            shapeRenderer.rect(
-//                enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth / 2f + enemy.spriteOfEntity.sprite.getWidth() / 2f,
-//                enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight / 2f + enemy.spriteOfEntity.sprite.getHeight() / 2f,
-//                enemy.hitboxOfEntity.hitboxWidth,
-//                enemy.hitboxOfEntity.hitboxHeight
-//            );
-//
-//        }
-//        shapeRenderer.end();
-//
+//                    secondEntity.spriteOfEntity.sprite.getX() - entity.hitboxOfEntity.hitboxWidth/2f + entity.spriteOfEntity.sprite.getWidth()/2f,
+//                    entity.spriteOfEntity.sprite.getY() - entity.hitboxOfEntity.hitboxHeight/2f  + entity.spriteOfEntity.sprite.getHeight()/2f);
+
+            }
+
+        }
+        shapeRenderer.rect(ship.spriteOfEntity.sprite.getX() - ship.spriteOfEntity.width/2f + ship.spriteOfEntity.sprite.getWidth()/2f,
+            ship.spriteOfEntity.sprite.getY() - ship.spriteOfEntity.height/2f  + ship.spriteOfEntity.sprite.getHeight()/2f,
+            ship.spriteOfEntity.width,ship.spriteOfEntity.height
+        );
+//        System.out.println(ship.spriteOfEntity.width + "  " + ship.spriteOfEntity.height);
+        for(Bullet enemy : bullets) {
+            shapeRenderer.setColor(Color.RED);
+
+            shapeRenderer.rect(
+                enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth / 2f + enemy.spriteOfEntity.sprite.getWidth() / 2f,
+                enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight / 2f + enemy.spriteOfEntity.sprite.getHeight() / 2f,
+                enemy.hitboxOfEntity.hitboxWidth,
+                enemy.hitboxOfEntity.hitboxHeight
+            );
+
+        }
+        shapeRenderer.end();
+
 
 
     }
@@ -201,11 +201,12 @@ public class Main extends ApplicationAdapter {
 
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Entity enemy = enemies.get(i);
-            if(enemy.hitboxOfEntity.rectangle.overlaps(ship.hitboxOfEntity.rectangle))
-                if(ship.hitboxOfEntity.overlapsHitbox(enemy))
-                 System.out.println("yes");
+            if(enemy.hitboxOfEntity.rectangle.overlaps(ship.hitboxOfEntity.rectangle)) {
+                if (ship.hitboxOfEntity.overlapsHitbox(enemy))
+                    System.out.println("yes");
 //                System.out.println(ship.hitboxOfEntity.overlapsHitbox(enemy));
 //                System.exit(1);
+            }
         }
 
 
@@ -213,8 +214,9 @@ public class Main extends ApplicationAdapter {
             Bullet bullet = bullets.get(i);
             for (int j = enemies.size() - 1; j >= 0; j--) {
                 Enemy enemy = enemies.get(j);
-                if (enemy.hitboxOfEntity.rectangle.overlaps(bullet.hitboxOfEntity.rectangle)) {
+                if (enemy.hitboxOfEntity.rectangle.overlaps(bullet.hitboxOfEntity.rectangle) && enemy.animationOfEntity.shouldDisplayAnimation == -1) {
                     if (bullet.hitboxOfEntity.overlapsHitbox(enemy)) {
+
                         if (bullet instanceof Rocket) {
                             bullet.animationOfEntity.triggerAnimation();
                             explosionSound.play();
@@ -275,7 +277,7 @@ public class Main extends ApplicationAdapter {
             Rock.timer = 0;
             createEnemy();
         }
-//        UFO.timer += delta;
+        UFO.timer += delta;
         if(UFO.timer > UFO.spawnSpeed){
             UFO.timer = 0;
             createUFO();
