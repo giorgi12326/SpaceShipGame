@@ -1,15 +1,17 @@
 package com.GameGdx.game;
 
-import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.files.FileHandle;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.math.Rectangle;
+import java.util.List;
+
+import java.util.ArrayList;
 
 public class HitboxOfEntity {
     private final Entity entity;
     public float hitboxWidth;
     public float hitboxHeight;
     Rectangle rectangle = new Rectangle();
+    List<List<Pixmap>> animationHitbox = new ArrayList<>();
     Pixmap pixmap;
 
 
@@ -39,7 +41,7 @@ public class HitboxOfEntity {
         rectangle.set(-1, -1, 0, 0);
 
     }
-    public boolean overlapsHitbox(Entity secondEntity){
+    public boolean overlapsSpriteHitbox(Entity secondEntity){
         return doPixmapsOverlap(pixmap,
             entity.spriteOfEntity.sprite.getX() - entity.spriteOfEntity.width/2f + entity.spriteOfEntity.sprite.getWidth()/2f,
             entity.spriteOfEntity.sprite.getY() - entity.spriteOfEntity.height/2f  + entity.spriteOfEntity.sprite.getHeight()/2f,
@@ -47,6 +49,19 @@ public class HitboxOfEntity {
             secondEntity.spriteOfEntity.sprite.getX() - secondEntity.spriteOfEntity.width/2f + secondEntity.spriteOfEntity.sprite.getWidth()/2f,
             secondEntity.spriteOfEntity.sprite.getY() - secondEntity.spriteOfEntity.height/2f  + secondEntity.spriteOfEntity.sprite.getHeight()/2f);
     }
+    public boolean animationOverlapsSpriteHitbox(Entity secondEntity){
+        System.out.println(entity.animationOfEntity.shouldDisplayAnimation);
+        return doPixmapsOverlap(
+            entity.hitboxOfEntity.animationHitbox.get(entity.animationOfEntity.shouldDisplayAnimation).get(entity.animationOfEntity.animations.get(entity.animationOfEntity.shouldDisplayAnimation).getKeyFrameIndex(entity.animationOfEntity.animationTimer)),
+            entity.spriteOfEntity.sprite.getX() - entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).x()/2f
+                + entity.spriteOfEntity.sprite.getWidth()/2f + entity.animationOfEntity.offset.get(entity.animationOfEntity.shouldDisplayAnimation).x(),
+            entity.spriteOfEntity.sprite.getY() - entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).y()/2f
+                + entity.spriteOfEntity.sprite.getHeight()/2f  + entity.animationOfEntity.offset.get(entity.animationOfEntity.shouldDisplayAnimation).y(),
+            secondEntity.hitboxOfEntity.pixmap,
+            secondEntity.spriteOfEntity.sprite.getX() - secondEntity.spriteOfEntity.width/2f + secondEntity.spriteOfEntity.sprite.getWidth()/2f,
+            secondEntity.spriteOfEntity.sprite.getY() - secondEntity.spriteOfEntity.height/2f  + secondEntity.spriteOfEntity.sprite.getHeight()/2f);
+    }
+
 
 
     public boolean doPixmapsOverlap(Pixmap pixmap1, float x1, float y1,
@@ -103,8 +118,6 @@ public class HitboxOfEntity {
 //                    System.out.printf("Alpha1 = %d, Alpha2 = %d%n", alpha1, alpha2);
 
                     if (color1 != 0 && color2 != 0) { // Check if both pixels are non-transparent
-                        System.out.println("Overlap detected at ship" + (pixmap1X) + ", " + (pixmap1Y) +" " + pixmap1.getPixel(pixmap1X,pixmap1Y));
-                        System.out.println("Overlap detected at Rock" + (pixmap2X) + ", " + (pixmap2Y));
                         return true;
                     }
 

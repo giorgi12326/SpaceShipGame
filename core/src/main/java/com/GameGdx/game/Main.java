@@ -202,7 +202,7 @@ public class Main extends ApplicationAdapter {
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Entity enemy = enemies.get(i);
             if(enemy.hitboxOfEntity.rectangle.overlaps(ship.hitboxOfEntity.rectangle)) {
-                if (ship.hitboxOfEntity.overlapsHitbox(enemy))
+                if (ship.hitboxOfEntity.overlapsSpriteHitbox(enemy))
                     System.out.println("yes");
 //                System.out.println(ship.hitboxOfEntity.overlapsHitbox(enemy));
 //                System.exit(1);
@@ -214,23 +214,21 @@ public class Main extends ApplicationAdapter {
             Bullet bullet = bullets.get(i);
             for (int j = enemies.size() - 1; j >= 0; j--) {
                 Enemy enemy = enemies.get(j);
-                if (enemy.hitboxOfEntity.rectangle.overlaps(bullet.hitboxOfEntity.rectangle) && enemy.animationOfEntity.shouldDisplayAnimation == -1) {
-                    if (bullet.hitboxOfEntity.overlapsHitbox(enemy)) {
-
-                        if (bullet instanceof Rocket) {
-                            bullet.animationOfEntity.triggerAnimation();
-                            explosionSound.play();
-                        }
-
-                        enemy.animationOfEntity.shouldDisplayAnimation = 0;
-                        garbageCollector.add(enemies.get(j));
-                        garbageCollector.add(bullets.get(i));
-                        pop.play();
+                if (enemy.hitboxOfEntity.rectangle.overlaps(bullet.hitboxOfEntity.rectangle)) {
+                    if (bullet instanceof Rocket) {
+                        bullet.animationOfEntity.triggerAnimation();
+                        explosionSound.play();
                     }
+                    enemy.animationOfEntity.shouldDisplayAnimation = 0;
+                    garbageCollector.add(enemies.get(j));
+                    garbageCollector.add(bullets.get(i));
+                    pop.play();
+
+
                 }
-            }
-            if(bullet.spriteOfEntity.sprite.getY() > Gdx.graphics.getHeight()) {
-                garbageCollector.add(bullets.get(i));
+                if (bullet.spriteOfEntity.sprite.getY() > Gdx.graphics.getHeight()) {
+                    garbageCollector.add(bullets.get(i));
+                }
             }
         }
 //        for (Explosion explosion : explosionList) {
