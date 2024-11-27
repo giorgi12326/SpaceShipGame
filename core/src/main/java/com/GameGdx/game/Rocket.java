@@ -15,7 +15,7 @@ public class Rocket extends Bullet {
 
     public Rocket(float x,float y){
         spriteOfEntity.scale = 1f;
-        animationOfEntity.animationScale = 1f;
+        animationOfEntity.animationScale = 8f;
 
         spriteOfEntity.texture = new Texture("rocket.png");
         spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
@@ -76,10 +76,10 @@ public class Rocket extends Bullet {
                     framePixmap.drawPixel(j, k, color);
                 }
             }
-            hitboxOfEntity.animationHitbox.get(0).add(hitboxOfEntity.scalePixmap(framePixmap,spriteOfEntity.scale,spriteOfEntity.scale));
+            hitboxOfEntity.animationHitbox.get(0).add(hitboxOfEntity.scalePixmap(framePixmap,animationOfEntity.animationScale,animationOfEntity.animationScale));
 
         }
-//        for (Pixmap pixmap: hitboxOfEntity.animationHitbox){
+//        for (Pixmap pixmap: hitboxOfEntity.animationHitbox.get(0)){
 //            for (int i = 0; i < pixmap.getHeight(); i++) {
 //                for (int j = 25; j <  pixmap.getWidth()-25; j++) {
 //                    if((pixmap.getPixel(j,i) & 0x000000FF) > 0)
@@ -92,5 +92,10 @@ public class Rocket extends Bullet {
 //            }
 //            System.out.println("----------");
 //        }
+    }
+
+    @Override
+    public void hitBoxDuringAnimation() {
+        hitboxOfEntity.setAnimationRectangle(animationOfEntity.shouldDisplayAnimation);
     }
 }

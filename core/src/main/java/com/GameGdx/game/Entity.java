@@ -18,8 +18,8 @@ public class Entity {
 
     public void update(SpriteBatch batch){
         if(animationOfEntity.shouldDisplayAnimation >= 0){
+            hitBoxDuringAnimation();//has to be above drawAnimation!
             drawDuringAnimation(batch, animationOfEntity.shouldDisplayAnimation);
-            hitBoxDuringAnimation();
         }
         else{
             drawNormally(batch);

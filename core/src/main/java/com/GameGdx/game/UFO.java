@@ -53,11 +53,6 @@ public class UFO extends Enemy {
 
     }
 
-    @Override
-    public void hitBoxDuringAnimation() {
-        hitboxOfEntity.setAnimationRectangle(0);
-    }
-
 
 
     @Override

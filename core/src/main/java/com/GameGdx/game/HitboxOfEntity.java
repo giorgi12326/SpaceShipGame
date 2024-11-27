@@ -24,10 +24,7 @@ public class HitboxOfEntity {
             entity.spriteOfEntity.sprite.getY() - entity.hitboxOfEntity.hitboxHeight/2f  + entity.spriteOfEntity.sprite.getHeight()/2f ,
                 hitboxWidth, hitboxHeight);
     }
-//    public void setRectangle(float x,float y,float width,float height,float scale) {
-//        rectangle.set(entity.spriteOfEntity.sprite.getX()  - height * scale / 2, y - width * scale / 2,
-//                width * scale, height * scale);
-//    }
+
     public void setAnimationRectangle(int index){
         Pair getHitbox = entity.animationOfEntity.hitbox.get(index);
         Pair getOffset = entity.animationOfEntity.offset.get(index);
@@ -50,13 +47,28 @@ public class HitboxOfEntity {
             secondEntity.spriteOfEntity.sprite.getY() - secondEntity.spriteOfEntity.height/2f  + secondEntity.spriteOfEntity.sprite.getHeight()/2f);
     }
     public boolean animationOverlapsSpriteHitbox(Entity secondEntity){
-        System.out.println(entity.animationOfEntity.shouldDisplayAnimation);
+        Pixmap p =       entity.hitboxOfEntity.animationHitbox.get(entity.animationOfEntity.shouldDisplayAnimation).get(entity.animationOfEntity.animations.get(entity.animationOfEntity.shouldDisplayAnimation).getKeyFrameIndex(entity.animationOfEntity.animationTimer));
+//            for (int i = 0; i < p.getHeight(); i++) {
+//                for (int j = 25; j <  125; j++) {
+//                    if((p.getPixel(j,i) & 0x000000FF) > 0)
+//                        System.out.print( 1);
+//                    else
+//                        System.out.print( 0);
+//
+//                }
+//                System.out.println();
+//
+//            }
+//            System.out.println("----------");
+        System.out.println("called");
+
         return doPixmapsOverlap(
             entity.hitboxOfEntity.animationHitbox.get(entity.animationOfEntity.shouldDisplayAnimation).get(entity.animationOfEntity.animations.get(entity.animationOfEntity.shouldDisplayAnimation).getKeyFrameIndex(entity.animationOfEntity.animationTimer)),
             entity.spriteOfEntity.sprite.getX() - entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).x()/2f
-                + entity.spriteOfEntity.sprite.getWidth()/2f + entity.animationOfEntity.offset.get(entity.animationOfEntity.shouldDisplayAnimation).x(),
+                + entity.spriteOfEntity.sprite.getWidth()/2f
+                + entity.animationOfEntity.offset.get(entity.animationOfEntity.shouldDisplayAnimation).x(),
             entity.spriteOfEntity.sprite.getY() - entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).y()/2f
-                + entity.spriteOfEntity.sprite.getHeight()/2f  + entity.animationOfEntity.offset.get(entity.animationOfEntity.shouldDisplayAnimation).y(),
+                + entity.spriteOfEntity.sprite.getHeight()/2f,
             secondEntity.hitboxOfEntity.pixmap,
             secondEntity.spriteOfEntity.sprite.getX() - secondEntity.spriteOfEntity.width/2f + secondEntity.spriteOfEntity.sprite.getWidth()/2f,
             secondEntity.spriteOfEntity.sprite.getY() - secondEntity.spriteOfEntity.height/2f  + secondEntity.spriteOfEntity.sprite.getHeight()/2f);
@@ -66,17 +78,21 @@ public class HitboxOfEntity {
 
     public boolean doPixmapsOverlap(Pixmap pixmap1, float x1, float y1,
                                     Pixmap pixmap2, float x2, float y2) {
+
         // Determine the overlap region
         float overlapXStart = Math.max(x1, x2);
         float overlapYStart = Math.max(y1, y2);
         float overlapXEnd = Math.min(x1 + pixmap1.getWidth(), x2 + pixmap2.getWidth());
         float overlapYEnd = Math.min(y1 + pixmap1.getHeight(), y2 + pixmap2.getHeight());
+//        System.out.println( pixmap1.getWidth());
+//        System.out.println((x1+ pixmap1.getWidth()) + " " +  (y1 + pixmap1.getHeight())  +" "+ x2 + " " + y2);
 
         // If there is no overlap, return false
         if (overlapXStart >= overlapXEnd || overlapYStart >= overlapYEnd) {
-//            System.out.println("No overlap region");
+            System.out.println("falsed");
             return false;
         }
+
 
         // Convert overlap region to integer bounds for iteration
         int startX = (int) Math.floor(overlapXStart);
@@ -117,7 +133,7 @@ public class HitboxOfEntity {
 
 //                    System.out.printf("Alpha1 = %d, Alpha2 = %d%n", alpha1, alpha2);
 
-                    if (color1 != 0 && color2 != 0) { // Check if both pixels are non-transparent
+                    if ((color1 & 0x000000FF) > 0 && color2 != 0) {
                         return true;
                     }
 

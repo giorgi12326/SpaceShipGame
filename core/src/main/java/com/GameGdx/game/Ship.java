@@ -96,10 +96,10 @@ public class Ship extends Entity{
             // Now you have a Pixmap for each frame (framePixmap)
             // You can store these Pixmaps in an array or list for later use
         }
-//        for (Pixmap pixmap: hitboxOfEntity.animationHitbox){
+//        for (Pixmap pixmap: hitboxOfEntity.animationHitbox.get(0)){
 //            for (int i = 0; i < pixmap.getHeight(); i++) {
 //                for (int j = 0; j <  pixmap.getWidth(); j++) {
-//                    if(((pixmap.getPixel(j,i)>>>24) & 0xFF) >=0.1)
+//                    if((pixmap.getPixel(j,i) & 0x000000FF) > 0)
 //                        System.out.print( 1);
 //                    else
 //                        System.out.print( 0);
@@ -113,8 +113,4 @@ public class Ship extends Entity{
 
 
     }
-
-
-
-
 }
