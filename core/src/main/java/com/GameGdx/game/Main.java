@@ -93,7 +93,7 @@ public class Main extends ApplicationAdapter {
     }
 
     private void lines() {
-        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
+//        shapeRenderer.begin(ShapeRenderer.ShapeType.Line);
 //        for(Enemy enemy : enemies) {
 //            if(enemy instanceof UFO&& enemy.animationOfEntity.shouldDisplayAnimation != -1){
 //                shapeRenderer.setColor(Color.BLUE);
@@ -127,33 +127,35 @@ public class Main extends ApplicationAdapter {
 //            ship.spriteOfEntity.sprite.getY() - ship.spriteOfEntity.height/2f  + ship.spriteOfEntity.sprite.getHeight()/2f,
 //            ship.spriteOfEntity.width,ship.spriteOfEntity.height
 //        );
-        for(Bullet enemy : bullets) {
-            shapeRenderer.setColor(Color.RED);
-            if(enemy.animationOfEntity.shouldDisplayAnimation == -1) {
-
-                shapeRenderer.rect(
-                    enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth / 2f + enemy.spriteOfEntity.sprite.getWidth() / 2f,
-                    enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight / 2f + enemy.spriteOfEntity.sprite.getHeight() / 2f,
-                    enemy.hitboxOfEntity.hitboxWidth,
-                    enemy.hitboxOfEntity.hitboxHeight
-                );
-            }
-            else {
-                Pair getHitbox = enemy.animationOfEntity.hitbox.getFirst();
-                Pair getOffset = enemy.animationOfEntity.offset.getFirst();
-                shapeRenderer.rect(enemy.spriteOfEntity.sprite.getX() - enemy.animationOfEntity.hitbox.get(enemy.animationOfEntity.shouldDisplayAnimation).x()/2f
-                        + enemy.animationOfEntity.hitbox.get(enemy.animationOfEntity.shouldDisplayAnimation).x()/enemy.animationOfEntity.animationScale/2f
-                      + enemy.animationOfEntity.offset.get(enemy.animationOfEntity.shouldDisplayAnimation).x(),
-                    enemy.spriteOfEntity.sprite.getY() - enemy.animationOfEntity.hitbox.get(enemy.animationOfEntity.shouldDisplayAnimation).y()/2f
-                        +  enemy.animationOfEntity.hitbox.get(enemy.animationOfEntity.shouldDisplayAnimation).y()/enemy.animationOfEntity.animationScale/2f
-                        + enemy.animationOfEntity.offset.get(enemy.animationOfEntity.shouldDisplayAnimation).y(),
-                    getHitbox.x(),getHitbox.y()
-                );
-
-            }
-
-        }
-        shapeRenderer.end();
+//        for(Bullet enemy : bullets) {
+//            shapeRenderer.setColor(Color.RED);
+//            if(enemy.animationOfEntity.shouldDisplayAnimation == -1) {
+//
+//                shapeRenderer.rect(
+//                    enemy.spriteOfEntity.sprite.getX() - enemy.hitboxOfEntity.hitboxWidth / 2f + enemy.spriteOfEntity.sprite.getWidth() / 2f,
+//                    enemy.spriteOfEntity.sprite.getY() - enemy.hitboxOfEntity.hitboxHeight / 2f + enemy.spriteOfEntity.sprite.getHeight() / 2f,
+//                    enemy.hitboxOfEntity.hitboxWidth,
+//                    enemy.hitboxOfEntity.hitboxHeight
+//                );
+//            }
+//            else {
+//                Pair getHitbox = enemy.animationOfEntity.hitbox.getFirst();
+//                Pair getOffset = enemy.animationOfEntity.offset.getFirst();
+//                shapeRenderer.rect( enemy.spriteOfEntity.sprite.getX() - enemy.animationOfEntity.sizeFull.get(enemy.animationOfEntity.shouldDisplayAnimation).x()/2f
+//                        + enemy.spriteOfEntity.sprite.getWidth()/2f
+//                        + enemy.animationOfEntity.offset.get(enemy.animationOfEntity.shouldDisplayAnimation).x(),
+//                    enemy.spriteOfEntity.sprite.getY() - enemy.animationOfEntity.sizeFull.get(enemy.animationOfEntity.shouldDisplayAnimation).y()/2f
+//                        + enemy.spriteOfEntity.sprite.getHeight()/2f
+//                        + enemy.animationOfEntity.offset.get(enemy.animationOfEntity.shouldDisplayAnimation).y(),
+//                    enemy.animationOfEntity.sizeFull.get(enemy.animationOfEntity.shouldDisplayAnimation).x(),
+//                    enemy.animationOfEntity.sizeFull.get(enemy.animationOfEntity.shouldDisplayAnimation).y()
+//
+//                );
+//
+//            }
+//
+//        }
+//        shapeRenderer.end();
     }
 //
 //    private void test() {

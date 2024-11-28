@@ -9,7 +9,7 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Rock extends Enemy{
 
-    public static float spawnSpeed = 0.1f;
+    public static float spawnSpeed = 0.4f;
     public static float timer = 0;
     public static float moveSpeed = 400f;//
 

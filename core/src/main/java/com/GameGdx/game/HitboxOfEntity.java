@@ -11,7 +11,7 @@ public class HitboxOfEntity {
     public float hitboxWidth;
     public float hitboxHeight;
     Rectangle rectangle = new Rectangle();
-    List<List<Pixmap>> animationHitbox = new ArrayList<>();
+    static List<List<Pixmap>> animationHitbox = new ArrayList<>();
     Pixmap pixmap;
 
 
@@ -47,28 +47,16 @@ public class HitboxOfEntity {
             secondEntity.spriteOfEntity.sprite.getY() - secondEntity.spriteOfEntity.height/2f  + secondEntity.spriteOfEntity.sprite.getHeight()/2f);
     }
     public boolean animationOverlapsSpriteHitbox(Entity secondEntity){
-        Pixmap p =       entity.hitboxOfEntity.animationHitbox.get(entity.animationOfEntity.shouldDisplayAnimation).get(entity.animationOfEntity.animations.get(entity.animationOfEntity.shouldDisplayAnimation).getKeyFrameIndex(entity.animationOfEntity.animationTimer));
-//            for (int i = 0; i < p.getHeight(); i++) {
-//                for (int j = 25; j <  125; j++) {
-//                    if((p.getPixel(j,i) & 0x000000FF) > 0)
-//                        System.out.print( 1);
-//                    else
-//                        System.out.print( 0);
-//
-//                }
-//                System.out.println();
-//
-//            }
-//            System.out.println("----------");
-        System.out.println("called");
 
         return doPixmapsOverlap(
-            entity.hitboxOfEntity.animationHitbox.get(entity.animationOfEntity.shouldDisplayAnimation).get(entity.animationOfEntity.animations.get(entity.animationOfEntity.shouldDisplayAnimation).getKeyFrameIndex(entity.animationOfEntity.animationTimer)),
+            HitboxOfEntity.animationHitbox.get(entity.animationOfEntity.shouldDisplayAnimation+1).get(entity.animationOfEntity.animations.get(entity.animationOfEntity.shouldDisplayAnimation).getKeyFrameIndex(entity.animationOfEntity.animationTimer)),
             entity.spriteOfEntity.sprite.getX() - entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).x()/2f
                 + entity.spriteOfEntity.sprite.getWidth()/2f
                 + entity.animationOfEntity.offset.get(entity.animationOfEntity.shouldDisplayAnimation).x(),
             entity.spriteOfEntity.sprite.getY() - entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).y()/2f
-                + entity.spriteOfEntity.sprite.getHeight()/2f,
+                + entity.spriteOfEntity.sprite.getHeight()/2f
+                + entity.animationOfEntity.offset.get(entity.animationOfEntity.shouldDisplayAnimation).y()
+            ,
             secondEntity.hitboxOfEntity.pixmap,
             secondEntity.spriteOfEntity.sprite.getX() - secondEntity.spriteOfEntity.width/2f + secondEntity.spriteOfEntity.sprite.getWidth()/2f,
             secondEntity.spriteOfEntity.sprite.getY() - secondEntity.spriteOfEntity.height/2f  + secondEntity.spriteOfEntity.sprite.getHeight()/2f);
@@ -89,7 +77,6 @@ public class HitboxOfEntity {
 
         // If there is no overlap, return false
         if (overlapXStart >= overlapXEnd || overlapYStart >= overlapYEnd) {
-            System.out.println("falsed");
             return false;
         }
 
@@ -145,7 +132,7 @@ public class HitboxOfEntity {
         return false; // No overlap found
     }
 
-    public Pixmap scalePixmap(Pixmap original, float scaleX, float scaleY) {
+    public static Pixmap scalePixmap(Pixmap original, float scaleX, float scaleY) {
         // Calculate new dimensions based on scale factors
         int newWidth = Math.round(original.getWidth() * scaleX);
         int newHeight = Math.round(original.getHeight() * scaleY);
