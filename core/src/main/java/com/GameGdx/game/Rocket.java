@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.ArrayList;
 
@@ -42,9 +43,7 @@ public class Rocket extends Bullet {
                 }
             }
         }
-        for(Pixmap p : splitPixmaps){
-            temp.add(HitboxOfEntity.scalePixmap(p,AnimationOfEntity.animationScale,AnimationOfEntity.animationScale));
-        }
+        temp.addAll(Arrays.asList(splitPixmaps));
         HitboxOfEntity.animationHitbox.add(temp);
 
 
@@ -63,7 +62,7 @@ public class Rocket extends Bullet {
         spriteOfEntity.width = spriteOfEntity.sprite.getWidth() * spriteOfEntity.scale;
         spriteOfEntity.height = spriteOfEntity.sprite.getHeight() * spriteOfEntity.scale;
 
-        hitboxOfEntity.pixmap = hitboxOfEntity.scalePixmap( new Pixmap(Gdx.files.internal("rocket.png")),spriteOfEntity.scale,spriteOfEntity.scale);
+        hitboxOfEntity.pixmap = new Pixmap(Gdx.files.internal("rocket.png"));
         hitboxOfEntity.hitboxWidth = 7f * spriteOfEntity.scale;
         hitboxOfEntity.hitboxHeight = 19f * spriteOfEntity.scale;
 

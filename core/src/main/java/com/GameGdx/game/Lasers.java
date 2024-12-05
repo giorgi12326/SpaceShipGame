@@ -21,7 +21,7 @@ public class Lasers extends Bullet{
         spriteOfEntity.width = spriteOfEntity.sprite.getWidth() * spriteOfEntity.scale;
         spriteOfEntity.height = spriteOfEntity.sprite.getHeight() * spriteOfEntity.scale;
 
-        hitboxOfEntity.pixmap = hitboxOfEntity.scalePixmap( new Pixmap(Gdx.files.internal("laser.png")),spriteOfEntity.scale,spriteOfEntity.scale);
+        hitboxOfEntity.pixmap = new Pixmap(Gdx.files.internal("laser.png"));
         hitboxOfEntity.hitboxWidth = 4f * spriteOfEntity.scale;
         hitboxOfEntity.hitboxHeight = 20f * spriteOfEntity.scale;
 

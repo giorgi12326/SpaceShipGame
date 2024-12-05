@@ -32,7 +32,7 @@ public class Rock extends Enemy{
 
         hitboxOfEntity.hitboxWidth = 16f * spriteOfEntity.scale;
         hitboxOfEntity.hitboxHeight = 13f * spriteOfEntity.scale;
-        hitboxOfEntity.pixmap = hitboxOfEntity.scalePixmap( new Pixmap(Gdx.files.internal("rock.png")),spriteOfEntity.scale,spriteOfEntity.scale);
+        hitboxOfEntity.pixmap =new Pixmap(Gdx.files.internal("rock.png"));
         Texture expImage = new Texture("rock_explode.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,53,38);
         animationOfEntity.animations.add(new Animation<>(0.1f, expRegion[0]));

@@ -29,7 +29,7 @@ public class Ship extends Entity{
 
         hitboxOfEntity.hitboxWidth = 29f * spriteOfEntity.scale;
         hitboxOfEntity.hitboxHeight = 29f * spriteOfEntity.scale;
-        hitboxOfEntity.pixmap = hitboxOfEntity.scalePixmap( new Pixmap(Gdx.files.internal("plane.png")),spriteOfEntity.scale,spriteOfEntity.scale);
+        hitboxOfEntity.pixmap = new Pixmap(Gdx.files.internal("plane.png"));
 
 
 
@@ -91,7 +91,7 @@ public class Ship extends Entity{
                     framePixmap.drawPixel(j, k, color);
                 }
             }
-            hitboxOfEntity.animationHitbox.get(0).add(hitboxOfEntity.scalePixmap(framePixmap,spriteOfEntity.scale,spriteOfEntity.scale));
+            hitboxOfEntity.animationHitbox.get(0).add(framePixmap);
 
             // Now you have a Pixmap for each frame (framePixmap)
             // You can store these Pixmaps in an array or list for later use
