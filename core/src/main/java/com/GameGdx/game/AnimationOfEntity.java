@@ -12,13 +12,12 @@ public class AnimationOfEntity {
     private final Entity entity;
     public float animationTimer = 0f;
     public List<Animation<TextureRegion>> animations = new ArrayList<>();
-    public List<Pair> size = new ArrayList<>();
+    public List<Pair> sizeFull = new ArrayList<>();
+    public List<Pair> offset = new ArrayList<>();
+    public List<Pair> hitbox = new ArrayList<>();
     public int shouldDisplayAnimation = -1;
     public int framesOfAnimation;
     public float animationScale = 1;
-
-    public float animationWidth;
-    public float animationHeight;
 
 
 
@@ -27,11 +26,12 @@ public class AnimationOfEntity {
     }
 
     public void drawAnimation(SpriteBatch batch,int index){
-//        System.out.println(entity.spriteOfEntity.width/2);
+        Pair getSizeFull = sizeFull.get(index);
+        Pair getOffset = offset.get(index);
         batch.draw(animations.get(shouldDisplayAnimation).getKeyFrame(animationTimer),
-            entity.spriteOfEntity.sprite.getX() - animationWidth/2f,
-            entity.spriteOfEntity.sprite.getY() - animationHeight/2f
-            , entity.animationOfEntity.size.get(index).x() * animationScale, entity.animationOfEntity.size.get(index).y() * animationScale);
+            entity.spriteOfEntity.sprite.getX() - getSizeFull.x()/2f + entity.spriteOfEntity.sprite.getWidth()/2f + getOffset.x(),
+            entity.spriteOfEntity.sprite.getY() - getSizeFull.y()/2f + entity.spriteOfEntity.sprite.getHeight()/2f + getOffset.y(),
+            getSizeFull.x(), getSizeFull.y());
         updateAnimationTimer();
         checkIfAnimationShouldEnd();
     }

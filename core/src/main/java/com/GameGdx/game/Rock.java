@@ -9,9 +9,9 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class Rock extends Enemy{
 
-    public static float spawnSpeed = 0.3f;
+    public static float spawnSpeed = 0.4f;
     public static float timer = 0;
-    public static float moveSpeed = 50f ;
+    public static float moveSpeed = 400f;//
 
 
     Rock(){
@@ -20,29 +20,26 @@ public class Rock extends Enemy{
 
         spriteOfEntity.texture = new Texture("rock.png");
         spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
+
         spriteOfEntity.sprite.setScale(spriteOfEntity.scale);
+        spriteOfEntity.width = spriteOfEntity.sprite.getWidth() * spriteOfEntity.scale;
+        spriteOfEntity.height = spriteOfEntity.sprite.getHeight()* spriteOfEntity.scale;
 
-        spriteOfEntity.width = spriteOfEntity.sprite.getWidth();
-        spriteOfEntity.height = spriteOfEntity.sprite.getHeight();
 
-        spriteOfEntity.sprite.setX(random.nextFloat(0, Gdx.graphics.getWidth() - spriteOfEntity.width * spriteOfEntity.scale));
+        spriteOfEntity.sprite.setX(random.nextFloat(spriteOfEntity.width/2f - spriteOfEntity.sprite.getWidth()/2f,Gdx.graphics.getWidth() + spriteOfEntity.sprite.getWidth()/2f - spriteOfEntity.width/2f));//
         spriteOfEntity.sprite.setY(Gdx.graphics.getHeight());
 
 
-        hitboxOfEntity.hitboxWidth = 16f;
-        hitboxOfEntity.hitboxHeight = 13f;
-
-        hitboxOfEntity.pixmap = new Pixmap(Gdx.files.internal("rock.png"));
-
-
-
+        hitboxOfEntity.hitboxWidth = 16f * spriteOfEntity.scale;
+        hitboxOfEntity.hitboxHeight = 13f * spriteOfEntity.scale;
+        hitboxOfEntity.pixmap =new Pixmap(Gdx.files.internal("rock.png"));
         Texture expImage = new Texture("rock_explode.png");
         TextureRegion[][] expRegion = TextureRegion.split(expImage,53,38);
         animationOfEntity.animations.add(new Animation<>(0.1f, expRegion[0]));
-        animationOfEntity.size.add(new Pair(53,38));
+        animationOfEntity.sizeFull.add(new Pair(53f*animationOfEntity.animationScale,38f*animationOfEntity.animationScale));
+        animationOfEntity.offset.add(new Pair(0,0));
+
         animationOfEntity.framesOfAnimation = 3;
-        animationOfEntity.animationWidth = 53 * animationOfEntity.animationScale;
-        animationOfEntity.animationHeight = 38 * animationOfEntity.animationScale;
 
 
     }
