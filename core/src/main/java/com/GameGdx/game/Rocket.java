@@ -47,7 +47,7 @@ public class Rocket extends Bullet {
         animationOfEntity.sizeFull.add(new Pair(150f*animationOfEntity.animationScale,60f*animationOfEntity.animationScale));
         animationOfEntity.offset.add(new Pair(0,0));
         animationOfEntity.hitbox.add(new Pair(60f*animationOfEntity.animationScale,60f*animationOfEntity.animationScale));
-
+        hitboxOfEntity.animationHitbox.add(new Pixmap(Gdx.files.internal("explode.png")));
 
     }
 

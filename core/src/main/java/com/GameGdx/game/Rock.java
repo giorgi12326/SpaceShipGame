@@ -25,10 +25,8 @@ public class Rock extends Enemy{
         spriteOfEntity.width = spriteOfEntity.sprite.getWidth() * spriteOfEntity.scale;
         spriteOfEntity.height = spriteOfEntity.sprite.getHeight()* spriteOfEntity.scale;
 
-
         spriteOfEntity.sprite.setX(random.nextFloat(spriteOfEntity.width/2f - spriteOfEntity.sprite.getWidth()/2f,Gdx.graphics.getWidth() + spriteOfEntity.sprite.getWidth()/2f - spriteOfEntity.width/2f));//
         spriteOfEntity.sprite.setY(Gdx.graphics.getHeight());
-
 
         hitboxOfEntity.hitboxWidth = 16f * spriteOfEntity.scale;
         hitboxOfEntity.hitboxHeight = 13f * spriteOfEntity.scale;

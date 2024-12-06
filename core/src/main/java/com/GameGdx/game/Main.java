@@ -308,26 +308,29 @@ public class Main extends ApplicationAdapter {
             if(ship.spriteOfEntity.sprite.getY() + ship.spriteOfEntity.sprite.getHeight()/2f +ship.spriteOfEntity.height/2f  < Gdx.graphics.getHeight())
                 ship.spriteOfEntity.sprite.translateY(delta * speed);
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.S)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.S)) {
             if(ship.spriteOfEntity.sprite.getY() + ship.spriteOfEntity.sprite.getHeight()/2f -ship.spriteOfEntity.height/2f > 0)//
                 ship.spriteOfEntity.sprite.translateY(-delta * speed);
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
-//            System.out.println(shipTimer + " " + dashTimer);
-
+        if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
             if(shipTimer > dashTimer) {
-                if(ship.spriteOfEntity.sprite.getX() > -ship.spriteOfEntity.width /2*(1f- ship.spriteOfEntity.scale))//
-                    ship.spriteOfEntity.sprite.translateX(-delta * speed * 40);
+                if(ship.spriteOfEntity.sprite.getX() + ship.spriteOfEntity.sprite.getWidth()/2f - ship.spriteOfEntity.width/2f - delta * speed * 30 >= 0)
+                    ship.spriteOfEntity.sprite.translateX(-delta * speed * 30);
+                else
+                    ship.spriteOfEntity.sprite.setX(ship.spriteOfEntity.width / 2f - ship.spriteOfEntity.sprite.getWidth()/ 2f);
+
                 shipTimer = 0f;
                 ship.animationOfEntity.triggerAnimation();
             }
         }
-        else if(Gdx.input.isKeyPressed(Input.Keys.E)) {
+        if(Gdx.input.isKeyPressed(Input.Keys.E)) {
             if(shipTimer > dashTimer) {
-                if(ship.spriteOfEntity.sprite.getX() < Gdx.graphics.getWidth() + ship.spriteOfEntity.width /2*(-1f- ship.spriteOfEntity.scale))
-                    ship.spriteOfEntity.sprite.translateX(+delta * speed * 40);
+                if (ship.spriteOfEntity.sprite.getX() + ship.spriteOfEntity.sprite.getWidth() / 2f + ship.spriteOfEntity.width / 2f + delta * speed * 30 < Gdx.graphics.getWidth())
+                    ship.spriteOfEntity.sprite.translateX(delta * speed * 30);
+                else
+                    ship.spriteOfEntity.sprite.setX(Gdx.graphics.getWidth() - ship.spriteOfEntity.sprite.getWidth() / 2f - ship.spriteOfEntity.width / 2f);
                 shipTimer = 0f;
-                ship.animationOfEntity.triggerAnimation();
+                ship.animationOfEntity.triggerAnimation(1);
             }
 
         }

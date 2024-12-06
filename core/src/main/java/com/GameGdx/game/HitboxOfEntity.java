@@ -12,7 +12,7 @@ public class HitboxOfEntity {
     public float hitboxWidth;
     public float hitboxHeight;
     Rectangle rectangle = new Rectangle();
-    static List<List<Pixmap>> animationHitbox = new ArrayList<>();
+    List<Pixmap> animationHitbox = new ArrayList<>();
     Pixmap pixmap;
 
 
@@ -52,7 +52,8 @@ public class HitboxOfEntity {
     public boolean animationOverlapsSpriteHitbox(Entity secondEntity){
         Pixmap p = new Pixmap(Gdx.files.internal("explode.png"));
         return customDoPixmapsOverlap(
-p,            entity.spriteOfEntity.sprite.getX() - entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).x()/2f
+            entity.hitboxOfEntity.animationHitbox.get(entity.animationOfEntity.shouldDisplayAnimation),
+            entity.spriteOfEntity.sprite.getX() - entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).x()/2f
                 + entity.spriteOfEntity.sprite.getWidth()/2f
                 + entity.animationOfEntity.offset.get(entity.animationOfEntity.shouldDisplayAnimation).x(),
             entity.spriteOfEntity.sprite.getY() - entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).y()/2f
