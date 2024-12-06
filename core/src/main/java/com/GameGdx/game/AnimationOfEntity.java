@@ -17,7 +17,7 @@ public class AnimationOfEntity {
     public List<Pair> hitbox = new ArrayList<>();
     public int shouldDisplayAnimation = -1;
     public int framesOfAnimation;
-    public static float animationScale = 1;
+    public float animationScale = 1;
 
 
 

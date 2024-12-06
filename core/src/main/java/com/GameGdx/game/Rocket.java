@@ -15,39 +15,7 @@ public class Rocket extends Bullet {
     public static float spawnSpeed = 1f;
     public static float timer = 0;
 
-    static{
-        AnimationOfEntity.animationScale = 8f;
 
-        List<Pixmap> temp = new ArrayList<>();
-        Texture expImage = new Texture("explode.png");
-
-//        spriteOfEntity.width = 150f;
-////        spriteOfEntity.height = 60f;
-
-        TextureRegion[][] expRegion = TextureRegion.split(expImage,150,60);
-
-        // Step 1: Get the full Pixmap from the texture
-        expRegion[0][0].getTexture().getTextureData().prepare();
-
-        Pixmap fullPixmap = new Pixmap(Gdx.files.internal("explode.png"));
-        Pixmap[] splitPixmaps = new Pixmap[5];
-        int partWidth = 150;
-        int partHeight = 60;
-
-        for (int i = 0; i < 5; i++) {
-            splitPixmaps[i] = new Pixmap(partWidth, partHeight, fullPixmap.getFormat());
-            for (int p = 0; p < partHeight; p++) {
-                for (int k = 0; k < partWidth; k++) {
-                    int pixel = fullPixmap.getPixel(i * partWidth + k, p);
-                    splitPixmaps[i].drawPixel(k, p, pixel);
-                }
-            }
-        }
-        temp.addAll(Arrays.asList(splitPixmaps));
-        HitboxOfEntity.animationHitbox.add(temp);
-
-
-    }
 
     public Rocket(float x,float y){
         spriteOfEntity.scale = 1f;
