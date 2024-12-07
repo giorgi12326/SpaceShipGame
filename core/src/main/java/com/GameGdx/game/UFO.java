@@ -8,7 +8,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
 public class UFO extends Enemy {
-    public static float spawnSpeed = 4f;
+    public static float spawnSpeed = 8f;
     public static float timer = 0;
     public static float moveSpeed = 100f;
 

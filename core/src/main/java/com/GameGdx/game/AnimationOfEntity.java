@@ -23,6 +23,7 @@ public class AnimationOfEntity {
 
 
 
+
     public AnimationOfEntity(Entity entity) {
         this.entity = entity;
     }
@@ -44,7 +45,6 @@ public class AnimationOfEntity {
         if ((looping.isEmpty() ||!looping.get(shouldDisplayAnimation)) &&animations.get(shouldDisplayAnimation).getKeyFrameIndex(animationTimer) == framesOfAnimation.get(shouldDisplayAnimation) -1) {
             System.out.println(numberOfSequentialAnimation + " " + shouldDisplayAnimation);
             if(numberOfSequentialAnimation-1 > shouldDisplayAnimation) {
-                System.out.println("Asdfgh");
                 triggerAnimation(shouldDisplayAnimation + 1);
             }
             else {
@@ -53,7 +53,7 @@ public class AnimationOfEntity {
             }
         }
         else {
-            if(animationTimer > 5){
+            if(animationTimer > 3){
                 animationTimer = 0;
                 shouldDisplayAnimation = -1;
             }

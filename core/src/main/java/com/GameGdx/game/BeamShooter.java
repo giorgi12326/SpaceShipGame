@@ -11,9 +11,10 @@ import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import java.util.ArrayList;
 
 public class BeamShooter extends Enemy{
-    public static float spawnSpeed = 4f;
+    public static float spawnSpeed = 12f;
     public static float timer = 0;
     public static float moveSpeed = 100f;
+    public static float countdown = 14f;
 
     Ship ship;
 
@@ -63,10 +64,14 @@ public class BeamShooter extends Enemy{
     }
     @Override
     public void moveSprite(){
-        if(ship.spriteOfEntity.sprite.getX()  > spriteOfEntity.sprite.getX()+10)
-            spriteOfEntity.sprite.translateX(moveSpeed*Gdx.graphics.getDeltaTime()*2);
-        else if(ship.spriteOfEntity.sprite.getX()  < spriteOfEntity.sprite.getX()-10)
-            spriteOfEntity.sprite.translateX(-moveSpeed*Gdx.graphics.getDeltaTime()*2);
+        if(animationOfEntity.shouldDisplayAnimation == -1)
+            spriteOfEntity.sprite.translateY(moveSpeed*Gdx.graphics.getDeltaTime()*1.5f);
+            else {
+            if (ship.spriteOfEntity.sprite.getX() > spriteOfEntity.sprite.getX() + 10)
+                spriteOfEntity.sprite.translateX(moveSpeed * Gdx.graphics.getDeltaTime() * 2);
+            else if (ship.spriteOfEntity.sprite.getX() < spriteOfEntity.sprite.getX() - 10)
+                spriteOfEntity.sprite.translateX(-moveSpeed * Gdx.graphics.getDeltaTime() * 2);
+        }
 
     }
 
@@ -81,5 +86,10 @@ public class BeamShooter extends Enemy{
         animationOfEntity.drawAnimation(batch,index);
         spriteOfEntity.draw(batch);
 
+    }
+
+    @Override
+    public void hitBoxNormally() {
+        hitboxOfEntity.removeRectangle();
     }
 }

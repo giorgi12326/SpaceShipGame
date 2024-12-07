@@ -13,6 +13,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.utils.ScreenUtils;
 
+import java.beans.beancontext.BeanContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -87,7 +88,7 @@ public class Main extends ApplicationAdapter {
         input();
         logic();
         draw();
-        lines();//has to be blow DRAW !
+//        lines();//has to be blow DRAW !
 
 //        test();
     }
@@ -267,7 +268,15 @@ public class Main extends ApplicationAdapter {
 
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Enemy enemy = enemies.get(i);
-            if(enemy.spriteOfEntity.sprite.getY() < 0){
+            if(enemy instanceof BeamShooter){
+                System.out.println(BeamShooter.countdown + " " + enemy.animationOfEntity.shouldDisplayAnimation);
+                if(BeamShooter.countdown <= 0 && enemy.animationOfEntity.shouldDisplayAnimation == -1){
+                    BeamShooter.countdown = 14f;
+                    BeamShooter.timer = 0;
+                    enemy.animationOfEntity.triggerAnimation();
+                }
+            }
+            if(enemy.spriteOfEntity.sprite.getY() < 0|| enemy.spriteOfEntity.sprite.getY() > Gdx.graphics.getHeight()){
                 garbageCollector.add(enemies.get(i));
 //                System.exit(1);//dedda
             }
@@ -284,13 +293,24 @@ public class Main extends ApplicationAdapter {
             UFO.timer = 0;
             createUFO();
         }
+        BeamShooter.timer += delta;
+        BeamShooter.countdown-= delta;
+        if(BeamShooter.timer >= BeamShooter.spawnSpeed){
+            createBeamShooter();
+            BeamShooter.timer = 0;
+        }
+
+
+
+
+
     }
 
     private void input() {
         float speed = 300.0f;
         float delta = Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Input.Keys.P)) {
-            createBeamLaser();
+            createBeamShooter();
         }
 
         if(Gdx.input.isKeyPressed(Input.Keys.D)) {
@@ -329,7 +349,6 @@ public class Main extends ApplicationAdapter {
                 shipTimer = 0f;
                 ship.animationOfEntity.triggerAnimation(1);
             }
-
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
             if (Lasers.timer > Lasers.spawnSpeed) {
@@ -343,7 +362,6 @@ public class Main extends ApplicationAdapter {
                 createRocket();
                 Rocket.timer = 0;
             }
-
         }
         Rocket.timer+= delta;
         Lasers.timer+= delta;
@@ -375,11 +393,8 @@ public class Main extends ApplicationAdapter {
         Enemy beamShooter = new BeamShooter(ship);
         enemies.add(beamShooter);
     }
-    private void createBeamLaser(){
-        Enemy beamLaser = new BeamShooter(ship);
-        enemies.add(beamLaser);
 
-    }
+
 //    private float[] scaledEntityParameters(Entity entity){
 //        float[] arr = new float[4];
 //        arr[0] = entity.sprite.getX() + entity.sprite.getWidth()*Math.abs((1f-entity.scale))/2;
