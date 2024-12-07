@@ -4,6 +4,7 @@ PhaseLeft.png
 PhaseRight.png
 Playerplaneleft.png
 Playerplaneright.png
+beamshooter.png
 bg.png
 bomb.mp3
 emptySprite.png

@@ -24,7 +24,7 @@ public class BeamShooter extends Enemy{
         spriteOfEntity.scale = 5.0f;
         animationOfEntity.animationScale = 2f;
 
-        spriteOfEntity.texture = new Texture("plane.png");
+        spriteOfEntity.texture = new Texture("beamshooter.png");
         spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
 
         spriteOfEntity.sprite.setScale(spriteOfEntity.scale);
