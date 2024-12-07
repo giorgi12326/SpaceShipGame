@@ -35,13 +35,13 @@ public class Ship extends Entity{
         animationOfEntity.animations.add(new Animation<>(0.03f, anim1[0]));
         animationOfEntity.sizeFull.add(new Pair(16f*animationOfEntity.animationScale,16f*animationOfEntity.animationScale));
         animationOfEntity.offset.add(new Pair(40,0));
-        animationOfEntity.framesOfAnimation = 5;
+        animationOfEntity.framesOfAnimation.add(5);
 
         TextureRegion[][] anim2 = TextureRegion.split(new Texture("PhaseRight.png"),16,16);
         animationOfEntity.animations.add(new Animation<>(0.03f, anim2[0]));
         animationOfEntity.sizeFull.add(new Pair(16f*animationOfEntity.animationScale,16f*animationOfEntity.animationScale));
         animationOfEntity.offset.add(new Pair(-40,0));
-        animationOfEntity.framesOfAnimation = 5;
+        animationOfEntity.framesOfAnimation.add(5);
 
     }
 }

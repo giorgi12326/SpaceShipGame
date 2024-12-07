@@ -37,7 +37,7 @@ public class Rock extends Enemy{
         animationOfEntity.sizeFull.add(new Pair(53f*animationOfEntity.animationScale,38f*animationOfEntity.animationScale));
         animationOfEntity.offset.add(new Pair(0,0));
 
-        animationOfEntity.framesOfAnimation = 3;
+        animationOfEntity.framesOfAnimation.add(3);
 
 
     }

@@ -43,7 +43,7 @@ public class Rocket extends Bullet {
 
         TextureRegion[][] expRegion = TextureRegion.split(expImage,150,60);
         animationOfEntity.animations.add(new Animation<>(0.1f, expRegion[0]));
-        animationOfEntity.framesOfAnimation = 5;
+        animationOfEntity.framesOfAnimation.add(5);
         animationOfEntity.sizeFull.add(new Pair(150f*animationOfEntity.animationScale,60f*animationOfEntity.animationScale));
         animationOfEntity.offset.add(new Pair(0,0));
         animationOfEntity.hitbox.add(new Pair(60f*animationOfEntity.animationScale,60f*animationOfEntity.animationScale));

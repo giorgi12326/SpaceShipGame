@@ -40,8 +40,7 @@ public class UFO extends Enemy {
         animationOfEntity.sizeFull.add(new Pair(100f*animationOfEntity.animationScale,82f*animationOfEntity.animationScale));
         animationOfEntity.offset.add(new Pair(0,-100f*animationOfEntity.animationScale/2));
         animationOfEntity.hitbox.add(new Pair(100*animationOfEntity.animationScale,82*animationOfEntity.animationScale));
-
-        animationOfEntity.framesOfAnimation = 8;
+        animationOfEntity.framesOfAnimation.add(8);
 
     }
     @Override

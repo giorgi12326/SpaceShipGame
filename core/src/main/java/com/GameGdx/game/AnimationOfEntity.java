@@ -15,9 +15,11 @@ public class AnimationOfEntity {
     public List<Pair> sizeFull = new ArrayList<>();
     public List<Pair> offset = new ArrayList<>();
     public List<Pair> hitbox = new ArrayList<>();
-    public int shouldDisplayAnimation = -1;
-    public int framesOfAnimation;
+    public List<Integer> framesOfAnimation = new ArrayList<>();
     public float animationScale = 1;
+    public int shouldDisplayAnimation = -1;
+    public int numberOfSequentialAnimation = 1;
+    public List<Boolean> looping = new ArrayList<>();
 
 
 
@@ -37,12 +39,26 @@ public class AnimationOfEntity {
     }
 
     private void checkIfAnimationShouldEnd() {
-        if (animations.get(shouldDisplayAnimation).getKeyFrameIndex(animationTimer) == framesOfAnimation -1) {
-            animationTimer = 0;
-            shouldDisplayAnimation = -1;
-        }
-    }
 
+
+        if ((looping.isEmpty() ||!looping.get(shouldDisplayAnimation)) &&animations.get(shouldDisplayAnimation).getKeyFrameIndex(animationTimer) == framesOfAnimation.get(shouldDisplayAnimation) -1) {
+            System.out.println(numberOfSequentialAnimation + " " + shouldDisplayAnimation);
+            if(numberOfSequentialAnimation-1 > shouldDisplayAnimation) {
+                System.out.println("Asdfgh");
+                triggerAnimation(shouldDisplayAnimation + 1);
+            }
+            else {
+                animationTimer = 0;
+                shouldDisplayAnimation = -1;
+            }
+        }
+        else {
+            if(animationTimer > 5){
+                animationTimer = 0;
+                shouldDisplayAnimation = -1;
+            }
+        };
+    }
 
     public void triggerAnimation(){
         shouldDisplayAnimation = 0;
@@ -53,7 +69,6 @@ public class AnimationOfEntity {
     public void updateAnimationTimer() {
         animationTimer = animationTimer + Gdx.graphics.getDeltaTime();
     }
-
     public void loop() {
 
     }

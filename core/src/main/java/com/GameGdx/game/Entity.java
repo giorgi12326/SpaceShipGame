@@ -20,12 +20,16 @@ public class Entity {
         if(animationOfEntity.shouldDisplayAnimation >= 0){
             hitBoxDuringAnimation();//has to be above drawAnimation!
             drawDuringAnimation(batch, animationOfEntity.shouldDisplayAnimation);
+            moveSpriteDuringAnimation();
         }
         else{
             drawNormally(batch);
             hitBoxNormally();
             moveSprite();
         }
+    }
+
+    public void moveSpriteDuringAnimation() {
     }
 
     public void drawDuringAnimation(SpriteBatch batch, int index){
@@ -35,15 +39,12 @@ public class Entity {
     public void hitBoxDuringAnimation(){
         hitboxOfEntity.removeRectangle();
     }
-
     public void drawNormally(SpriteBatch batch){
         spriteOfEntity.draw(batch);
     }
-
     public void hitBoxNormally(){
         hitboxOfEntity.setSpriteRectangle();
     }
-
     public void moveSprite(){
 
     }

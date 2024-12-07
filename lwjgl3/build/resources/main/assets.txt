@@ -6,7 +6,10 @@ Playerplaneleft.png
 Playerplaneright.png
 bg.png
 bomb.mp3
+emptySprite.png
 explode.png
+flame.png
+flameLinkLoop.png
 gameMusic.mp3
 laser.png
 libgdx.png
