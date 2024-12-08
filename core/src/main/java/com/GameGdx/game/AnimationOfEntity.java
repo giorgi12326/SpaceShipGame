@@ -43,7 +43,6 @@ public class AnimationOfEntity {
 
 
         if ((looping.isEmpty() ||!looping.get(shouldDisplayAnimation)) &&animations.get(shouldDisplayAnimation).getKeyFrameIndex(animationTimer) == framesOfAnimation.get(shouldDisplayAnimation) -1) {
-            System.out.println(numberOfSequentialAnimation + " " + shouldDisplayAnimation);
             if(numberOfSequentialAnimation-1 > shouldDisplayAnimation) {
                 triggerAnimation(shouldDisplayAnimation + 1);
             }
@@ -69,7 +68,5 @@ public class AnimationOfEntity {
     public void updateAnimationTimer() {
         animationTimer = animationTimer + Gdx.graphics.getDeltaTime();
     }
-    public void loop() {
 
-    }
 }

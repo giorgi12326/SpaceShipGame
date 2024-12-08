@@ -41,6 +41,8 @@ public class UFO extends Enemy {
         animationOfEntity.offset.add(new Pair(0,-100f*animationOfEntity.animationScale/2));
         animationOfEntity.hitbox.add(new Pair(100*animationOfEntity.animationScale,82*animationOfEntity.animationScale));
         animationOfEntity.framesOfAnimation.add(8);
+        hitboxOfEntity.animationHitbox.add(new Pixmap(Gdx.files.internal("OmegaBolt.png")));
+
 
     }
     @Override
@@ -58,5 +60,9 @@ public class UFO extends Enemy {
     public void loop() {
         if(timer ==2f)
             animationOfEntity.triggerAnimation();
+    }
+    @Override
+    public void hitBoxDuringAnimation() {
+        hitboxOfEntity.setAnimationRectangle(animationOfEntity.shouldDisplayAnimation);
     }
 }

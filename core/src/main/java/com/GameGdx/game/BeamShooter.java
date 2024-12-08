@@ -49,6 +49,8 @@ public class BeamShooter extends Enemy{
         animationOfEntity.framesOfAnimation.add(3);
         animationOfEntity.shouldDisplayAnimation = -1;
         animationOfEntity.numberOfSequentialAnimation = 2;
+        hitboxOfEntity.animationHitbox.add(new Pixmap(Gdx.files.internal("flame.png")));
+
 
         Texture expImage2 = new Texture("flameLinkLoop.png");
         TextureRegion[][] expRegion2 = TextureRegion.split(expImage2,32,640);
@@ -60,6 +62,8 @@ public class BeamShooter extends Enemy{
         animationOfEntity.hitbox.add(new Pair(32*animationOfEntity.animationScale,640*animationOfEntity.animationScale));
         animationOfEntity.looping.add(true);
         animationOfEntity.framesOfAnimation.add(4);
+        hitboxOfEntity.animationHitbox.add(new Pixmap(Gdx.files.internal("flameLinkLoop.png")));
+
 
     }
     @Override
@@ -72,7 +76,6 @@ public class BeamShooter extends Enemy{
             else if (ship.spriteOfEntity.sprite.getX() < spriteOfEntity.sprite.getX() - 10)
                 spriteOfEntity.sprite.translateX(-moveSpeed * Gdx.graphics.getDeltaTime() * 2);
         }
-
     }
 
     @Override
@@ -85,11 +88,15 @@ public class BeamShooter extends Enemy{
     public void drawDuringAnimation(SpriteBatch batch, int index){
         animationOfEntity.drawAnimation(batch,index);
         spriteOfEntity.draw(batch);
-
     }
 
     @Override
     public void hitBoxNormally() {
         hitboxOfEntity.removeRectangle();
     }
+    @Override
+    public void hitBoxDuringAnimation() {
+        hitboxOfEntity.setAnimationRectangle(animationOfEntity.shouldDisplayAnimation);
+    }
+
 }

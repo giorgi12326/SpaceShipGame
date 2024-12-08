@@ -27,6 +27,7 @@ public class Entity {
             hitBoxNormally();
             moveSprite();
         }
+        loop();
     }
 
     public void moveSpriteDuringAnimation() {
@@ -48,8 +49,8 @@ public class Entity {
     public void moveSprite(){
 
     }
+
     public void loop(){
-        animationOfEntity.loop();
     }
 
 

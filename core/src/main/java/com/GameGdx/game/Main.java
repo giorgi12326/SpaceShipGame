@@ -88,7 +88,7 @@ public class Main extends ApplicationAdapter {
         input();
         logic();
         draw();
-//        lines();//has to be blow DRAW !
+        lines();//has to be blow DRAW !
 
 //        test();
     }
@@ -218,17 +218,25 @@ public class Main extends ApplicationAdapter {
                     garbageCollector.remove(entity);
                 }
             }
-
         }
 
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Entity enemy = enemies.get(i);
             if(enemy.hitboxOfEntity.rectangle.overlaps(ship.hitboxOfEntity.rectangle)) {
-//                if (ship.hitboxOfEntity.overlapsSpriteHitbox(enemy))//
-//                    System.out.println("yes");
+                if(enemy.animationOfEntity.shouldDisplayAnimation == -1) {
+                    if (ship.hitboxOfEntity.overlapsSpriteHitbox(enemy))//
+                        System.out.println("yes");
+                }
+                else{
+                    if(enemy instanceof BeamShooter || enemy instanceof UFO) {
+                        if (enemy.hitboxOfEntity.animationOverlapsSpriteHitbox(ship))
+                            System.out.println("deder!");
+                    }
+                }
 //                System.out.println(ship.hitboxOfEntity.overlapsHitbox(enemy));
 //                System.exit(1);
             }
+
         }
 
         for (int i = bullets.size() - 1; i >= 0; i--) {
@@ -246,7 +254,6 @@ public class Main extends ApplicationAdapter {
                             garbageCollector.add(enemy);
                             garbageCollector.add(bullet);
                             pop.play();
-
                         }
                     }
                     else{
@@ -258,8 +265,6 @@ public class Main extends ApplicationAdapter {
                         }
                     }
                 }
-
-
                 if (bullet.spriteOfEntity.sprite.getY() > Gdx.graphics.getHeight()) {
                     garbageCollector.add(bullets.get(i));
                 }
@@ -276,12 +281,14 @@ public class Main extends ApplicationAdapter {
                     enemy.animationOfEntity.triggerAnimation();
                 }
             }
-            if(enemy.spriteOfEntity.sprite.getY() < 0|| enemy.spriteOfEntity.sprite.getY() > Gdx.graphics.getHeight()){
+            if(enemy.spriteOfEntity.sprite.getY() < 0){
                 garbageCollector.add(enemies.get(i));
 //                System.exit(1);//dedda
             }
+            if(enemy.spriteOfEntity.sprite.getY() > Gdx.graphics.getHeight()){
+                garbageCollector.add(enemies.get(i));
+            }
         }
-
 
         Rock.timer += delta;
         if(Rock.timer > Rock.spawnSpeed){
@@ -299,10 +306,6 @@ public class Main extends ApplicationAdapter {
             createBeamShooter();
             BeamShooter.timer = 0;
         }
-
-
-
-
 
     }
 
