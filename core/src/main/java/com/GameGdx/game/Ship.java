@@ -5,15 +5,18 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
-import java.util.ArrayList;
-
 public class Ship extends Entity{
-
     public static float moveSpeed = 100f;
 
-    Ship(){
+    public boolean isItHit = false;
+    public float damagedTimer = 1f;
+
+    public int hearts = 3;
+
+    public Ship(){
         spriteOfEntity.scale = 2.0f;
         animationOfEntity.animationScale = 4.0f;
 
@@ -44,4 +47,41 @@ public class Ship extends Entity{
         animationOfEntity.framesOfAnimation.add(5);
 
     }
+
+    @Override
+    public void drawNormally(SpriteBatch batch) {
+        if(isItHit) {
+            if (((int)(damagedTimer/0.2f))%2 == 1)
+                super.drawNormally(batch);
+        }
+        else
+            super.drawNormally(batch);
+    }
+
+    @Override
+    public void loop() {
+        hitUpdate();
+
+    }
+
+    private void hitUpdate() {
+        if(isItHit){
+            if(damagedTimer == 1f){
+                uponHit();
+            }
+            damagedTimer -= Gdx.graphics.getDeltaTime();
+            if(damagedTimer <= 0){
+                System.out.println("out");
+                damagedTimer = 1f;
+                isItHit = false;
+            }
+        }
+    }
+
+    private void uponHit() {
+        hearts--;
+        if(hearts == 0)
+            System.exit(1);
+    }
+
 }

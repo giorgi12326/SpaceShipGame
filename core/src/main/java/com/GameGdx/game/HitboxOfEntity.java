@@ -13,8 +13,7 @@ public class HitboxOfEntity {
     Rectangle rectangle = new Rectangle();
     List<Pixmap> animationHitbox = new ArrayList<>();
     Pixmap pixmap;
-    public boolean canBeDamaged = true;
-    public float damagedTimer = 1f;
+
 
 
     public HitboxOfEntity(Entity entity) {
@@ -41,8 +40,6 @@ public class HitboxOfEntity {
 
     }
     public boolean overlapsSpriteHitbox(Entity secondEntity){
-        if(!canBeDamaged)
-            return false;
         return doPixmapsOverlap(pixmap,
             entity.spriteOfEntity.sprite.getX() - entity.spriteOfEntity.width/2f + entity.spriteOfEntity.sprite.getWidth()/2f,
             entity.spriteOfEntity.sprite.getY() - entity.spriteOfEntity.height/2f  + entity.spriteOfEntity.sprite.getHeight()/2f,
@@ -53,8 +50,6 @@ public class HitboxOfEntity {
             secondEntity.spriteOfEntity.scale);
     }
     public boolean animationOverlapsSpriteHitbox(Entity secondEntity){
-        if(!canBeDamaged)
-            return false;
         return customDoPixmapsOverlap(
             entity.hitboxOfEntity.animationHitbox.get(entity.animationOfEntity.shouldDisplayAnimation),
             entity.spriteOfEntity.sprite.getX() - entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).x()/2f

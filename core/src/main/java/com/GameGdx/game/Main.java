@@ -46,6 +46,7 @@ public class Main extends ApplicationAdapter {
     float shipTimer = 0f;
     float dashTimer = 1f;
     Ship ship;
+    HUD hud;
 
 
     @Override
@@ -78,8 +79,8 @@ public class Main extends ApplicationAdapter {
         garbageCollector = new ArrayList<>();
 //        explosionList = new ArrayList<>();
         ship = new Ship();
+        hud = new HUD(ship);
 //        createEnemy();
-
 
     }
 
@@ -88,8 +89,8 @@ public class Main extends ApplicationAdapter {
         input();
         logic();
         draw();
-        lines();//has to be blow DRAW !
-
+//        lines();//has to be blow DRAW !
+//d awdasaaww
 //        test();
     }
 
@@ -197,6 +198,7 @@ public class Main extends ApplicationAdapter {
         for(Enemy enemy : enemies) {
             enemy.update(batch);
         }
+        hud.update(batch);
 
         batch.end();
     }
@@ -222,17 +224,23 @@ public class Main extends ApplicationAdapter {
 
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Entity enemy = enemies.get(i);
-            if(enemy.hitboxOfEntity.rectangle.overlaps(ship.hitboxOfEntity.rectangle)) {
-                if(enemy.animationOfEntity.shouldDisplayAnimation == -1) {
-                    if (ship.hitboxOfEntity.overlapsSpriteHitbox(enemy))//
-                        System.out.println("yes");
-                }
-                else{
-                    if(enemy instanceof BeamShooter || enemy instanceof UFO) {
-                        if (enemy.hitboxOfEntity.animationOverlapsSpriteHitbox(ship))
-                            System.out.println("deder!");
+            if(!ship.isItHit)
+                if(enemy.hitboxOfEntity.rectangle.overlaps(ship.hitboxOfEntity.rectangle)) {
+                    if(enemy.animationOfEntity.shouldDisplayAnimation == -1) {
+                        if (ship.hitboxOfEntity.overlapsSpriteHitbox(enemy)) {
+                            ship.isItHit = true;
+                            System.out.println("yes");
+                        }
                     }
-                }
+                    else{
+                        if(enemy instanceof BeamShooter || enemy instanceof UFO) {
+                            if (enemy.hitboxOfEntity.animationOverlapsSpriteHitbox(ship)) {
+                                System.out.println("deder!");
+                                ship.isItHit = true;
+
+                            }
+                        }
+                    }
 //                System.out.println(ship.hitboxOfEntity.overlapsHitbox(enemy));
 //                System.exit(1);
             }

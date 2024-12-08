@@ -12,6 +12,7 @@ explode.png
 flame.png
 flameLinkLoop.png
 gameMusic.mp3
+heart.png
 laser.png
 libgdx.png
 plane.png
