@@ -24,7 +24,7 @@ public class UFO extends Enemy {
         this.ship = ship;
 
         spriteOfEntity.scale = 5.0f;
-        animationOfEntity.animationScale = 5.0f;
+        animationOfEntity.animationScale = 4.0f;
 
         spriteOfEntity.texture = new Texture("ufo.png");
         spriteOfEntity.sprite = new Sprite(spriteOfEntity.texture);
@@ -40,9 +40,9 @@ public class UFO extends Enemy {
         hitboxOfEntity.hitboxHeight = 16f * spriteOfEntity.scale;
         hitboxOfEntity.pixmap = new Pixmap(Gdx.files.internal("ufo.png"));
 
-        Texture expImage = new Texture("OmegaBolt.png");
+        Texture expImage = new Texture("OmegaBolt.png");//
         TextureRegion[][] expRegion = TextureRegion.split(expImage,100,82);
-        animationOfEntity.animations.add(new Animation<>(0.1f, expRegion[0]));
+        animationOfEntity.animations.add(new Animation<>(0.15f, expRegion[0]));
         animationOfEntity.sizeFull.add(new Pair(100f*animationOfEntity.animationScale,82f*animationOfEntity.animationScale));
         animationOfEntity.offset.add(new Pair(0,-100f*animationOfEntity.animationScale/2));
         animationOfEntity.hitbox.add(new Pair(100*animationOfEntity.animationScale,82*animationOfEntity.animationScale));

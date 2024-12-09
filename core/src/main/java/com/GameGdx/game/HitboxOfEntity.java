@@ -109,10 +109,11 @@ public class HitboxOfEntity {
             for (int y = startY; y < endY; y++) {
                 // Convert global coordinates to local Pixmap coordinates, accounting for scaling
                 int pixmap1X = (int) ((x - x1) / scale1) + startPoint1;
-                int pixmap1Y = (int) ((y - y1) / scale1);
+                int pixmap1Y = pixmap1.getHeight() - 1 - (int) ((y - y1)/ scale1); // Flip Y for Pixmap 1
+
 
                 int pixmap2X = (int) ((x - x2) / scale2) + startPoint2;
-                int pixmap2Y = (int) ((y - y2) / scale2);
+                int pixmap2Y = pixmap2.getHeight() - 1 - (int) ((y - y2)/ scale2); // Flip Y for Pixmap 1
 
                 // Ensure indices are within the subregion bounds for each Pixmap
                 if (pixmap1X >= startPoint1 && pixmap1X < startPoint1 + sizeX1 &&
@@ -160,10 +161,12 @@ public class HitboxOfEntity {
             for (int y = startY; y < endY; y++) {
                 // Convert global coordinates to local Pixmap coordinates, accounting for scaling
                 int pixmap1X = (int) ((x - x1) / scale1);
-                int pixmap1Y = (int) ((y - y1) / scale1);
+                int pixmap1Y = pixmap1.getHeight() - 1 - (int) ((y - y1)/ scale1); // Flip Y for Pixmap 1
+
 
                 int pixmap2X = (int) ((x - x2) / scale2);
-                int pixmap2Y = (int) ((y - y2) / scale2);
+                int pixmap2Y = pixmap2.getHeight() - 1 - (int) ((y - y2)/ scale2); // Flip Y for Pixmap 1
+
 
                 // Ensure indices are within bounds for each Pixmap
                 if (pixmap1X >= 0 && pixmap1X < pixmap1.getWidth() &&

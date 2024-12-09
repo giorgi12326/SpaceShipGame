@@ -15,7 +15,7 @@ public class Rock extends Enemy{
 
 
     Rock(){
-        spriteOfEntity.scale = 4.0f;
+        spriteOfEntity.scale = 4.0f;//aaaaaaaaaaaaaa
         animationOfEntity.animationScale = 4.0f;
 
         spriteOfEntity.texture = new Texture("rock.png");
