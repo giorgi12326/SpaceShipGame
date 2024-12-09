@@ -187,16 +187,28 @@ public class HitboxOfEntity {
     }
 
 
-    public void handleCollision(Entity entity) {
-        if(entity.animationOfEntity.shouldDisplayAnimation == -1) {
-            if (overlapsSpriteHitbox(entity)) {
+    public void handleCollision(Entity secondEntity) {
+        boolean isEntityAnimationPhase = entity.animationOfEntity.shouldDisplayAnimation == -1;
+
+        boolean isSecondEntityAnimationPhase = secondEntity.animationOfEntity.shouldDisplayAnimation == -1;
+        if(isEntityAnimationPhase &&
+            isSecondEntityAnimationPhase) {
+            if (overlapsSpriteHitbox(secondEntity)) {
                 this.entity.gotHit();
-                entity.gotHit();
+                secondEntity.gotHit();
+
             }
         }
-        else{
-            if(entity instanceof BeamShooter || entity instanceof UFO) {
-                if (entity.hitboxOfEntity.animationOverlapsSpriteHitbox(this.entity)) {
+        else if(!isEntityAnimationPhase && isSecondEntityAnimationPhase){
+            if(secondEntity instanceof BeamShooter || secondEntity instanceof UFO) {
+                if (entity.hitboxOfEntity.animationOverlapsSpriteHitbox(secondEntity)) {
+                    this.entity.gotHit();
+                }
+            }
+        }
+        else if(isEntityAnimationPhase && !isSecondEntityAnimationPhase){
+            if(secondEntity instanceof BeamShooter || secondEntity instanceof UFO) {
+                if (secondEntity.hitboxOfEntity.animationOverlapsSpriteHitbox(this.entity)) {
                     this.entity.gotHit();
                 }
             }

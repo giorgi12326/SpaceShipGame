@@ -200,21 +200,32 @@ public class Main extends ApplicationAdapter {
     private void logic() {
         float delta = Gdx.graphics.getDeltaTime();
 
-        for (int i = garbageCollector.size() - 1; i >= 0; i--) {
-            Entity entity = garbageCollector.get( i);
-            if(entity instanceof Bullet){
-                if (entity.animationOfEntity.shouldDisplayAnimation == -1) {
-                    bullets.remove(entity);
-                    garbageCollector.remove(entity);
-                }
-            }
-            else if(entity instanceof Enemy) {
-                if (entity.animationOfEntity.shouldDisplayAnimation == -1) {
-                    enemies.remove(entity);
-                    garbageCollector.remove(entity);
-                }
-            }
+        for (int i = enemies.size() - 1; i >= 0; i--) {
+            Enemy enemy = enemies.get(i);
+            if(enemy.markedAsDead && enemy.animationOfEntity.shouldDisplayAnimation == -1)
+                enemies.remove(enemy);
         }
+        for (int i = bullets.size() - 1; i >= 0; i--) {
+            Bullet bullet = bullets.get(i);
+            if(bullet.markedAsDead && bullet.animationOfEntity.shouldDisplayAnimation == -1)
+                bullets.remove(bullet);
+        }
+
+//        for (int i = garbageCollector.size() - 1; i >= 0; i--) {
+//            Entity entity = garbageCollector.get( i);
+//            if(entity instanceof Bullet){
+//                if (entity.animationOfEntity.shouldDisplayAnimation == -1) {
+//                    bullets.remove(entity);
+//                    garbageCollector.remove(entity);
+//                }
+//            }
+//            else if(entity instanceof Enemy) {
+//                if (entity.animationOfEntity.shouldDisplayAnimation == -1) {
+//                    enemies.remove(entity);
+//                    garbageCollector.remove(entity);
+//                }
+//            }
+//        }
 
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Entity enemy = enemies.get(i);
@@ -236,24 +247,26 @@ public class Main extends ApplicationAdapter {
                                 explosionSound.play();
                             }
                             if(enemy instanceof  UFO){
+                                System.out.println("asd");
                                 enemy.gotHit();
                             }
                             enemy.animationOfEntity.triggerAnimation();
-                            garbageCollector.add(enemy);
-                            garbageCollector.add(bullet);
+                            enemy.markAsDead();
+                            bullet.markAsDead();
                             pop.play();
                         }
                     }
                     else{
                         if(bullet.hitboxOfEntity.animationOverlapsSpriteHitbox(enemy)){
-                            garbageCollector.add(enemy);
-                            garbageCollector.add(bullet);
+                            enemy.animationOfEntity.triggerAnimation();
+                            enemy.markAsDead();
+                            bullet.markAsDead();
                             pop.play();
                         }
                     }
                 }
                 if (bullet.spriteOfEntity.sprite.getY() > Gdx.graphics.getHeight()) {
-                    garbageCollector.add(bullets.get(i));
+                    bullets.get(i).markAsDead();
                 }
             }
         }
@@ -269,11 +282,12 @@ public class Main extends ApplicationAdapter {
                 }
             }
             if(enemy.spriteOfEntity.sprite.getY() < 0){
-                garbageCollector.add(enemies.get(i));
+                enemies.get(i).markAsDead();
+
 //                System.exit(1);//dedda
             }
             if(enemy.spriteOfEntity.sprite.getY() > Gdx.graphics.getHeight()){
-                garbageCollector.add(enemies.get(i));
+                enemies.get(i).markAsDead();
             }
         }
 
@@ -300,9 +314,8 @@ public class Main extends ApplicationAdapter {
         float speed = 300.0f;
         float delta = Gdx.graphics.getDeltaTime();
         if(Gdx.input.isKeyPressed(Input.Keys.P)) {
-            createBeamShooter();
+            createUFO();
         }
-
         if(Gdx.input.isKeyPressed(Input.Keys.D)) {
             if(ship.spriteOfEntity.sprite.getX() + ship.spriteOfEntity.sprite.getWidth()/2f +ship.spriteOfEntity.width/2f  < Gdx.graphics.getWidth())
                 ship.spriteOfEntity.sprite.translateX(delta * speed);

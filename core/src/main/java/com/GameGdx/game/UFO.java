@@ -79,7 +79,10 @@ public class UFO extends Enemy {
 
     @Override
     public void gotHit() {
-        ufoShootSound.play();
+        if(markedAsDead) {
+            ufoShootSound.play();
+            ufoSpawnSound.stop();
+        }
 
     }
 }

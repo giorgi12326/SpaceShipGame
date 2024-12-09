@@ -16,6 +16,8 @@ public class Entity {
     public static float timer = 0f;
     public static float spawnSpeed;
 
+    public boolean markedAsDead = false;
+
     public void update(SpriteBatch batch){
         if(animationOfEntity.shouldDisplayAnimation >= 0){
             hitBoxDuringAnimation();//has to be above drawAnimation!
@@ -52,6 +54,9 @@ public class Entity {
     }
     public void handleCollision(Entity entity){
         hitboxOfEntity.handleCollision(entity);
+    }
+    public void markAsDead(){
+        markedAsDead = true;
     }
     public void gotHit(){
 
