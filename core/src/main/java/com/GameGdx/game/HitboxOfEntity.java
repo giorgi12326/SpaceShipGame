@@ -58,7 +58,8 @@ public class HitboxOfEntity {
             entity.spriteOfEntity.sprite.getY() - entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).y()/2f
                 + entity.spriteOfEntity.sprite.getHeight()/2f
                 + entity.animationOfEntity.offset.get(entity.animationOfEntity.shouldDisplayAnimation).y(),
-            entity.animationOfEntity.animations.get(entity.animationOfEntity.shouldDisplayAnimation).getKeyFrameIndex(entity.animationOfEntity.animationTimer)*150,
+            entity.animationOfEntity.animations.get(entity.animationOfEntity.shouldDisplayAnimation).getKeyFrameIndex(entity.animationOfEntity.animationTimer)*
+                (int)entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).x()/(int)entity.animationOfEntity.animationScale,
             (int)entity.animationOfEntity.sizeFull.get(entity.animationOfEntity.shouldDisplayAnimation).x()/(int)entity.animationOfEntity.animationScale,
             entity.animationOfEntity.animationScale,
             secondEntity.hitboxOfEntity.pixmap,
@@ -73,6 +74,7 @@ public class HitboxOfEntity {
         Pixmap pixmap1, float x1, float y1, int startPoint1, int sizeX1, float scale1,
         Pixmap pixmap2, float x2, float y2, int startPoint2, int sizeX2, float scale2) {
 
+//
         // Calculate the bounds of the subregions in global coordinates
         float region1XStart = x1;
         float region1XEnd = x1 + sizeX1 * scale1;
@@ -141,7 +143,6 @@ public class HitboxOfEntity {
         float overlapYStart = Math.max(y1, y2);
         float overlapXEnd = Math.min(x1 + pixmap1.getWidth() * scale1, x2 + pixmap2.getWidth() * scale2);
         float overlapYEnd = Math.min(y1 + pixmap1.getHeight() * scale1, y2 + pixmap2.getHeight() * scale2);
-//        System.out.println(x1 + " " + y1 +" "+ (x1+ pixmap1.getWidth() * scale1) + " " + (y1 +pixmap1.getHeight() * scale1));
 
         // If there is no overlap, return false
         if (overlapXStart >= overlapXEnd || overlapYStart >= overlapYEnd) {
@@ -186,7 +187,20 @@ public class HitboxOfEntity {
     }
 
 
+    public void handleCollision(Entity entity) {
+        if(entity.animationOfEntity.shouldDisplayAnimation == -1) {
+            if (overlapsSpriteHitbox(entity)) {
+                this.entity.gotHit();
+                entity.gotHit();
+            }
+        }
+        else{
+            if(entity instanceof BeamShooter || entity instanceof UFO) {
+                if (entity.hitboxOfEntity.animationOverlapsSpriteHitbox(this.entity)) {
+                    this.entity.gotHit();
+                }
+            }
+        }
 
-
-
+    }
 }

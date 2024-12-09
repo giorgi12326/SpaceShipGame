@@ -29,7 +29,9 @@ public class Entity {
         }
         loop();
     }
+    public void moveSprite(){
 
+    }
     public void moveSpriteDuringAnimation() {
     }
 
@@ -46,11 +48,13 @@ public class Entity {
     public void hitBoxNormally(){
         hitboxOfEntity.setSpriteRectangle();
     }
-    public void moveSprite(){
-
-    }
-
     public void loop(){
+    }
+    public void handleCollision(Entity entity){
+        hitboxOfEntity.handleCollision(entity);
+    }
+    public void gotHit(){
+
     }
 
 

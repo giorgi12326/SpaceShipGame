@@ -1,6 +1,7 @@
 package com.GameGdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -11,10 +12,15 @@ public class UFO extends Enemy {
     public static float spawnSpeed = 8f;
     public static float timer = 0;
     public static float moveSpeed = 100f;
+    Sound ufoSpawnSound = ufoSpawnSound = Gdx.audio.newSound(Gdx.files.internal("UFOspawnSound.mp3"));;
+    Sound ufoShootSound = ufoShootSound = Gdx.audio.newSound(Gdx.files.internal("ufoShoot.mp3"));;
+
+
 
     Ship ship;
 
     UFO(Ship ship){
+        ufoSpawnSound.play();
         this.ship = ship;
 
         spriteOfEntity.scale = 5.0f;
@@ -64,5 +70,16 @@ public class UFO extends Enemy {
     @Override
     public void hitBoxDuringAnimation() {
         hitboxOfEntity.setAnimationRectangle(animationOfEntity.shouldDisplayAnimation);
+    }
+
+    @Override
+    public void handleCollision(Entity entity) {
+        ufoSpawnSound.stop();
+    }
+
+    @Override
+    public void gotHit() {
+        ufoShootSound.play();
+
     }
 }

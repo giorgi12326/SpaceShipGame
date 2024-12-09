@@ -1,6 +1,7 @@
 package com.GameGdx.game;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Animation;
@@ -8,13 +9,20 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 
+
 public class Ship extends Entity{
+
     public static float moveSpeed = 100f;
 
     public boolean isItHit = false;
     public float damagedTimer = 1f;
-
     public int hearts = 3;
+
+    Sound gotHitSound = Gdx.audio.newSound(Gdx.files.internal("gotHit.mp3"));
+    Sound needMilkSound = Gdx.audio.newSound(Gdx.files.internal("needMilkSound.mp3"));;
+    Sound swooshSound = Gdx.audio.newSound(Gdx.files.internal("swooshSound.mp3"));
+
+
 
     public Ship(){
         spriteOfEntity.scale = 2.0f;
@@ -60,28 +68,54 @@ public class Ship extends Entity{
 
     @Override
     public void loop() {
-        hitUpdate();
+        updateHitTimer();
 
     }
-
-    private void hitUpdate() {
+    private void updateHitTimer() {
         if(isItHit){
-            if(damagedTimer == 1f){
-                uponHit();
-            }
             damagedTimer -= Gdx.graphics.getDeltaTime();
             if(damagedTimer <= 0){
-                System.out.println("out");
                 damagedTimer = 1f;
                 isItHit = false;
             }
         }
     }
 
-    private void uponHit() {
-        hearts--;
-        if(hearts == 0)
-            System.exit(1);
+    @Override
+    public void gotHit() {
+        if(!isItHit) {
+            isItHit = true;
+            hearts--;
+            if (hearts == 0)
+                System.exit(1);
+            else if (hearts > 1)
+                gotHitSound.play();
+            else needMilkSound.play();
+        }
+
     }
 
+    public void swooshLeft(){
+        float delta = Gdx.graphics.getDeltaTime();
+        float speed = 300.0f;
+        if(spriteOfEntity.sprite.getX() + spriteOfEntity.sprite.getWidth()/2f - spriteOfEntity.width/2f - delta * speed * 30 >= 0)
+            spriteOfEntity.sprite.translateX(-delta * speed * 30);
+        else
+            spriteOfEntity.sprite.setX(spriteOfEntity.width / 2f - spriteOfEntity.sprite.getWidth()/ 2f);
+        animationOfEntity.triggerAnimation();
+        swooshSound.play();
+
+    }
+
+    public void swooshRight(){
+        float delta = Gdx.graphics.getDeltaTime();
+        float speed = 300.0f;
+        if (spriteOfEntity.sprite.getX() + spriteOfEntity.sprite.getWidth() / 2f + spriteOfEntity.width / 2f + delta * speed * 30 < Gdx.graphics.getWidth()) {
+            spriteOfEntity.sprite.translateX(delta * speed * 30);
+        }
+        else
+            spriteOfEntity.sprite.setX(Gdx.graphics.getWidth() - spriteOfEntity.sprite.getWidth() / 2f - spriteOfEntity.width / 2f);
+        animationOfEntity.triggerAnimation(1);
+        swooshSound.play();
+    }
 }

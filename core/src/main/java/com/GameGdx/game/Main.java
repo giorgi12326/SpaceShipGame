@@ -12,8 +12,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.math.Circle;
 import com.badlogic.gdx.utils.ScreenUtils;
-
-import java.beans.beancontext.BeanContext;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -27,11 +25,10 @@ public class Main extends ApplicationAdapter {
     List<Bullet> bullets;
     float backgroundWidth;
     float backgroundHeight;
-    Sound shoot;
     Sound shootSound;
     Sound explosionSound;
+    Sound flameBlast;
     Music gameMusic;
-    float enemyTimer;
     Texture backgroundTexture;
     Sprite backgroundSprite;
     ShapeRenderer shapeRenderer;
@@ -56,8 +53,8 @@ public class Main extends ApplicationAdapter {
         backgroundWidth = Gdx.graphics.getWidth();
         backgroundHeight = Gdx.graphics.getHeight();
         batch = new SpriteBatch();
-        lShip = new Texture("Playerplaneleft.png");
-        rShip = new Texture("Playerplaneright.png");
+        lShip = new Texture("playerPlaneLeft.png");
+        rShip = new Texture("playerPlaneRight.png");
         nShip = new Texture("plane.png");
         shipSprite = new Sprite(nShip);
         shipSprite.setScale(2.0f);
@@ -80,6 +77,8 @@ public class Main extends ApplicationAdapter {
 //        explosionList = new ArrayList<>();
         ship = new Ship();
         hud = new HUD(ship);
+        flameBlast = Gdx.audio.newSound(Gdx.files.internal("fireBlast.mp3"));
+
 //        createEnemy();
 
     }
@@ -90,7 +89,6 @@ public class Main extends ApplicationAdapter {
         logic();
         draw();
 //        lines();//has to be blow DRAW !
-//d awdasaaww
 //        test();
     }
 
@@ -135,8 +133,6 @@ public class Main extends ApplicationAdapter {
                 );
             }
             else {
-                Pair getHitbox = enemy.animationOfEntity.hitbox.getFirst();
-                Pair getOffset = enemy.animationOfEntity.offset.getFirst();
                 shapeRenderer.rect( enemy.spriteOfEntity.sprite.getX() - enemy.animationOfEntity.sizeFull.get(enemy.animationOfEntity.shouldDisplayAnimation).x()/2f
                         + enemy.spriteOfEntity.sprite.getWidth()/2f
                         + enemy.animationOfEntity.offset.get(enemy.animationOfEntity.shouldDisplayAnimation).x(),
@@ -177,14 +173,13 @@ public class Main extends ApplicationAdapter {
         //however it scales from the center and x and y no longer represent starting point of sprite
         //my width is now scaled width (with transparency),
         // if you want without one, you look for hit-boxWidth
-        //getY and getY doesnt change after scaling
+        //getY and getY doesn't change after scaling
     //rectangle starts and scales and sprites original position
     //but circle scales from its center which is its original coordinates
 
 
     private void draw() {
         ScreenUtils.clear(0.15f, 0.15f, 0.2f, 1f);
-        float delta = Gdx.graphics.getDeltaTime();
         batch.begin();
 
         backgroundSprite.draw(batch);
@@ -207,7 +202,6 @@ public class Main extends ApplicationAdapter {
 
         for (int i = garbageCollector.size() - 1; i >= 0; i--) {
             Entity entity = garbageCollector.get( i);
-
             if(entity instanceof Bullet){
                 if (entity.animationOfEntity.shouldDisplayAnimation == -1) {
                     bullets.remove(entity);
@@ -224,25 +218,8 @@ public class Main extends ApplicationAdapter {
 
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Entity enemy = enemies.get(i);
-            if(!ship.isItHit)
-                if(enemy.hitboxOfEntity.rectangle.overlaps(ship.hitboxOfEntity.rectangle)) {
-                    if(enemy.animationOfEntity.shouldDisplayAnimation == -1) {
-                        if (ship.hitboxOfEntity.overlapsSpriteHitbox(enemy)) {
-                            ship.isItHit = true;
-                            System.out.println("yes");
-                        }
-                    }
-                    else{
-                        if(enemy instanceof BeamShooter || enemy instanceof UFO) {
-                            if (enemy.hitboxOfEntity.animationOverlapsSpriteHitbox(ship)) {
-                                System.out.println("deder!");
-                                ship.isItHit = true;
-
-                            }
-                        }
-                    }
-//                System.out.println(ship.hitboxOfEntity.overlapsHitbox(enemy));
-//                System.exit(1);
+            if(enemy.hitboxOfEntity.rectangle.overlaps(ship.hitboxOfEntity.rectangle)) {
+                ship.handleCollision(enemy);
             }
 
         }
@@ -258,6 +235,9 @@ public class Main extends ApplicationAdapter {
                                 bullet.animationOfEntity.triggerAnimation();
                                 explosionSound.play();
                             }
+                            if(enemy instanceof  UFO){
+                                enemy.gotHit();
+                            }
                             enemy.animationOfEntity.triggerAnimation();
                             garbageCollector.add(enemy);
                             garbageCollector.add(bullet);
@@ -266,7 +246,6 @@ public class Main extends ApplicationAdapter {
                     }
                     else{
                         if(bullet.hitboxOfEntity.animationOverlapsSpriteHitbox(enemy)){
-                            enemy.animationOfEntity.triggerAnimation();
                             garbageCollector.add(enemy);
                             garbageCollector.add(bullet);
                             pop.play();
@@ -282,11 +261,11 @@ public class Main extends ApplicationAdapter {
         for (int i = enemies.size() - 1; i >= 0; i--) {
             Enemy enemy = enemies.get(i);
             if(enemy instanceof BeamShooter){
-                System.out.println(BeamShooter.countdown + " " + enemy.animationOfEntity.shouldDisplayAnimation);
                 if(BeamShooter.countdown <= 0 && enemy.animationOfEntity.shouldDisplayAnimation == -1){
                     BeamShooter.countdown = 14f;
                     BeamShooter.timer = 0;
                     enemy.animationOfEntity.triggerAnimation();
+                    flameBlast.play();
                 }
             }
             if(enemy.spriteOfEntity.sprite.getY() < 0){
@@ -342,23 +321,14 @@ public class Main extends ApplicationAdapter {
         }
         if(Gdx.input.isKeyPressed(Input.Keys.Q)) {
             if(shipTimer > dashTimer) {
-                if(ship.spriteOfEntity.sprite.getX() + ship.spriteOfEntity.sprite.getWidth()/2f - ship.spriteOfEntity.width/2f - delta * speed * 30 >= 0)
-                    ship.spriteOfEntity.sprite.translateX(-delta * speed * 30);
-                else
-                    ship.spriteOfEntity.sprite.setX(ship.spriteOfEntity.width / 2f - ship.spriteOfEntity.sprite.getWidth()/ 2f);
-
+                ship.swooshLeft();
                 shipTimer = 0f;
-                ship.animationOfEntity.triggerAnimation();
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.E)) {
             if(shipTimer > dashTimer) {
-                if (ship.spriteOfEntity.sprite.getX() + ship.spriteOfEntity.sprite.getWidth() / 2f + ship.spriteOfEntity.width / 2f + delta * speed * 30 < Gdx.graphics.getWidth())
-                    ship.spriteOfEntity.sprite.translateX(delta * speed * 30);
-                else
-                    ship.spriteOfEntity.sprite.setX(Gdx.graphics.getWidth() - ship.spriteOfEntity.sprite.getWidth() / 2f - ship.spriteOfEntity.width / 2f);
-                shipTimer = 0f;
-                ship.animationOfEntity.triggerAnimation(1);
+                ship.swooshRight();
+               shipTimer = 0f;
             }
         }
         if(Gdx.input.isKeyPressed(Input.Keys.SPACE)) {
@@ -380,7 +350,6 @@ public class Main extends ApplicationAdapter {
     }
 
     private void createLasers() {
-        float distanceFromCenter = 25.0f;
         Bullet bullet1 = new Lasers(ship.spriteOfEntity.sprite.getX() - ship.spriteOfEntity.sprite.getWidth()*0.5f, ship.spriteOfEntity.sprite.getY()-20);
         Bullet bullet2 = new Lasers(ship.spriteOfEntity.sprite.getX() + ship.spriteOfEntity.sprite.getWidth()*1.5f- bullet1.spriteOfEntity.width, ship.spriteOfEntity.sprite.getY()-20);
         bullets.add(bullet1);
@@ -404,17 +373,6 @@ public class Main extends ApplicationAdapter {
         Enemy beamShooter = new BeamShooter(ship);
         enemies.add(beamShooter);
     }
-
-
-//    private float[] scaledEntityParameters(Entity entity){
-//        float[] arr = new float[4];
-//        arr[0] = entity.sprite.getX() + entity.sprite.getWidth()*Math.abs((1f-entity.scale))/2;
-//        arr[1] = entity.sprite.getY() + entity.sprite.getHeight()*Math.abs((1f-entity.scale))/2;
-//        arr[2] = entity.width;
-//        arr[3] = entity.height;
-//        return arr;
-//    }
-
 
     @Override
     public void dispose() {
